@@ -10,7 +10,6 @@ namespace RestWebservice_RemoteCompiling.JsonObjClasses
     {
         [Required]
         public string CodeAsValue { get; set; }
-        [Required]
         public string CompileArguments { get; set; }
     }
 }
