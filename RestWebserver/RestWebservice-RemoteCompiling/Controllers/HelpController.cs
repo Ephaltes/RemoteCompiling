@@ -13,10 +13,10 @@ namespace RestWebservice_RemoteCompiling.Controllers
 {
     [Route("Api/Help")]
     [ApiController]
-    public class SupportedLanguagesController : ControllerBase
+    public class HelpController : ControllerBase
     {
         private readonly ILanguageAndVersionHelper _LanguageAndVersionHelper;
-        public SupportedLanguagesController(ILanguageAndVersionHelper languageAndVersionHelper)
+        public HelpController(ILanguageAndVersionHelper languageAndVersionHelper)
         { 
             _LanguageAndVersionHelper = languageAndVersionHelper;
         }
