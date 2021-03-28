@@ -2,7 +2,6 @@ version: '3.3'
 services:
   ubuntu:
     container_name: ubuntu_remote_compiler
-    #image: ubuntu:20.04
     build: .
     privileged: true
     restart: always
@@ -11,9 +10,3 @@ services:
       #This port is not beeing used!!!!
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
-    #  - "./scripts:/var/remote"
-    #volumes:
-    #  - "./scripts:/var/remote"
-    #command: sh -c "tail -f /dev/null"
-volumes:
-  my-piston:

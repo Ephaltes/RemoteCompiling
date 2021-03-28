@@ -10,14 +10,16 @@ def main(argv):
         sys.exit(2)
 
     directory = argv[0]
-    iphost = argv[1]
+    url = "http://" + argv[1]
     pistonRuntimesFile = directory + "/list.txt"
     toInstallFile = directory + "/toinstall.txt"
-    print('Input file is ', pistonRuntimesFile)
     symbol = "• "
     toInstall = []
     pistonRuntimes = []
     outputInstall = []
+    
+    print('Input file is ', pistonRuntimesFile)
+
     with open(pistonRuntimesFile) as file:
         pistonRuntimes = file.readlines()
         for i, line in enumerate(pistonRuntimes):
@@ -34,7 +36,7 @@ def main(argv):
     print(fullpath)
     with open(fullpath, "w") as file:
         for install in outputInstall:
-            file.write("/var/docker/piston/cli/index.js -u http://" + iphost +" ppman install " + install + "\n")
+            file.write("/var/docker/piston/cli/index.js -u " + url +" ppman install " + install + "\n")
 
 
 if __name__ == "__main__":

@@ -39,20 +39,10 @@ RUN ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 
 RUN git clone -b v3 https://github.com/engineer-man/piston /var/docker/piston
 
-#RUN docker-compose --project-directory /var/docker/piston up -d piston_api
-
 RUN npm install -g yarn 
 
 RUN  yarn --cwd /var/docker/piston/cli
 
-#RUN  /var/docker/piston/cli/index.js ppman list > /var/remote/list.txt
-
-#RUN python3 /var/remote/installRuntimes.py /var/remote/list.txt /var/remote/toinstall.txt
-
-#RUN chmod +x /var/remote/installRuntimes.sh
-
-#RUN /var/remote/installRuntimes.sh
-
 RUN chmod +x /var/remote/startForDocker.sh
 
-ENTRYPOINT "/var/remote/startForDocker.sh"
+ENTRYPOINT ["/bin/bash","-c","/var/remote/startForDocker.sh"]
