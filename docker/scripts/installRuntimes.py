@@ -5,11 +5,12 @@ import os
 
 
 def main(argv):
-    if len(argv) < 1:
-        print('installRuntimes.py <runtimes from piston and runtimes to install path>')
+    if len(argv) < 2:
+        print('installRuntimes.py <runtimes from piston and runtimes to install path> <IPAdress to API>')
         sys.exit(2)
 
     directory = argv[0]
+    iphost = argv[1]
     pistonRuntimesFile = directory + "/list.txt"
     toInstallFile = directory + "/toinstall.txt"
     print('Input file is ', pistonRuntimesFile)
@@ -33,7 +34,7 @@ def main(argv):
     print(fullpath)
     with open(fullpath, "w") as file:
         for install in outputInstall:
-            file.write("/var/docker/piston/cli/index.js ppman install " + install + "\n")
+            file.write("/var/docker/piston/cli/index.js -u http://" + iphost +" ppman install " + install + "\n")
 
 
 if __name__ == "__main__":
