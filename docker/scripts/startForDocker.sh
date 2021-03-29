@@ -10,7 +10,7 @@ trap _term SIGTERM SIGINT SIGQUIT SIGHUP ERR
 
 FILE=/var/init.custom
 
-hostip=$(ip route show | awk '/default/ {print $3}'):6969
+hostip=$(ip route show | awk '/default/ {print $3}'):2000
 echo "hostIP: $hostip"
 
 service docker start

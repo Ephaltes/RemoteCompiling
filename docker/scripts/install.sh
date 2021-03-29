@@ -1,7 +1,7 @@
 #!/bin/bash
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-hostip=127.0.0.1:6969
+hostip=127.0.0.1:2000
 
 echo $DIR
 echo $hostip
