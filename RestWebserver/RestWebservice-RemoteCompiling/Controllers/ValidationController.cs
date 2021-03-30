@@ -16,9 +16,9 @@ namespace RestWebservice_RemoteCompiling.Controllers
     public class ValidationController : ControllerBase
     {
 
-            private readonly ILanguageAndVersionHelper _LanguageAndVersionValidator;
+            private readonly IPistonHelper _LanguageAndVersionValidator;
             private readonly HttpClient _Http;
-            public ValidationController(HttpClient http, ILanguageAndVersionHelper languageAndVersionValidator)
+            public ValidationController(HttpClient http, IPistonHelper languageAndVersionValidator)
             {
                 _Http = http;
                 _LanguageAndVersionValidator = languageAndVersionValidator;
@@ -28,14 +28,10 @@ namespace RestWebservice_RemoteCompiling.Controllers
             {
                 try
                 {
-                    if (!_LanguageAndVersionValidator.CheckConfigurationForVersionAndLanguage(language, version))
-                    {
-                        return NotFound();
-                    }
                     /*
                     * run validation here            
                    */
-                    return Ok(Code.CodeAsValue);
+                    return Ok();
                 }
                 catch (NullReferenceException e)
                 {
