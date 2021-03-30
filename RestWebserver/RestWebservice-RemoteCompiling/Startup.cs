@@ -28,7 +28,7 @@ namespace RestWebservice_RemoteCompiling
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddHttpClient();
-            services.AddSingleton<IPistonHelper, PistonHelper>();
+            services.AddSingleton<ILanguageAndVersionHelper, LanguageAndVersionHelper>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
