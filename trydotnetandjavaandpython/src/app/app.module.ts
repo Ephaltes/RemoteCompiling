@@ -14,7 +14,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
   ],
   imports: [
     BrowserModule,
-    BrowserAnimationsModule, MatGridListModule, MatTreeModule, MatIconModule
+    BrowserAnimationsModule, MatGridListModule, MatTreeModule, MatIconModule,
     CodeEditorModule.forRoot()
   ],
   providers: [],
