@@ -2,8 +2,14 @@ import { FlatTreeControl } from '@angular/cdk/tree';
 import { Component } from '@angular/core';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import { CodeModel } from '@ngstack/code-editor';
+interface CodeFile {
+  name: string;
+  code: string
+}
 interface FileNode {
   name: string;
+  code?: string;
+  parent?:FileNode;
   children?: FileNode[];
 }
 interface FlatNode {
@@ -13,30 +19,22 @@ interface FlatNode {
 }
 const TREE_DATA: FileNode[] = [
   {
-    name: 'Fruit',
-    children: [
-      {name: 'Apple'},
-      {name: 'Banana'},
-      {name: 'Fruit loops'},
-    ]
-  }, {
-    name: 'Vegetables',
+    name: 'Files',
     children: [
       {
-        name: 'Green',
-        children: [
-          {name: 'Broccoli'},
-          {name: 'Brussels sprouts'},
-        ]
-      }, {
-        name: 'Orange',
-        children: [
-          {name: 'Pumpkins'},
-          {name: 'Carrots'},
-        ]
+        name: 'HelloWorld.cs',
+        code: "xd"
+      },
+      {
+        name: 'HelloWorld.java',
+        code: ""
+      },
+      {
+        name: 'HelloWorld.py',
+        code: ""
       },
     ]
-  },
+  }
 ];
 
 @Component({
@@ -76,6 +74,7 @@ export class AppComponent {
       level: level,
     };
   }
+  
   treeControl = new FlatTreeControl<FlatNode>(
     node => node.level, node => node.expandable);
 
