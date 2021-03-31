@@ -4,6 +4,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { CodeEditorModule } from '@ngstack/code-editor';
 import { MatTreeModule } from '@angular/material/tree';
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -14,7 +15,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
   ],
   imports: [
     BrowserModule,
-    BrowserAnimationsModule, MatGridListModule, MatTreeModule, MatIconModule,
+    BrowserAnimationsModule, MatGridListModule, MatTreeModule, MatIconModule, MatButtonModule,
     CodeEditorModule.forRoot()
   ],
   providers: [],
