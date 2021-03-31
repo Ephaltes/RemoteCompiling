@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { CodeEditorModule } from '@ngstack/code-editor';
+import {MatTreeModule} from '@angular/material/tree';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -12,7 +13,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
   ],
   imports: [
     BrowserModule,
-    BrowserAnimationsModule, MatGridListModule, CodeEditorModule.forRoot()
+    BrowserAnimationsModule, MatGridListModule, MatTreeModule,
+    CodeEditorModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]
