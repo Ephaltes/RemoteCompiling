@@ -45,7 +45,7 @@ export class AppComponent implements OnInit {
     this.nestedDataSource = new MatTreeNestedDataSource();
 
     database.dataChange.subscribe(
-      (data) => (this.nestedDataSource.data = data)
+      (data) => { (this.nestedDataSource.data = data); this.nestedTreeControl.expand(data[0]); }
     );
 
     this.isLoading$ = editorService.loadingTypings.pipe(debounceTime(300));
@@ -79,6 +79,7 @@ export class AppComponent implements OnInit {
     console.log('loaded');
   }
   ngOnInit() {
+    this.selectNode(this.nestedDataSource.data[0].children[0]);
     /*
     this.selectedModel = {
       language: 'json',
