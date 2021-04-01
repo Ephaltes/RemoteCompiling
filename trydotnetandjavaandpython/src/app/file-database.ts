@@ -55,6 +55,266 @@ const FILES_DATA: FileNode[] = [
           value:
             `print('Hello, world!')`,
         }
+      },
+      {
+        name: 'HelloWorld.py',
+        type: FileNodeType.file,
+        code: {
+          language: 'python',
+          uri: 'main.py',
+          value:
+            `print('Hello, world!')`,
+        }
+      },
+      {
+        name: 'HelloWorld.py',
+        type: FileNodeType.file,
+        code: {
+          language: 'python',
+          uri: 'main.py',
+          value:
+            `print('Hello, world!')`,
+        }
+      },
+      {
+        name: 'HelloWorld.py',
+        type: FileNodeType.file,
+        code: {
+          language: 'python',
+          uri: 'main.py',
+          value:
+            `print('Hello, world!')`,
+        }
+      },
+      {
+        name: 'HelloWorld.py',
+        type: FileNodeType.file,
+        code: {
+          language: 'python',
+          uri: 'main.py',
+          value:
+            `print('Hello, world!')`,
+        }
+      },
+      {
+        name: 'HelloWorld.py',
+        type: FileNodeType.file,
+        code: {
+          language: 'python',
+          uri: 'main.py',
+          value:
+            `print('Hello, world!')`,
+        }
+      },
+      {
+        name: 'HelloWorld.py',
+        type: FileNodeType.file,
+        code: {
+          language: 'python',
+          uri: 'main.py',
+          value:
+            `print('Hello, world!')`,
+        }
+      },
+      {
+        name: 'HelloWorld.py',
+        type: FileNodeType.file,
+        code: {
+          language: 'python',
+          uri: 'main.py',
+          value:
+            `print('Hello, world!')`,
+        }
+      },
+      {
+        name: 'HelloWorld.py',
+        type: FileNodeType.file,
+        code: {
+          language: 'python',
+          uri: 'main.py',
+          value:
+            `print('Hello, world!')`,
+        }
+      },
+      {
+        name: 'HelloWorld.py',
+        type: FileNodeType.file,
+        code: {
+          language: 'python',
+          uri: 'main.py',
+          value:
+            `print('Hello, world!')`,
+        }
+      },
+      {
+        name: 'HelloWorld.py',
+        type: FileNodeType.file,
+        code: {
+          language: 'python',
+          uri: 'main.py',
+          value:
+            `print('Hello, world!')`,
+        }
+      },
+      {
+        name: 'HelloWorld.py',
+        type: FileNodeType.file,
+        code: {
+          language: 'python',
+          uri: 'main.py',
+          value:
+            `print('Hello, world!')`,
+        }
+      },
+      {
+        name: 'HelloWorld.py',
+        type: FileNodeType.file,
+        code: {
+          language: 'python',
+          uri: 'main.py',
+          value:
+            `print('Hello, world!')`,
+        }
+      },
+      {
+        name: 'HelloWorld.py',
+        type: FileNodeType.file,
+        code: {
+          language: 'python',
+          uri: 'main.py',
+          value:
+            `print('Hello, world!')`,
+        }
+      },
+      {
+        name: 'HelloWorld.py',
+        type: FileNodeType.file,
+        code: {
+          language: 'python',
+          uri: 'main.py',
+          value:
+            `print('Hello, world!')`,
+        }
+      },
+      {
+        name: 'HelloWorld.py',
+        type: FileNodeType.file,
+        code: {
+          language: 'python',
+          uri: 'main.py',
+          value:
+            `print('Hello, world!')`,
+        }
+      },
+      {
+        name: 'HelloWorld.py',
+        type: FileNodeType.file,
+        code: {
+          language: 'python',
+          uri: 'main.py',
+          value:
+            `print('Hello, world!')`,
+        }
+      },
+      {
+        name: 'HelloWorld.py',
+        type: FileNodeType.file,
+        code: {
+          language: 'python',
+          uri: 'main.py',
+          value:
+            `print('Hello, world!')`,
+        }
+      },
+      {
+        name: 'HelloWorld.py',
+        type: FileNodeType.file,
+        code: {
+          language: 'python',
+          uri: 'main.py',
+          value:
+            `print('Hello, world!')`,
+        }
+      },
+      {
+        name: 'HelloWorld.py',
+        type: FileNodeType.file,
+        code: {
+          language: 'python',
+          uri: 'main.py',
+          value:
+            `print('Hello, world!')`,
+        }
+      },
+      {
+        name: 'HelloWorld.py',
+        type: FileNodeType.file,
+        code: {
+          language: 'python',
+          uri: 'main.py',
+          value:
+            `print('Hello, world!')`,
+        }
+      },
+      {
+        name: 'HelloWorld.py',
+        type: FileNodeType.file,
+        code: {
+          language: 'python',
+          uri: 'main.py',
+          value:
+            `print('Hello, world!')`,
+        }
+      },
+      {
+        name: 'HelloWorld.py',
+        type: FileNodeType.file,
+        code: {
+          language: 'python',
+          uri: 'main.py',
+          value:
+            `print('Hello, world!')`,
+        }
+      },
+      {
+        name: 'HelloWorld.py',
+        type: FileNodeType.file,
+        code: {
+          language: 'python',
+          uri: 'main.py',
+          value:
+            `print('Hello, world!')`,
+        }
+      },
+      {
+        name: 'HelloWorld.py',
+        type: FileNodeType.file,
+        code: {
+          language: 'python',
+          uri: 'main.py',
+          value:
+            `print('Hello, world!')`,
+        }
+      },
+      {
+        name: 'HelloWorld.py',
+        type: FileNodeType.file,
+        code: {
+          language: 'python',
+          uri: 'main.py',
+          value:
+            `print('Hello, world!')`,
+        }
+      },
+      {
+        name: 'HelloWorld.py',
+        type: FileNodeType.file,
+        code: {
+          language: 'python',
+          uri: 'main.py',
+          value:
+            `print('Hello, world!')`,
+        }
       }
     ]
   }
