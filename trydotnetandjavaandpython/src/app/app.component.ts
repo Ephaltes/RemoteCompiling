@@ -1,86 +1,91 @@
-import { FlatTreeControl } from '@angular/cdk/tree';
-import { Component } from '@angular/core';
-import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
-import { CodeModel } from '@ngstack/code-editor';
-interface CodeFile {
-  name: string;
-  code: string
-}
-interface FileNode {
-  name: string;
-  code?: string;
-  parent?:FileNode;
-  children?: FileNode[];
-}
-interface FlatNode {
-  expandable: boolean;
-  name: string;
-  level: number;
-}
-const TREE_DATA: FileNode[] = [
-  {
-    name: 'Files',
-    children: [
-      {
-        name: 'HelloWorld.cs',
-        code: "xd"
-      },
-      {
-        name: 'HelloWorld.java',
-        code: ""
-      },
-      {
-        name: 'HelloWorld.py',
-        code: ""
-      },
-    ]
-  }
-];
-
+import { NestedTreeControl } from '@angular/cdk/tree';
+import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { MatTreeNestedDataSource } from '@angular/material/tree';
+import { CodeEditorService, CodeModel } from '@ngstack/code-editor';
+import { Observable } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
+import { FileDatabase } from './file-database';
+import { FileNode, FileNodeType } from './file-node';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  encapsulation: ViewEncapsulation.None,
+  providers: [FileDatabase]
 })
 
-export class AppComponent {
+export class AppComponent implements OnInit {
+  nestedTreeControl: NestedTreeControl<FileNode>;
+  nestedDataSource: MatTreeNestedDataSource<FileNode>;
   title = 'trydotnetandjavaandpython';
-  theme = 'vs-dark';
 
-  codeModel: CodeModel = {
-    language: 'csharp',
-    uri: 'Program.cs',
-    value: '',
-  };
+  themes = [
+    { name: 'Visual Studio', value: 'vs' },
+    { name: 'Visual Studio Dark', value: 'vs-dark' },
+    { name: 'High Contrast Dark', value: 'hc-black' },
+  ];
+
+  selectedModel: CodeModel = null;
+  activeTheme = 'vs-dark';
+  readOnly = false;
+  isLoading = false;
+  isLoading$: Observable<boolean>;
+
+  @ViewChild('file')
+  fileInput: ElementRef;
 
   options = {
     contextmenu: true,
     minimap: {
-      enabled: true,
+      enabled: false,
     },
   };
-  constructor() {
-    this.dataSource.data = TREE_DATA;
+  constructor(database: FileDatabase, editorService: CodeEditorService) {
+    this.nestedTreeControl = new NestedTreeControl<FileNode>(this._getChildren);
+    this.nestedDataSource = new MatTreeNestedDataSource();
+
+    database.dataChange.subscribe(
+      (data) => (this.nestedDataSource.data = data)
+    );
+
+    this.isLoading$ = editorService.loadingTypings.pipe(debounceTime(300));
   }
+
+  hasNestedChild(_: number, nodeData: FileNode): boolean {
+    return nodeData.type === FileNodeType.folder;
+  }
+
+  private _getChildren = (node: FileNode) => node.children;
 
   onCodeChanged(value: any) {
     console.log('CODE', value);
   }
-
-  private _transformer = (node: FileNode, level: number) => {
-    return {
-      expandable: !!node.children && node.children.length > 0,
-      name: node.name,
-      level: level,
-    };
+  isNodeSelected(node: FileNode): boolean {
+    return (
+      node &&
+      node.code &&
+      this.selectedModel &&
+      node.code === this.selectedModel
+    );
   }
-  
-  treeControl = new FlatTreeControl<FlatNode>(
-    node => node.level, node => node.expandable);
 
-  treeFlattener = new MatTreeFlattener(
-    this._transformer, node => node.level, node => node.expandable, node => node.children);
+  selectNode(node: FileNode) {
+    this.isLoading = false;
+    console.log(node);
+    this.selectedModel = node.code;
+  }
 
-  dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
-  hasChild = (_: number, node: FlatNode) => node.expandable;
+  onEditorLoaded() {
+    console.log('loaded');
+  }
+  ngOnInit() {
+    /*
+    this.selectedModel = {
+      language: 'json',
+      uri: 'main.json',
+      value: '{}'
+    };
+    */
+  }
+
 }
