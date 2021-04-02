@@ -27,7 +27,8 @@ export class AppComponent implements OnInit {
     { name: 'Visual Studio Dark', value: 'vs-dark' },
     { name: 'High Contrast Dark', value: 'hc-black' },
   ];
-
+  versions = [{ value: "5.0" }, { value: "3.1" }]
+  selected = "";
   selectedModel: CodeModel = null;
   activeTheme = 'vs-dark';
   readOnly = false;
@@ -65,7 +66,7 @@ export class AppComponent implements OnInit {
       `python`,
       this.domSanitizer.bypassSecurityTrustResourceUrl(`./assets/python.svg`)
     );
-
+    this.selected = this.versions[0].value;
   }
 
   hasNestedChild(_: number, nodeData: FileNode): boolean {
