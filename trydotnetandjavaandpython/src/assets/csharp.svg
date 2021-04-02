@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="210mm" height="297mm" version="1.1" viewBox="0 0 210 297" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+ <metadata>
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <circle cx="106.97" cy="137.21" r="99.408" opacity=".999" stroke-linejoin="round" stroke-width="10.572"/>
+ <g transform="matrix(1.6017 0 0 1.6017 -43.196 -36.911)" fill="#000000" font-family="sans-serif">
+  <text x="43.503628" y="149.24696" font-size="112.89px" stroke-width=".26458" style="line-height:1.25" xml:space="preserve"><tspan x="43.503628" y="149.24696" fill="#ffffff" font-family="'Century Gothic'" font-size="112.89px" font-weight="bold" stroke-width=".26458">C</tspan></text>
+  <text x="114.82458" y="122.52394" font-size="42.333px" stroke-width=".26079" style="line-height:1.25" xml:space="preserve"><tspan x="114.82458" y="122.52394" fill="#ffffff" font-family="Cambria" font-size="42.333px" stroke-width=".26079">#</tspan></text>
+  <text font-size="10.583px" style="line-height:1.25;shape-inside:url(#rect1574);white-space:pre" xml:space="preserve"/>
+ </g>
+</svg>

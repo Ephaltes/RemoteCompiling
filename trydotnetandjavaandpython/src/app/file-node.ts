@@ -1,7 +1,9 @@
 import { CodeModel } from '@ngstack/code-editor/public_api';
 
 export enum FileNodeType {
-    file = 'file',
+    csharp = 'csharp',
+    java = 'java',
+    python = 'python',
     folder = 'folder'
 }
 

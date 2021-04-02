@@ -10,7 +10,7 @@ const FILES_DATA: FileNode[] = [
 
       {
         name: 'HelloWorld.cs',
-        type: FileNodeType.file,
+        type: FileNodeType.csharp,
         code: {
           language: 'csharp',
           uri: 'Program.cs',
@@ -31,7 +31,7 @@ const FILES_DATA: FileNode[] = [
       },
       {
         name: 'HelloWorld.java',
-        type: FileNodeType.file,
+        type: FileNodeType.java,
         code: {
           language: 'java',
           uri: 'main.java',
@@ -48,7 +48,7 @@ const FILES_DATA: FileNode[] = [
       },
       {
         name: 'HelloWorld.py',
-        type: FileNodeType.file,
+        type: FileNodeType.python,
         code: {
           language: 'python',
           uri: 'main.py',
