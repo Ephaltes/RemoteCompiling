@@ -27,10 +27,12 @@ export class AppComponent implements OnInit {
     { name: 'Visual Studio Dark', value: 'vs-dark' },
     { name: 'High Contrast Dark', value: 'hc-black' },
   ];
-  versions = [{ value: "5.0" }, { value: "3.1" }]
-  selected = "";
+  langVersions = { csharp: ["5.0", "3.1"], java: ["8", "11"], python: ["3", "2"] }
+  selectedCSharpVersion = "";
+  selectedJavaVersion = "";
+  selectedPythonVersion = "";
   selectedModel: CodeModel = null;
-  activeTheme = 'vs-dark';
+  selectedTheme = 'vs-dark';
   readOnly = false;
   isLoading = false;
   isLoading$: Observable<boolean>;
@@ -66,7 +68,9 @@ export class AppComponent implements OnInit {
       `python`,
       this.domSanitizer.bypassSecurityTrustResourceUrl(`./assets/python.svg`)
     );
-    this.selected = this.versions[0].value;
+    this.selectedCSharpVersion = this.langVersions.csharp[0];
+    this.selectedJavaVersion = this.langVersions.java[0];
+    this.selectedPythonVersion = this.langVersions.python[0];
   }
 
   hasNestedChild(_: number, nodeData: FileNode): boolean {
@@ -95,6 +99,17 @@ export class AppComponent implements OnInit {
 
   onEditorLoaded() {
     console.log('loaded');
+  }
+  runCode() {
+    console.log(this.selectedModel.value);
+    console.log(this.selectedModel.language);
+    if (this.selectedModel.language == 'csharp')
+      console.log(this.selectedCSharpVersion);
+    if (this.selectedModel.language == 'java')
+      console.log(this.selectedJavaVersion);
+    if (this.selectedModel.language == 'python')
+      console.log(this.selectedPythonVersion);
+
   }
   ngOnInit() {
     this.selectNode(this.nestedDataSource.data[0].children[0]);

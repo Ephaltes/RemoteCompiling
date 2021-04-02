@@ -9,7 +9,7 @@
 
 
     <!-- Code Editor-->
-    <ngs-code-editor [codeModel]="selectedModel" [theme]="activeTheme" [options]="options"
+    <ngs-code-editor [codeModel]="selectedModel" [theme]="selectedTheme" [options]="options"
       style="width: 100%; height: 100%;" (valueChanged)="onCodeChanged($event)" (loaded)="onEditorLoaded()">
     </ngs-code-editor>
   </mat-grid-tile>
@@ -64,29 +64,49 @@
         <mat-grid-tile [colspan]="2" [rowspan]="3">
           <mat-form-field appearance="fill" class="versionActionBar" [style.height.vh]="5">
             <mat-label>Version</mat-label>
-            <mat-select [(value)]="selected">
-              <mat-option *ngFor="let version of versions" [value]="version.value">
-                {{version.value}}
-              </mat-option>
-            </mat-select>
+            <!--C-Sharp Version List-->
+            <ng-container *ngIf="selectedModel.language=='csharp'">
+              <mat-select [(value)]="selectedCSharpVersion">
+                <mat-option *ngFor="let version of langVersions.csharp" [value]="version">
+                  {{version}}
+                </mat-option>
+              </mat-select>
+            </ng-container>
+            <!--Java Version List-->
+            <ng-container *ngIf="selectedModel.language=='java'">
+              <mat-select [(value)]="selectedJavaVersion">
+                <mat-option *ngFor="let version of langVersions.java" [value]="version">
+                  {{version}}
+                </mat-option>
+              </mat-select>
+            </ng-container>
+            <!--Python Version List-->
+            <ng-container *ngIf="selectedModel.language=='python'">
+              <mat-select [(value)]="selectedPythonVersion">
+                <mat-option *ngFor="let version of langVersions.python" [value]="version">
+                  {{version}}
+                </mat-option>
+              </mat-select>
+            </ng-container>
+
           </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile [colspan]="1" [rowspan]="3">
-          <button class="runActionBar" mat-raised-button color="primary" type="submit">Run</button>
+          <button class="runActionBar" mat-raised-button color="primary" (click)="runCode()">Run</button>
         </mat-grid-tile>
         <mat-grid-tile [colspan]="10" [rowspan]="3"></mat-grid-tile>
         <mat-grid-tile [colspan]="2" [rowspan]="3">
           <mat-form-field appearance="fill" class="versionActionBar" [style.height.vh]="5">
             <mat-label>Theme</mat-label>
-            <mat-select [(value)]="selected">
-              <mat-option *ngFor="let version of versions" [value]="version.value">
-                {{version.value}}
+            <mat-select [(value)]="selectedTheme">
+              <mat-option *ngFor="let theme of themes" [value]="theme.value">
+                {{theme.name}}
               </mat-option>
             </mat-select>
           </mat-form-field>
         </mat-grid-tile>
 
-        <mat-grid-tile [colspan]="10" [rowspan]="7">
+        <mat-grid-tile [colspan]="15" [rowspan]="7">
           Output
         </mat-grid-tile>
       </mat-grid-list>
