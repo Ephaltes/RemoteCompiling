@@ -1,11 +1,14 @@
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { MatIconRegistry } from '@angular/material/icon';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { CodeEditorService, CodeModel } from '@ngstack/code-editor';
 import { Observable } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { FileDatabase } from './file-database';
 import { FileNode, FileNodeType } from './file-node';
+import { DomSanitizer } from "@angular/platform-browser";
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -40,7 +43,7 @@ export class AppComponent implements OnInit {
       enabled: false,
     },
   };
-  constructor(database: FileDatabase, editorService: CodeEditorService) {
+  constructor(database: FileDatabase, editorService: CodeEditorService, private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer) {
     this.nestedTreeControl = new NestedTreeControl<FileNode>(this._getChildren);
     this.nestedDataSource = new MatTreeNestedDataSource();
 
@@ -49,6 +52,20 @@ export class AppComponent implements OnInit {
     );
 
     this.isLoading$ = editorService.loadingTypings.pipe(debounceTime(300));
+    this.matIconRegistry.addSvgIcon(
+      `csharp`,
+      this.domSanitizer.bypassSecurityTrustResourceUrl(`./assets/csharp.svg`)
+    );
+    this.matIconRegistry.addSvgIcon(
+      `java`,
+      this.domSanitizer.bypassSecurityTrustResourceUrl(`./assets/java.svg`)
+    );
+
+    this.matIconRegistry.addSvgIcon(
+      `python`,
+      this.domSanitizer.bypassSecurityTrustResourceUrl(`./assets/python.svg`)
+    );
+
   }
 
   hasNestedChild(_: number, nodeData: FileNode): boolean {

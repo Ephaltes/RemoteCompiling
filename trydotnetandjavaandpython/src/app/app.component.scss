@@ -2,7 +2,6 @@
     height: calc(100vh - 64px);
     overflow: hidden;
   }
-  
   .file-tree {
     background-color: rgba(26, 32, 53, 1);
     display: flex;
@@ -32,6 +31,7 @@
       display: flex;
       cursor: pointer;
       user-select: none;
+      
   
       &__icon {
         float: left;
