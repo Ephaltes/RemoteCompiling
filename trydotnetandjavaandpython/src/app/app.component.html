@@ -58,6 +58,38 @@
 
   <!--Output-->
   <mat-grid-tile [colspan]="10" [rowspan]="3">
-    Output
+    <div class="internalMatGridOutputActionBar">
+      <mat-grid-list cols="15" rows="10" rowHeight="2vh">
+
+        <mat-grid-tile [colspan]="2" [rowspan]="3">
+          <mat-form-field appearance="fill" class="versionActionBar" [style.height.vh]="5">
+            <mat-label>Version</mat-label>
+            <mat-select [(value)]="selected">
+              <mat-option *ngFor="let version of versions" [value]="version.value">
+                {{version.value}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="1" [rowspan]="3">
+          <button class="runActionBar" mat-raised-button color="primary" type="submit">Run</button>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="10" [rowspan]="3"></mat-grid-tile>
+        <mat-grid-tile [colspan]="2" [rowspan]="3">
+          <mat-form-field appearance="fill" class="versionActionBar" [style.height.vh]="5">
+            <mat-label>Theme</mat-label>
+            <mat-select [(value)]="selected">
+              <mat-option *ngFor="let version of versions" [value]="version.value">
+                {{version.value}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="10" [rowspan]="7">
+          Output
+        </mat-grid-tile>
+      </mat-grid-list>
+    </div>
   </mat-grid-tile>
 </mat-grid-list>
