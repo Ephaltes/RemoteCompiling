@@ -36,6 +36,7 @@ export class AppComponent implements OnInit {
   readOnly = false;
   isLoading = false;
   isLoading$: Observable<boolean>;
+  output = "";
 
   @ViewChild('file')
   fileInput: ElementRef;
@@ -109,6 +110,7 @@ export class AppComponent implements OnInit {
       console.log(this.selectedJavaVersion);
     if (this.selectedModel.language == 'python')
       console.log(this.selectedPythonVersion);
+    this.output = this.selectedModel.value;
 
   }
   ngOnInit() {
