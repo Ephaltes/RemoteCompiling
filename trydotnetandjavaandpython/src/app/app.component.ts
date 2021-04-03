@@ -8,13 +8,14 @@ import { debounceTime } from 'rxjs/operators';
 import { FileDatabase } from './file-database';
 import { FileNode, FileNodeType } from './file-node';
 import { DomSanitizer } from "@angular/platform-browser";
+import { CompileService } from './service/compile.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  providers: [FileDatabase]
+  providers: [FileDatabase, CompileService]
 })
 
 export class AppComponent implements OnInit {
@@ -47,7 +48,7 @@ export class AppComponent implements OnInit {
       enabled: false,
     },
   };
-  constructor(database: FileDatabase, editorService: CodeEditorService, private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer) {
+  constructor(database: FileDatabase, editorService: CodeEditorService, private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer, private compileService: CompileService) {
     this.nestedTreeControl = new NestedTreeControl<FileNode>(this._getChildren);
     this.nestedDataSource = new MatTreeNestedDataSource();
 
@@ -111,6 +112,7 @@ export class AppComponent implements OnInit {
     if (this.selectedModel.language == 'python')
       console.log(this.selectedPythonVersion);
     this.output = this.selectedModel.value;
+    this.compileService.compile(this.selectedCSharpVersion, this.selectedModel).subscribe((item) => console.log(item));
 
   }
   ngOnInit() {
