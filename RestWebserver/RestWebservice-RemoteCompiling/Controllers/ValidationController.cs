@@ -35,7 +35,7 @@ namespace RestWebservice_RemoteCompiling.Controllers
                    */
                     return Ok();
                 }
-                catch (NullReferenceException e)
+                catch
                 {
                     return NotFound();
                 }
