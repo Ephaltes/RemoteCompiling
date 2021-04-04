@@ -28,10 +28,11 @@ export class AppComponent implements OnInit {
     { name: 'Visual Studio Dark', value: 'vs-dark' },
     { name: 'High Contrast Dark', value: 'hc-black' },
   ];
-  langVersions = { csharp: ["5", "3.1"], java: ["8", "11"], python: ["3", "2"] }
+  langVersions = { csharp: ["5"], java: ["15.0.2"], python: ["3.9.1", "2.7.18"] }
   selectedCSharpVersion = "";
   selectedJavaVersion = "";
   selectedPythonVersion = "";
+  selectedVersion = "";
   selectedModel: CodeModel = null;
   selectedTheme = 'vs-dark';
   readOnly = false;
@@ -82,7 +83,7 @@ export class AppComponent implements OnInit {
   private _getChildren = (node: FileNode) => node.children;
 
   onCodeChanged(value: any) {
-    console.log('CODE', value);
+    //console.log('CODE', value);
   }
   isNodeSelected(node: FileNode): boolean {
     return (
@@ -103,16 +104,15 @@ export class AppComponent implements OnInit {
     console.log('loaded');
   }
   runCode() {
-    console.log(this.selectedModel.value);
-    console.log(this.selectedModel.language);
     if (this.selectedModel.language == 'csharp')
-      console.log(this.selectedCSharpVersion);
+      this.selectedVersion = this.selectedCSharpVersion;
     if (this.selectedModel.language == 'java')
-      console.log(this.selectedJavaVersion);
+      this.selectedVersion = this.selectedJavaVersion;
     if (this.selectedModel.language == 'python')
-      console.log(this.selectedPythonVersion);
-    this.output = this.selectedModel.value;
-    this.compileService.compile(this.selectedCSharpVersion, this.selectedModel).subscribe((item) => console.log(item));
+      this.selectedVersion = this.selectedPythonVersion;
+    this.output = "Loading...";
+    this.isLoading = true;
+    this.compileService.compile(this.selectedVersion, this.selectedModel).subscribe((item => { this.output = item.run.stdout; this.isLoading = false }))
 
   }
   ngOnInit() {

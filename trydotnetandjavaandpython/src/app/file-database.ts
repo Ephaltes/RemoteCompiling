@@ -9,11 +9,11 @@ const FILES_DATA: FileNode[] = [
     children: [
 
       {
-        name: 'Program.cs',
+        name: 'HelloWorld.cs',
         type: FileNodeType.csharp,
         code: {
           language: 'csharp',
-          uri: 'Program.cs',
+          uri: 'HelloWorld.cs',
           value: [
             'using System;',
             `namespace HelloWorld`,
