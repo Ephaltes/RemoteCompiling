@@ -58,49 +58,51 @@
 
   <!--Actionbar-->
   <mat-grid-tile [colspan]="10" [rowspan]="1">
-    <div class="actionBar">
+    <div class="wrap margin">
+      <div>
+        <mat-form-field appearance="fill" [style.height.px]="45" class="selectVersionActionBar">
+          <mat-label>Version</mat-label>
+          <!--C-Sharp Version List-->
+          <ng-container *ngIf="selectedModel.language=='csharp'">
+            <mat-select [(value)]="selectedCSharpVersion">
+              <mat-option *ngFor="let version of langVersions.csharp" [value]="version">
+                {{version}}
+              </mat-option>
+            </mat-select>
+          </ng-container>
+          <!--Java Version List-->
+          <ng-container *ngIf="selectedModel.language=='java'">
+            <mat-select [(value)]="selectedJavaVersion">
+              <mat-option *ngFor="let version of langVersions.java" [value]="version">
+                {{version}}
+              </mat-option>
+            </mat-select>
+          </ng-container>
+          <!--Python Version List-->
+          <ng-container *ngIf="selectedModel.language=='python'">
+            <mat-select [(value)]="selectedPythonVersion">
+              <mat-option *ngFor="let version of langVersions.python" [value]="version">
+                {{version}}
+              </mat-option>
+            </mat-select>
+          </ng-container>
 
-      <mat-form-field appearance="fill" [style.height.px]="45" class="selectVersionActionBar">
-        <mat-label>Version</mat-label>
-        <!--C-Sharp Version List-->
-        <ng-container *ngIf="selectedModel.language=='csharp'">
-          <mat-select [(value)]="selectedCSharpVersion">
-            <mat-option *ngFor="let version of langVersions.csharp" [value]="version">
-              {{version}}
-            </mat-option>
-          </mat-select>
-        </ng-container>
-        <!--Java Version List-->
-        <ng-container *ngIf="selectedModel.language=='java'">
-          <mat-select [(value)]="selectedJavaVersion">
-            <mat-option *ngFor="let version of langVersions.java" [value]="version">
-              {{version}}
-            </mat-option>
-          </mat-select>
-        </ng-container>
-        <!--Python Version List-->
-        <ng-container *ngIf="selectedModel.language=='python'">
-          <mat-select [(value)]="selectedPythonVersion">
-            <mat-option *ngFor="let version of langVersions.python" [value]="version">
-              {{version}}
-            </mat-option>
-          </mat-select>
-        </ng-container>
-
-      </mat-form-field>
-
-      <button class="runActionBar" mat-raised-button color="primary" [disabled]="isLoading" (click)="runCode()">Run</button>
-
+        </mat-form-field>
+      </div>
+      <div class="runActionBar">
+        <button mat-raised-button color="primary" [disabled]="isLoading" (click)="runCode()">Run</button>
+      </div>
       <!--<mat-grid-tile [colspan]="15" [rowspan]="3"></mat-grid-tile>-->
-
-      <mat-form-field appearance="fill" [style.height.px]="45" class="selectThemeActionBar">
-        <mat-label>Theme</mat-label>
-        <mat-select [(value)]="selectedTheme">
-          <mat-option *ngFor="let theme of themes" [value]="theme.value">
-            {{theme.name}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+      <div>
+        <mat-form-field appearance="fill" [style.height.px]="45" class="selectThemeActionBar">
+          <mat-label>Theme</mat-label>
+          <mat-select [(value)]="selectedTheme">
+            <mat-option *ngFor="let theme of themes" [value]="theme.value">
+              {{theme.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
     </div>
   </mat-grid-tile>
   <!--Output-->
