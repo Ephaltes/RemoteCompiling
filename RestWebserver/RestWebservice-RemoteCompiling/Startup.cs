@@ -1,22 +1,17 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using RestWebservice_RemoteCompiling.Helpers;
 
 namespace RestWebservice_RemoteCompiling
 {
     public class Startup
     {
+        private readonly string _AllAllowedPolicy = "AllAllowedPolicy";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -29,6 +24,17 @@ namespace RestWebservice_RemoteCompiling
         {
             services.AddHttpClient();
             services.AddSingleton<IPistonHelper, PistonHelper>();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: _AllAllowedPolicy,
+                                  builder =>
+                                  {
+                                      builder.AllowAnyOrigin().AllowAnyMethod();
+                                      //.WithMethods("POST", "GET");
+                                  });
+            });
+
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -48,9 +54,8 @@ namespace RestWebservice_RemoteCompiling
             }
 
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
+            app.UseCors();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

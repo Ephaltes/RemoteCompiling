@@ -1,14 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace RestWebservice_RemoteCompiling.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [EnableCors("AllAllowedPolicy")]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]

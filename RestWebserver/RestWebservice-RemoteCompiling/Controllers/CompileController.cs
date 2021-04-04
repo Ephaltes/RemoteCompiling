@@ -1,20 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using RestWebservice_RemoteCompiling.JsonObjClasses;
-using System.Web;
-using System.Net.Http;
-using RestWebservice_RemoteCompiling.Helpers;
-using System.Text;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using RestWebservice_RemoteCompiling.Helpers;
+using RestWebservice_RemoteCompiling.JsonObjClasses;
+using System;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace RestWebservice_RemoteCompiling.Controllers
 {
     [ApiController]
     [Route("/Api/Compile")]
+    [EnableCors("AllAllowedPolicy")]
     public class CompileController : ControllerBase
     {
         private readonly IPistonHelper _PistonHelper;
@@ -33,29 +31,30 @@ namespace RestWebservice_RemoteCompiling.Controllers
 
                 HttpContent httpContent = JsonObjToHttpContent(request);
 
-                var response =  _Http.PostAsync($"{_PistonHelper.Get_Piston_Service_Adress()}/jobs", httpContent).Result;
-               
-                if (response.IsSuccessStatusCode) {
+                var response = _Http.PostAsync($"{_PistonHelper.Get_Piston_Service_Adress()}/jobs", httpContent).Result;
+
+                if (response.IsSuccessStatusCode)
+                {
                     return Ok(JsonConvert.DeserializeObject<JSON_PistonCompileAndRUn>(await response.Content.ReadAsStringAsync()));
                 }
                 else
-                {                 
+                {
                     return BadRequest(JsonConvert.DeserializeObject<JSON_PistonError>(await response.Content.ReadAsStringAsync()));
                 }
-                
+
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return NotFound(e.Message + e.StackTrace);
             }
-          
+
         }
         private HttpContent JsonObjToHttpContent(JSON_sendCompileRequest request)
         {
             var stringPayload = JsonConvert.SerializeObject(request);
             return new StringContent(stringPayload, Encoding.UTF8, "application/json");
         }
-        private JSON_sendCompileRequest GetJsonRequestObj(string language,string version,JSON_Code Code)
+        private JSON_sendCompileRequest GetJsonRequestObj(string language, string version, JSON_Code Code)
         {
             JSON_sendCompileRequest item = new JSON_sendCompileRequest
             {
