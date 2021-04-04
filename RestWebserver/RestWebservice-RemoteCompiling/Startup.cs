@@ -30,7 +30,8 @@ namespace RestWebservice_RemoteCompiling
                 options.AddPolicy(name: _AllAllowedPolicy,
                                   builder =>
                                   {
-                                      builder.WithOrigins("*");//.WithMethods("POST", "GET");
+                                      builder.AllowAnyOrigin().AllowAnyMethod();
+                                      //.WithMethods("POST", "GET");
                                   });
             });
 
