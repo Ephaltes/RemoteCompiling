@@ -8,11 +8,13 @@ using RestWebservice_RemoteCompiling.JsonObjClasses;
 using System.Web;
 using System.Net.Http;
 using RestWebservice_RemoteCompiling.Helpers;
+using Microsoft.AspNetCore.Cors;
 
 namespace RestWebservice_RemoteCompiling.Controllers
 {
     [Route("Api/Validation")]
     [ApiController]
+    [EnableCors("AllAllowedPolicy")]
     public class ValidationController : ControllerBase
     {
 

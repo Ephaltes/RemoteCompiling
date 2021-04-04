@@ -5,11 +5,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.IO;
+using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Cors;
 
 namespace RestWebservice_RemoteCompiling.Controllers
 {
     [Route("Api/Templates")]
     [ApiController]
+    [EnableCors("AllAllowedPolicy")]
     public class TempleteController : ControllerBase
     {
         [HttpGet("{language}")]

@@ -10,11 +10,13 @@ using System.Net.Http;
 using RestWebservice_RemoteCompiling.Helpers;
 using System.Text;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Cors;
 
 namespace RestWebservice_RemoteCompiling.Controllers
 {
     [ApiController]
     [Route("/Api/Compile")]
+    [EnableCors("AllAllowedPolicy")]
     public class CompileController : ControllerBase
     {
         private readonly IPistonHelper _PistonHelper;

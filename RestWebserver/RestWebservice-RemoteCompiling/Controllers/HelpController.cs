@@ -8,11 +8,13 @@ using RestWebservice_RemoteCompiling.JsonObjClasses;
 using System.Web;
 using System.Net.Http;
 using RestWebservice_RemoteCompiling.Helpers;
+using Microsoft.AspNetCore.Cors;
 
 namespace RestWebservice_RemoteCompiling.Controllers
 {
     [Route("Api/Help")]
     [ApiController]
+    [EnableCors("AllAllowedPolicy")]
     public class HelpController : ControllerBase
     {
         private readonly IPistonHelper _PisonHelper;
@@ -35,7 +37,7 @@ namespace RestWebservice_RemoteCompiling.Controllers
         [HttpGet("Licence")]
         public IActionResult Licence()
         {
-                return Ok("\"MIT License\"");
+                return Ok("\"Web Api Licence: MIT License\"");
         }
         [HttpGet("PublicGithub")]
         public IActionResult PublicGithub()
