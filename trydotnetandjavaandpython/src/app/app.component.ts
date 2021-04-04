@@ -28,7 +28,7 @@ export class AppComponent implements OnInit {
     { name: 'Visual Studio Dark', value: 'vs-dark' },
     { name: 'High Contrast Dark', value: 'hc-black' },
   ];
-  langVersions = { csharp: ["5.0", "3.1"], java: ["8", "11"], python: ["3", "2"] }
+  langVersions = { csharp: ["5", "3.1"], java: ["8", "11"], python: ["3", "2"] }
   selectedCSharpVersion = "";
   selectedJavaVersion = "";
   selectedPythonVersion = "";

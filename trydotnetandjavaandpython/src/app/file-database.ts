@@ -9,7 +9,7 @@ const FILES_DATA: FileNode[] = [
     children: [
 
       {
-        name: 'HelloWorld.cs',
+        name: 'Program.cs',
         type: FileNodeType.csharp,
         code: {
           language: 'csharp',
@@ -26,7 +26,7 @@ const FILES_DATA: FileNode[] = [
             '        }',
             '    }',
             '}'
-          ].join('\n')
+          ].join('\r\n')
         }
       },
       {
