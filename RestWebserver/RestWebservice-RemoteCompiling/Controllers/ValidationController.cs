@@ -20,7 +20,7 @@ namespace RestWebservice_RemoteCompiling.Controllers
             _LanguageAndVersionValidator = languageAndVersionValidator;
         }
         [HttpPost("{language}/{version}")]
-        public IActionResult ValidateCodeWithVersion(string language, string version, JSON_Code Code)
+        public IActionResult ValidateCodeWithVersion(string language, string version, Code Code)
         {
             try
             {

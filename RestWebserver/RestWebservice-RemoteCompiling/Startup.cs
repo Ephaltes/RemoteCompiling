@@ -1,3 +1,6 @@
+using System.Net;
+using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -5,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using RestWebservice_RemoteCompiling.Helpers;
+using RestWebservice_RemoteCompiling.PipelineBehavior;
 
 namespace RestWebservice_RemoteCompiling
 {
@@ -17,13 +21,15 @@ namespace RestWebservice_RemoteCompiling
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        public IConfiguration Configuration { get; private set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddHttpClient();
             services.AddSingleton<IPistonHelper, PistonHelper>();
+            services.AddSingleton<IHttpHelper>(x => new HttpHelper
+            (Configuration.GetSection("RemoteCompilerApiLocation").Value));
 
             services.AddCors(options =>
             {
@@ -41,6 +47,11 @@ namespace RestWebservice_RemoteCompiling
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "RestWebservice_RemoteCompiling", Version = "v1" });
             });
+            
+            //CQRS Pattern + Mediator Pattern https://www.youtube.com/watch?v=YzOBrVlthMk&feature=youtu.be
+            services.AddMediatR(typeof(Startup));            
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+            services.AddValidatorsFromAssembly(typeof(Startup).Assembly);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,22 +1,31 @@
-﻿using Microsoft.AspNetCore.Cors;
+﻿using System.Threading.Tasks;
+using MediatR;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing.Template;
+using RestWebservice_RemoteCompiling.Extensions;
+using RestWebservice_RemoteCompiling.Query;
 
 namespace RestWebservice_RemoteCompiling.Controllers
 {
     [Route("Api/Templates")]
     [ApiController]
     [EnableCors("AllAllowedPolicy")]
-    public class TempleteController : ControllerBase
+    public class TemplateController : ControllerBase
     {
-        [HttpGet("{language}")]
-        public IActionResult GetTemplateForLanguage(string language)
+
+        private readonly IMediator _mediator;
+        public TemplateController(IMediator mediator)
         {
-            if (!System.IO.File.Exists($"./Templates/{language.ToLower()}Template.json"))
-            {
-                return NotFound();
-            }
-            string jsonString = System.IO.File.ReadAllText($"./Templates/{language.ToLower()}Template.json");
-            return Ok(jsonString);
+            _mediator = mediator;
+        }
+        
+        [HttpGet("{language}")]
+        public async Task<IActionResult> GetTemplateForLanguage(string language)
+        {
+            var query = new GetTemplateForLanguageQuery(language);
+            var result = await _mediator.Send(query);
+            return result.ToResponse();
         }
     }
 }

@@ -1,6 +1,12 @@
-﻿using Microsoft.AspNetCore.Cors;
+﻿using System.Threading.Tasks;
+using MediatR;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using RestWebservice_RemoteCompiling.Entities;
+using RestWebservice_RemoteCompiling.Extensions;
 using RestWebservice_RemoteCompiling.Helpers;
+using RestWebservice_RemoteCompiling.Query;
+using Serilog;
 
 namespace RestWebservice_RemoteCompiling.Controllers
 {
@@ -9,32 +15,27 @@ namespace RestWebservice_RemoteCompiling.Controllers
     [EnableCors("AllAllowedPolicy")]
     public class HelpController : ControllerBase
     {
-        private readonly IPistonHelper _PisonHelper;
-        public HelpController(IPistonHelper pistonHelper)
+        private readonly IMediator _mediator;
+        public HelpController(IMediator mediator)
         {
-            _PisonHelper = pistonHelper;
+            _mediator = mediator;
         }
         [HttpGet("runtimes")]
-        public IActionResult GetSupportedRuntimes()
+        public async Task<IActionResult> GetSupportedRuntimes()
         {
-            try
-            {
-                return Ok(_PisonHelper.GetSupportedRuntimes());
-            }
-            catch
-            {
-                return NotFound();
-            }
+            Log.Debug("Runtimes Requested");
+            var result = await _mediator.Send(new GetRuntimesQuery());
+            return result.ToResponse();
         }
-        [HttpGet("Licence")]
-        public IActionResult Licence()
+        [HttpGet("License")]
+        public IActionResult License()
         {
-            return Ok("\"Web Api Licence: MIT License\"");
+            return CustomResponse.Success("Web Api Licence: MIT License").ToResponse();
         }
         [HttpGet("PublicGithub")]
         public IActionResult PublicGithub()
         {
-            return Ok("\"https://github.com/kienboec/RemoteCompiling\"");
+            return CustomResponse.Success("https://github.com/kienboec/RemoteCompiling").ToResponse();
 
         }
         [HttpGet("WhatIsThisApi")]
@@ -42,8 +43,9 @@ namespace RestWebservice_RemoteCompiling.Controllers
         {
 
             //change bla bla with actual names
-            return Ok("\"A student project from the University of Applied Sciences Vienna in the year 2021 (4th Semester). Developers: blabla under supervision of Daniel Kienboec. This API serves as a remote compiling service.\"");
-
+            return CustomResponse.Success("A student project from the University of Applied Sciences Vienna in the year 2021 (4th Semester). " +
+                                          "Developers: blabla under supervision of Daniel Kienboec. This API serves as a remote compiling service.")
+                                            .ToResponse();
         }
     }
 }
