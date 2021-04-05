@@ -22,7 +22,7 @@ const FILES_DATA: FileNode[] = [
             '    {',
             `        static void Main(string[] args)`,
             `        {`,
-            `            Console.WriteLine("Hello World from .NET!");`,
+            `            Console.WriteLine("Hello, world from .NET!");`,
             '        }',
             '    }',
             '}'
@@ -40,7 +40,7 @@ const FILES_DATA: FileNode[] = [
             `{`,
             `       public static void main (String[] args)`,
             `       {`,
-            `             System.out.println("Hello World!");`,
+            `             System.out.println("Hello, world from Java!");`,
             `       }`,
             `}`
           ].join('\n')
@@ -53,7 +53,7 @@ const FILES_DATA: FileNode[] = [
           language: 'python',
           uri: 'main.py',
           value:
-            `print('Hello, world!')`,
+            `print('Hello, world from Python!')`,
         }
       }
     ]
