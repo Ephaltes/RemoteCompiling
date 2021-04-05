@@ -37,7 +37,15 @@ namespace RestWebservice_RemoteCompiling.Handlers
                 
                 if (response.IsSuccessStatusCode)
                 {
-                    var content = JsonConvert.DeserializeObject<PistonCompileAndRun>(await response.Content.ReadAsStringAsync(cancellationToken));
+                    var settings = new JsonSerializerSettings
+                    {
+                        NullValueHandling = NullValueHandling.Ignore,
+                        MissingMemberHandling = MissingMemberHandling.Ignore
+                    };
+                    
+                    
+                    var resp = await response.Content.ReadAsStringAsync(cancellationToken);
+                    var content = JsonConvert.DeserializeObject<PistonCompileAndRun>(resp,settings);
                     return CustomResponse.Success(content);
                 }
                 else

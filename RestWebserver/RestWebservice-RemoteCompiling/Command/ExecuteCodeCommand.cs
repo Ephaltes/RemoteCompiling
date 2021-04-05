@@ -7,15 +7,8 @@ namespace RestWebservice_RemoteCompiling.Command
 {
     public class ExecuteCodeCommand : IRequest<CustomResponse<PistonCompileAndRun>>
     {
-        public string Language { get; }
-        public string Version { get; }
-        public Code Code { get; }
-
-        public ExecuteCodeCommand(string language, string version, Code code)
-        {
-            Language = language;
-            Version = version;
-            Code = code;
-        }
+        public string Language { get; set; }
+        public string Version { get; set; }
+        public Code Code { get; set; }
     }
 }

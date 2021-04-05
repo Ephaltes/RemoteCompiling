@@ -27,7 +27,7 @@ namespace RestWebservice_RemoteCompiling.Extensions
                 language = command.Language,
                 version = command.Version,
                 main = command.Code.mainFile,
-                stdin = command.Code.stdin,
+                stdin = command.Code.stdin ,
                 compile_timeout = Int32.Parse(pistonHelper.GetCompileTimeout()),
                 run_timeout = Int32.Parse(pistonHelper.GetRunTimeout())
             };
