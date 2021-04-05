@@ -28,7 +28,7 @@ export class AppComponent implements OnInit {
     { name: 'Visual Studio Dark', value: 'vs-dark' },
     { name: 'High Contrast Dark', value: 'hc-black' },
   ];
-  langVersions = { csharp: ["5"], java: ["15.0.2"], python: ["3.9.1", "2.7.18"] }
+  langVersions = { csharp: ["5.0.201"], java: ["15.0.2"], python: ["3.9.1", "2.7.18"] }
   selectedCSharpVersion = "";
   selectedJavaVersion = "";
   selectedPythonVersion = "";
@@ -112,7 +112,7 @@ export class AppComponent implements OnInit {
       this.selectedVersion = this.selectedPythonVersion;
     this.output = "Loading...";
     this.isLoading = true;
-    this.compileService.compile(this.selectedVersion, this.selectedModel).subscribe((item => { this.output = item.run.stdout; this.isLoading = false }))
+    this.compileService.compile(this.selectedVersion, this.selectedModel).subscribe((item => { this.output = item.data.run.stdout; this.isLoading = false }))
 
   }
   ngOnInit() {
