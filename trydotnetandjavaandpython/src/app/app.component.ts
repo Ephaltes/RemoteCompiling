@@ -112,7 +112,7 @@ export class AppComponent implements OnInit {
       this.selectedVersion = this.selectedPythonVersion;
     this.output = "Loading...";
     this.isLoading = true;
-    this.compileService.compile(this.selectedVersion, this.selectedModel).subscribe((item => { this.output = item.data.run.stdout; this.isLoading = false }))
+    this.compileService.compile(this.selectedVersion, this.selectedModel).subscribe((item => { this.isLoading = false; item.data.run.stderr.length > 0 ? this.output = item.data.run.stderr : this.output = item.data.run.stdout }))
 
   }
   ngOnInit() {
