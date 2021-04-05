@@ -27,7 +27,7 @@ namespace RestWebservice_RemoteCompiling.Controllers
             var result = await _mediator.Send(new GetRuntimesQuery());
             return result.ToResponse();
         }
-        [HttpGet("Licence")]
+        [HttpGet("License")]
         public IActionResult License()
         {
             return CustomResponse.Success("Web Api Licence: MIT License").ToResponse();
