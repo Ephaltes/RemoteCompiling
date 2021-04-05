@@ -1,6 +1,6 @@
 ﻿namespace RestWebservice_RemoteCompiling.JsonObjClasses
 {
-    public class JSON_PistonError
+    public class PistonError
     {
         public string message { get; set; }
     }

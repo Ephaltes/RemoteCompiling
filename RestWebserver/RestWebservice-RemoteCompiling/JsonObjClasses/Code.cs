@@ -4,12 +4,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RestWebservice_RemoteCompiling.JsonObjClasses
 {
-    public class JSON_Code
+    public class Code
     {
         public List<string> args { get; set; }
         public string stdin { get; set; } //leave "" if no input
         [Required]
         public string mainFile { get; set; }
-        public List<JSON_FileArray> files { get; set; }
+        public List<FileArray> files { get; set; }
     }
 }

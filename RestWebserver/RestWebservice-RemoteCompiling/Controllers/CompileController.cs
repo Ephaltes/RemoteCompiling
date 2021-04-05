@@ -7,6 +7,9 @@ using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using MediatR;
+using RestWebservice_RemoteCompiling.Command;
+using RestWebservice_RemoteCompiling.Extensions;
 
 namespace RestWebservice_RemoteCompiling.Controllers
 {
@@ -15,59 +18,18 @@ namespace RestWebservice_RemoteCompiling.Controllers
     [EnableCors("AllAllowedPolicy")]
     public class CompileController : ControllerBase
     {
-        private readonly IPistonHelper _PistonHelper;
-        private readonly HttpClient _Http;
-        public CompileController(HttpClient http, IPistonHelper pistonHelper)
+        private readonly IMediator _mediator;
+
+        public CompileController(IMediator mediator)
         {
-            _Http = http;
-            _PistonHelper = pistonHelper;
+            _mediator = mediator;
         }
-        [HttpPost("{language}/{version}")]
-        public async Task<IActionResult> ExecuteCodeWithVersion(string language, string version, JSON_Code code)
+
+        [HttpPost]
+        public async Task<IActionResult> ExecuteCodeWithVersion([FromBody] ExecuteCodeCommand command)
         {
-            try
-            {
-                JSON_sendCompileRequest request = GetJsonRequestObj(language, version, code);
-
-                HttpContent httpContent = JsonObjToHttpContent(request);
-
-                var response = _Http.PostAsync($"{_PistonHelper.Get_Piston_Service_Adress()}/jobs", httpContent).Result;
-
-                if (response.IsSuccessStatusCode)
-                {
-                    return Ok(JsonConvert.DeserializeObject<JSON_PistonCompileAndRUn>(await response.Content.ReadAsStringAsync()));
-                }
-                else
-                {
-                    return BadRequest(JsonConvert.DeserializeObject<JSON_PistonError>(await response.Content.ReadAsStringAsync()));
-                }
-
-            }
-            catch (Exception e)
-            {
-                return NotFound(e.Message + e.StackTrace);
-            }
-
-        }
-        private HttpContent JsonObjToHttpContent(JSON_sendCompileRequest request)
-        {
-            var stringPayload = JsonConvert.SerializeObject(request);
-            return new StringContent(stringPayload, Encoding.UTF8, "application/json");
-        }
-        private JSON_sendCompileRequest GetJsonRequestObj(string language, string version, JSON_Code Code)
-        {
-            JSON_sendCompileRequest item = new JSON_sendCompileRequest
-            {
-                language = language,
-                version = version,
-                main = Code.mainFile ?? "",
-                stdin = Code.stdin ?? "",
-                compile_timeout = Int32.Parse(_PistonHelper.GetCompileTimeout()),
-                run_timeout = Int32.Parse(_PistonHelper.GetRunTimeout())
-            };
-            Code.files.ForEach(x => item.files.Add(x));
-            Code.args.ForEach(x => item.args.Add(x));
-            return item;
+            var result = await _mediator.Send(command);
+            return result.ToResponse();
         }
     }
 }

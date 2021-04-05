@@ -1,6 +1,6 @@
 ﻿namespace RestWebservice_RemoteCompiling.JsonObjClasses
 {
-    public class JSON_PistonReturn
+    public class PistonReturn
     {
         public string stdout { get; set; }
         public string stderr { get; set; }
