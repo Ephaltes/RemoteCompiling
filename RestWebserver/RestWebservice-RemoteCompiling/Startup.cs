@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using RestWebservice_RemoteCompiling.Helpers;
 using RestWebservice_RemoteCompiling.PipelineBehavior;
+using Serilog;
 
 namespace RestWebservice_RemoteCompiling
 {
@@ -19,6 +20,10 @@ namespace RestWebservice_RemoteCompiling
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(configuration)
+                .CreateLogger();
         }
 
         public IConfiguration Configuration { get; private set; }
