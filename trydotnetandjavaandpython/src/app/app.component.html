@@ -14,9 +14,11 @@
     </ngs-code-editor>
   </mat-grid-tile>
 
-
+<mat-grid-tile [colspan]="2" [rowspan]="1">
+  <button (click)="openNewFileDialog()">+</button>
+</mat-grid-tile>
   <!--File Tree-->
-  <mat-grid-tile [colspan]="2" [rowspan]="16">
+  <mat-grid-tile [colspan]="2" [rowspan]="15">
     <!--File items-->
     <mat-tree [dataSource]="nestedDataSource" [treeControl]="nestedTreeControl" class="file-tree">
       <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
@@ -45,6 +47,7 @@
                 {{ nestedTreeControl.isExpanded(node) ? 'folder_open' : 'folder' }}
               </mat-icon>
               <span class="file-node-label__text">{{node.name}}</span>
+              
             </div>
           </div>
           <ul [class.file-tree-invisible]="!nestedTreeControl.isExpanded(node)">

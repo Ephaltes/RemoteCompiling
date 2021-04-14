@@ -13,4 +13,10 @@ export class FileNode {
     type: FileNodeType;
 
     code?: CodeModel;
+
+    constructor(name:string, type:FileNodeType, code:string,){
+        this.name=name;
+        this.type=type;
+        this.code={language:type,value:code,uri:name};
+    }
 }

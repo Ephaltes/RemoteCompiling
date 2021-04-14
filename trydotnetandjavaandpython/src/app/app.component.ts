@@ -10,6 +10,8 @@ import { FileNode, FileNodeType } from './file-node';
 import { DomSanitizer } from "@angular/platform-browser";
 import { CompileService } from './service/compile.service';
 import { FileCode } from './file-code';
+import { MatDialog } from '@angular/material/dialog';
+import { AddNewFileComponent } from './add-new-file/add-new-file.component';
 
 @Component({
   selector: 'app-root',
@@ -20,6 +22,9 @@ import { FileCode } from './file-code';
 })
 
 export class AppComponent implements OnInit {
+  newFile = "Test.cs"
+  newType = FileNodeType.csharp;
+  newCode = "";
   nestedTreeControl: NestedTreeControl<FileNode>;
   nestedDataSource: MatTreeNestedDataSource<FileNode>;
   title = 'trydotnetandjavaandpython';
@@ -51,12 +56,12 @@ export class AppComponent implements OnInit {
       enabled: false,
     },
   };
-  constructor(private database: FileDatabase, private editorService: CodeEditorService, private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer, private compileService: CompileService) {
+  constructor(private database: FileDatabase, private editorService: CodeEditorService, private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer, private compileService: CompileService, private newFileDialog: MatDialog) {
     this.nestedTreeControl = new NestedTreeControl<FileNode>(this._getChildren);
     this.nestedDataSource = new MatTreeNestedDataSource();
 
     database.dataChange.subscribe(
-      (data) => { (this.nestedDataSource.data = data); this.nestedTreeControl.expand(data[0]); }
+      (data) => { (this.nestedDataSource.data = data); }
     );
 
     this.isLoading$ = editorService.loadingTypings.pipe(debounceTime(300));
@@ -76,7 +81,7 @@ export class AppComponent implements OnInit {
     this.selectedCSharpVersion = this.langVersions.csharp[0];
     this.selectedJavaVersion = this.langVersions.java[0];
     this.selectedPythonVersion = this.langVersions.python[0];
-    this.runFiles=[];
+    this.runFiles = [];
   }
 
   hasNestedChild(_: number, nodeData: FileNode): boolean {
@@ -99,7 +104,6 @@ export class AppComponent implements OnInit {
 
   selectNode(node: FileNode) {
     this.isLoading = false;
-    console.log(node);
     this.selectedModel = node.code;
   }
 
@@ -107,27 +111,35 @@ export class AppComponent implements OnInit {
     console.log('loaded');
   }
   runCode() {
-    this.runFiles=[];
-    if (this.selectedModel.language == 'csharp'){
+    this.runFiles = [];
+    if (this.selectedModel.language == 'csharp') {
       this.selectedVersion = this.selectedCSharpVersion;
-      this.nestedDataSource.data[0].children.filter(item => item.type == FileNodeType.csharp ? this.runFiles.push(new FileCode(item.code.uri,item.code.value)): false);
+      this.nestedDataSource.data.filter(item => item.type == FileNodeType.csharp ? this.runFiles.push(new FileCode(item.code.uri, item.code.value)) : false);
     }
-    if (this.selectedModel.language == 'java'){
+    if (this.selectedModel.language == 'java') {
       this.selectedVersion = this.selectedJavaVersion;
-      this.nestedDataSource.data[0].children.filter(item => item.type == FileNodeType.java ? this.runFiles.push(new FileCode(item.code.uri,item.code.value)): false);
+      this.nestedDataSource.data.filter(item => item.type == FileNodeType.java ? this.runFiles.push(new FileCode(item.code.uri, item.code.value)) : false);
     }
-    if (this.selectedModel.language == 'python'){
+    if (this.selectedModel.language == 'python') {
       this.selectedVersion = this.selectedPythonVersion;
-      this.nestedDataSource.data[0].children.filter(item => item.type == FileNodeType.python ? this.runFiles.push(new FileCode(item.code.uri,item.code.value)): false);
+      this.nestedDataSource.data.filter(item => item.type == FileNodeType.python ? this.runFiles.push(new FileCode(item.code.uri, item.code.value)) : false);
 
     }
-    this.isLoading=true;
+    this.isLoading = true;
     this.output = "Loading...";
+    console.log(this.selectedModel);
+    console.log(this.runFiles);
     this.compileService.compile(this.selectedVersion, this.selectedModel, this.runFiles).subscribe((item => { this.isLoading = false; item.data.run.stderr.length > 0 ? this.output = item.data.run.stderr : this.output = item.data.run.stdout }))
 
   }
+  openNewFileDialog() {
+    this.newFileDialog.open(AddNewFileComponent);
+  }
+  addNewFile(name: string, language: FileNodeType, code: string) {
+    this.database.add(name, language, code);
+  }
   ngOnInit() {
-    this.selectNode(this.nestedDataSource.data[0].children[0]);
+    this.selectNode(this.nestedDataSource.data[0]);
     /*
     this.selectedModel = {
       language: 'json',

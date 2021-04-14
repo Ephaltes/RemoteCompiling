@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CodeModel } from '@ngstack/code-editor';
 import { FileCode } from '../file-code';
-import { FileNode } from '../file-node';
 export interface CompileCode {
   data: {
     compile?: { code: number, signal: any, stderr: "", stdout: "" },

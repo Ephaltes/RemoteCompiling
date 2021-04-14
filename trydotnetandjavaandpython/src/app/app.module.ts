@@ -10,16 +10,19 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { MatSelectModule } from '@angular/material/select';
+import { MatDialogModule } from '@angular/material/dialog';
+import { AddNewFileComponent } from './add-new-file/add-new-file.component';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    AddNewFileComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
-    BrowserAnimationsModule, MatGridListModule, MatTreeModule, MatIconModule, MatButtonModule,
+    BrowserAnimationsModule, MatGridListModule, MatTreeModule, MatIconModule, MatButtonModule, MatDialogModule,
     MatSelectModule,
     CodeEditorModule.forRoot()
   ],
