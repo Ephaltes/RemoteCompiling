@@ -22,8 +22,26 @@ const FILES_DATA: FileNode[] = [
             '    {',
             `        static void Main(string[] args)`,
             `        {`,
-            `            Console.WriteLine("Hello, world from .NET!");`,
+            `            Console.WriteLine($"Hello, world from .NET and {Angular.name}!");`,
             '        }',
+            '    }',
+            '}'
+          ].join('\r\n')
+        }
+      },
+      {
+        name: 'HelloAngular.cs',
+        type: FileNodeType.csharp,
+        code: {
+          language: 'csharp',
+          uri: 'HelloAngular.cs',
+          value: [
+            'using System;',
+            `namespace HelloWorld`,
+            '{',
+            '    public class Angular',
+            '    {',
+            `        public static string name="Angular";`,
             '    }',
             '}'
           ].join('\r\n')
@@ -34,7 +52,7 @@ const FILES_DATA: FileNode[] = [
         type: FileNodeType.java,
         code: {
           language: 'java',
-          uri: 'main.java',
+          uri: 'HelloWorld.java',
           value: [
             'public class HelloWorld',
             `{`,
