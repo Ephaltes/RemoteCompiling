@@ -7,7 +7,6 @@ echo $DIR
 echo $hostip
 
 apt-get update -y
-apt-get upgrade -y
 
 apt-get install apt-transport-https -y 
 apt-get install ca-certificates  -y
@@ -22,7 +21,7 @@ apt-get install npm -y
 
 echo "finished installing 2 part of dependencies"
 
-git clone -b v3 https://github.com/engineer-man/piston /var/docker/piston
+git clone https://github.com/engineer-man/piston /var/docker/piston
 
 echo "cloning"
 
