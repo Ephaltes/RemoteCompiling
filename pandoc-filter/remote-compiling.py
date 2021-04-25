@@ -108,15 +108,15 @@ def remote_compile(key, value, format_, meta):
     stdout = response["run"]["stdout"]
     
     # replace "\n" in stdout with pandoc's LineBreak-elements
-    paragraphContent = []
+    paragraph_content = []
     
     for string in stdout.split("\n"):
-        paragraphContent.append(Str(string))
+        paragraph_content.append(Str(string))
         
         if len(string) > 0:
-            paragraphContent.append(LineBreak())
+            paragraph_content.append(LineBreak())
         
-    return Para(paragraphContent)
+    return Para(paragraph_content)
 
 
 if __name__ == '__main__':
