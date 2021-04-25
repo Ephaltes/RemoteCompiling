@@ -33,6 +33,7 @@ namespace RestWebservice_RemoteCompiling
         {
             services.AddHttpClient();
             services.AddSingleton<IPistonHelper, PistonHelper>();
+            services.AddSingleton<IAliasHelper, AliasHelper>();
             services.AddSingleton<IHttpHelper>(x => new HttpHelper
             (Configuration.GetSection("RemoteCompilerApiLocation").Value));
 

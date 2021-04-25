@@ -1,0 +1,5 @@
+{
+  "dotnet": [ "csharp", "cs" ],
+  "python": [ "py,python2,python3" ],
+  "cpp":  ["gcc","cplusplus","c++"]
+}
