@@ -30,7 +30,7 @@ namespace RestWebservice_RemoteCompiling.Controllers
         [HttpGet("License")]
         public IActionResult License()
         {
-            return CustomResponse.Success("Web Api Licence: MIT License").ToResponse();
+            return CustomResponse.Success("Web Api Licenced: MIT License").ToResponse();
         }
         [HttpGet("PublicGithub")]
         public IActionResult PublicGithub()
