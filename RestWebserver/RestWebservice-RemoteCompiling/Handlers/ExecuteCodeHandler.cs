@@ -28,7 +28,7 @@ namespace RestWebservice_RemoteCompiling.Handlers
             {
                 SendCompileRequest sendCompileRequest = request.ToJsonSendCompileRequest(_pistonHelper);
 
-                var response = await _httpHelper.ExecutePost("jobs", sendCompileRequest);
+                var response = await _httpHelper.ExecutePost("api/v2/execute", sendCompileRequest);
                 
                 if (response.IsSuccessStatusCode)
                 {
