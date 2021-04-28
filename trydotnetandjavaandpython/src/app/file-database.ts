@@ -53,10 +53,10 @@ const FILES_DATA: FileNode[] = [
           `{`,
           `       public static void main (String[] args)`,
           `       {`,
-          `             System.out.println("Hello, world from Java!");`,
+          `            System.out.println("Hello, world from Java!");`,
           `       }`,
           `}`
-        ].join('\n')
+        ].join('\r\n')
       }
     },
     {
@@ -65,10 +65,41 @@ const FILES_DATA: FileNode[] = [
       code: {
         language: 'python',
         uri: 'main.py',
-        value:
-          `print('Hello, world from Python!')`,
+        value: [
+          `print('Hello, world from Python!')`
+        ].join('\r\n')
       }
+    },
+  {
+    name: 'HelloWorld.cpp',
+    type: FileNodeType.cpp,
+    code: {
+      language: 'cpp',
+      uri: 'HelloWorld.cpp',
+      value: [
+        '#include <iostream>',
+        `    int main() {`,
+        `        std::cout << "Hello World!";`,
+        `        return 0;`,
+        '    }',
+      ].join('\r\n')
     }
+  },
+  {
+    name: 'HelloWorld.c',
+    type: FileNodeType.c,
+    code: {
+      language: 'c',
+      uri: 'HelloWorld.c',
+      value: [
+        '#include <stdio.h>',
+        `    int main() {`,
+        `        printf("Hello World!");`,
+        `        return 0;`,
+        '    }',
+      ].join('\r\n')
+    }
+  }
 ];
 
 @Injectable()

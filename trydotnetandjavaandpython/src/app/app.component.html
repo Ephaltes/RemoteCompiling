@@ -29,6 +29,8 @@
             <mat-icon *ngIf="node.type === 'csharp'" class="file-node-label__icon" svgIcon="csharp"></mat-icon>
             <mat-icon *ngIf="node.type === 'java'" class="file-node-label__icon" svgIcon="java"></mat-icon>
             <mat-icon *ngIf="node.type === 'python'" class="file-node-label__icon" svgIcon="python"></mat-icon>
+            <mat-icon *ngIf="node.type === 'cpp'" class="file-node-label__icon" svgIcon="cpp"></mat-icon>
+            <mat-icon *ngIf="node.type === 'c'" class="file-node-label__icon" svgIcon="c"></mat-icon>
             <span class="file-node-label__text">{{node.name}}</span>
           </div>
         </li>
@@ -47,7 +49,7 @@
                 {{ nestedTreeControl.isExpanded(node) ? 'folder_open' : 'folder' }}
               </mat-icon>
               <span class="file-node-label__text">{{node.name}}</span>
-              
+
             </div>
           </div>
           <ul [class.file-tree-invisible]="!nestedTreeControl.isExpanded(node)">
@@ -85,6 +87,24 @@
           <ng-container *ngIf="selectedModel.language=='python'">
             <mat-select [(value)]="selectedPythonVersion">
               <mat-option *ngFor="let version of langVersions.python" [value]="version">
+                {{version}}
+              </mat-option>
+            </mat-select>
+          </ng-container>
+
+          <!--c++ Version List-->
+          <ng-container *ngIf="selectedModel.language=='cpp'">
+            <mat-select [(value)]="selectedCppVersion">
+              <mat-option *ngFor="let version of langVersions.gcc" [value]="version">
+                {{version}}
+              </mat-option>
+            </mat-select>
+          </ng-container>
+
+          <!--c Version List-->
+          <ng-container *ngIf="selectedModel.language=='c'">
+            <mat-select [(value)]="selectedCVersion">
+              <mat-option *ngFor="let version of langVersions.gcc" [value]="version">
                 {{version}}
               </mat-option>
             </mat-select>

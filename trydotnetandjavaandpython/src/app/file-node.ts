@@ -4,6 +4,8 @@ export enum FileNodeType {
     csharp = 'csharp',
     java = 'java',
     python = 'python',
+    cpp = 'cpp',
+    c = 'c',
     folder = 'folder'
 }
 

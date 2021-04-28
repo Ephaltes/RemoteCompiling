@@ -34,10 +34,12 @@ export class AppComponent implements OnInit {
     { name: 'Visual Studio Dark', value: 'vs-dark' },
     { name: 'High Contrast Dark', value: 'hc-black' },
   ];
-  langVersions = { csharp: ["5.0.201"], java: ["15.0.2"], python: ["3.9.1", "2.7.18"] }
+  langVersions = { csharp: ["5.0.201"], java: ["15.0.2"], python: ["3.9.1", "2.7.18"], gcc: ["10.2.0"] };
   selectedCSharpVersion = "";
   selectedJavaVersion = "";
   selectedPythonVersion = "";
+  selectedCVersion = "";
+  selectedCppVersion = "";
   selectedVersion = "";
   selectedModel: CodeModel = null;
   selectedTheme = 'vs-dark';
@@ -78,9 +80,22 @@ export class AppComponent implements OnInit {
       `python`,
       this.domSanitizer.bypassSecurityTrustResourceUrl(`./assets/python.svg`)
     );
+
+    this.matIconRegistry.addSvgIcon(
+      `cpp`,
+      this.domSanitizer.bypassSecurityTrustResourceUrl(`./assets/cpp.svg`)
+    );
+
+    this.matIconRegistry.addSvgIcon(
+      `c`,
+      this.domSanitizer.bypassSecurityTrustResourceUrl(`./assets/c.svg`)
+    );
+
     this.selectedCSharpVersion = this.langVersions.csharp[0];
     this.selectedJavaVersion = this.langVersions.java[0];
     this.selectedPythonVersion = this.langVersions.python[0];
+    this.selectedCVersion = this.langVersions.gcc[0];
+    this.selectedCppVersion = this.langVersions.gcc[0];
     this.runFiles = [];
   }
 
@@ -123,8 +138,18 @@ export class AppComponent implements OnInit {
     if (this.selectedModel.language == 'python') {
       this.selectedVersion = this.selectedPythonVersion;
       this.nestedDataSource.data.filter(item => item.type == FileNodeType.python ? this.runFiles.push(new FileCode(item.code.uri, item.code.value)) : false);
-
     }
+
+    if (this.selectedModel.language == 'cpp') {
+      this.selectedVersion = this.selectedCppVersion;
+      this.nestedDataSource.data.filter(item => item.type == FileNodeType.cpp ? this.runFiles.push(new FileCode(item.code.uri, item.code.value)) : false);
+    }
+
+    if (this.selectedModel.language == 'c') {
+      this.selectedVersion = this.selectedCVersion;
+      this.nestedDataSource.data.filter(item => item.type == FileNodeType.c ? this.runFiles.push(new FileCode(item.code.uri, item.code.value)) : false);
+    }
+
     this.isLoading = true;
     this.output = "Loading...";
     console.log(this.selectedModel);
