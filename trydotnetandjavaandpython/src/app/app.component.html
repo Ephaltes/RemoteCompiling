@@ -96,7 +96,7 @@
           <ng-container *ngIf="selectedModel.language=='cpp'">
             <mat-select [(value)]="selectedCppVersion">
               <mat-option *ngFor="let version of langVersions.gcc" [value]="version">
-                {{version}}
+                {{version}} gcc
               </mat-option>
             </mat-select>
           </ng-container>
@@ -105,7 +105,7 @@
           <ng-container *ngIf="selectedModel.language=='c'">
             <mat-select [(value)]="selectedCVersion">
               <mat-option *ngFor="let version of langVersions.gcc" [value]="version">
-                {{version}}
+                {{version}} gcc
               </mat-option>
             </mat-select>
           </ng-container>
