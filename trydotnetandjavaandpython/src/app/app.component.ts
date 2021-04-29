@@ -53,6 +53,7 @@ export class AppComponent implements OnInit {
   fileInput: ElementRef;
 
   options = {
+    lineNumbers: true,
     contextmenu: true,
     minimap: {
       enabled: false,
