@@ -83,3 +83,8 @@
 .margin div:last-child {
   margin-left: auto;
 }
+::ng-deep .mat-form-field {
+  .mat-select-value{
+      color: black;
+  }
+}

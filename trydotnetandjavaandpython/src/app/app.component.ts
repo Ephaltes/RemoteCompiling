@@ -159,10 +159,11 @@ export class AppComponent implements OnInit {
 
   }
   openNewFileDialog() {
-    this.newFileDialog.open(AddNewFileComponent);
+    const dialogRef = this.newFileDialog.open(AddNewFileComponent);
+    dialogRef.afterClosed().subscribe(result => {dialogRef.componentInstance.validData ? this.addNewFile(dialogRef.componentInstance.emittingData): false})
   }
-  addNewFile(name: string, language: FileNodeType, code: string) {
-    this.database.add(name, language, code);
+  addNewFile(data:any) {
+    this.database.add(data.name, data.language, data.code);
   }
   ngOnInit() {
     this.selectNode(this.nestedDataSource.data[0]);
