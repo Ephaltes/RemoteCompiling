@@ -6,10 +6,10 @@
         <form [formGroup]="newFileForm" (ngSubmit)="submit()">
             <mat-card-content>
                 <div class="col-md-12 mb-3">
-                    <mat-form-field appearance="outline" [style.width.%]="49" style="padding-right: 2%;" class="newFileForm">
+                    <mat-form-field appearance="outline" [style.width.%]="49" style="padding-right: 2%;"
+                        class="newFileForm">
                         <mat-label>File name</mat-label>
-                        <input matInput formControlName="name" value="" autocomplete="off"
-                            placeholder="HelloWorld">
+                        <input matInput formControlName="name" value="" autocomplete="off" placeholder="HelloWorld">
                         <mat-hint *ngIf="name.invalid && (name.dirty || name.touched)"
                             class="text-danger margin-bottom-thin my-mat-hint">
                             <div *ngIf="name.errors!['required']">
@@ -17,6 +17,9 @@
                             </div>
                             <div *ngIf="name.errors!['minlength']">
                                 Filename must be at least 3 characters long.
+                            </div>
+                            <div *ngIf="name.errors!['fileNameExists']">
+                                Filename is already in use!
                             </div>
                         </mat-hint>
                     </mat-form-field>

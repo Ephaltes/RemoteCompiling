@@ -116,6 +116,16 @@ export class FileDatabase {
   add(name:string,language:FileNodeType,code:string){
     this.dataChange.next(this.dataChange.getValue().concat({name:name,type:language,code:{language:language,uri:name,value:code}}));
   }
+  fileNames():string[]{
+    var list=new Array();
+    this.data.forEach(element => {
+      list.push(this.fileEndingRemover(element.name));
+    });
+    return list;
+  }
+  fileEndingRemover(fileName:string):string{
+    return fileName.slice(0,fileName.lastIndexOf(".")).toLowerCase();
+  }
   initialize() {
     const data = FILES_DATA;
 

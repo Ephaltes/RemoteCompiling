@@ -159,7 +159,8 @@ export class AppComponent implements OnInit {
 
   }
   openNewFileDialog() {
-    const dialogRef = this.newFileDialog.open(AddNewFileComponent);
+    console.log(this.database.fileNames());
+    const dialogRef = this.newFileDialog.open(AddNewFileComponent,{data:this.database.fileNames()});
     dialogRef.afterClosed().subscribe(result => {dialogRef.componentInstance.validData ? this.addNewFile(dialogRef.componentInstance.emittingData): false})
   }
   addNewFile(data:any) {
