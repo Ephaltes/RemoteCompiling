@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FileNodeType } from '../file-node';
-import { forbiddenNameValidator } from './forbidden-name.directive';
+import { forbiddenEndingValidator, forbiddenNameValidator } from './forbidden-name.directive';
 
 @Component({
   selector: 'app-add-new-file',
@@ -42,7 +42,8 @@ export class AddNewFileComponent implements OnInit {
       name: [null, {
         validators: [
           Validators.required,
-          Validators.minLength(3)
+          Validators.minLength(3),
+          forbiddenEndingValidator()
         ],
         asyncValidators: [
           forbiddenNameValidator(fileList)
