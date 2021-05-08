@@ -4,11 +4,11 @@ import { FileNode, FileNodeType } from './file-node';
 
 const FILES_DATA: FileNode[] = [
     {
-      name: 'HelloWorld.cs',
+      name: 'HelloWorldCSharp.cs',
       type: FileNodeType.csharp,
       code: {
         language: 'csharp',
-        uri: 'HelloWorld.cs',
+        uri: 'HelloWorldCSharp.cs',
         value: [
           'using System;',
           `namespace HelloWorld`,
@@ -43,11 +43,11 @@ const FILES_DATA: FileNode[] = [
       }
     },
     {
-      name: 'HelloWorld.java',
+      name: 'HelloWorldJava.java',
       type: FileNodeType.java,
       code: {
         language: 'java',
-        uri: 'HelloWorld.java',
+        uri: 'HelloWorldJava.java',
         value: [
           'public class HelloWorld',
           `{`,
@@ -60,7 +60,7 @@ const FILES_DATA: FileNode[] = [
       }
     },
     {
-      name: 'HelloWorld.py',
+      name: 'HelloWorldPython.py',
       type: FileNodeType.python,
       code: {
         language: 'python',
@@ -71,11 +71,11 @@ const FILES_DATA: FileNode[] = [
       }
     },
   {
-    name: 'HelloWorld.cpp',
+    name: 'HelloWorldCpp.cpp',
     type: FileNodeType.cpp,
     code: {
       language: 'cpp',
-      uri: 'HelloWorld.cpp',
+      uri: 'HelloWorldCpp.cpp',
       value: [
         '#include <iostream>',
         `    int main() {`,
@@ -86,11 +86,11 @@ const FILES_DATA: FileNode[] = [
     }
   },
   {
-    name: 'HelloWorld.c',
+    name: 'HelloWorldC.c',
     type: FileNodeType.c,
     code: {
       language: 'c',
-      uri: 'HelloWorld.c',
+      uri: 'HelloWorldC.c',
       value: [
         '#include <stdio.h>',
         `    int main() {`,

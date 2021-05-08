@@ -124,7 +124,7 @@ export class AppComponent implements OnInit {
   }
 
   onEditorLoaded() {
-    console.log('loaded');
+    console.log('Online Editor loaded!');
   }
   runCode() {
     this.runFiles = [];
@@ -153,13 +153,10 @@ export class AppComponent implements OnInit {
 
     this.isLoading = true;
     this.output = "Loading...";
-    console.log(this.selectedModel);
-    console.log(this.runFiles);
     this.compileService.compile(this.selectedVersion, this.selectedModel, this.runFiles).subscribe((item => { this.isLoading = false; item.data.run.stderr.length > 0 ? this.output = item.data.run.stderr : this.output = item.data.run.stdout }))
 
   }
   openNewFileDialog() {
-    console.log(this.database.fileNames());
     const dialogRef = this.newFileDialog.open(AddNewFileComponent,{data:this.database.fileNames()});
     dialogRef.afterClosed().subscribe(result => {dialogRef.componentInstance.validData ? this.addNewFile(dialogRef.componentInstance.emittingData): false})
   }
