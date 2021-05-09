@@ -1,0 +1,5 @@
+FROM ghcr.io/engineer-man/piston@sha256:7b038a8a5733edbda6d33586e2e6490c3ba3f04f142d11ce1cec7a2876734b36
+
+RUN mkdir -p /piston/packages
+RUN mkdir -p /piston/jobs
+RUN mkdir -p /tmp
