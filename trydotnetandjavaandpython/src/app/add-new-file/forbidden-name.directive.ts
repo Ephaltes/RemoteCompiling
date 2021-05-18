@@ -16,7 +16,7 @@ export function forbiddenEndingValidator(): ValidatorFn {
 }
 export function forbiddenNameValidator(fileNameList: string[]): AsyncValidatorFn {
     return (control: AbstractControl): Observable<ValidationErrors | null> => {
-        return checkIfFileNameExists(control.value, fileNameList).pipe(
+        return checkIfFileNameExists(control.value.toLowerCase(), fileNameList).pipe(
             map(res => {
                 return res ? { fileNameExists: true } : null;
             })
