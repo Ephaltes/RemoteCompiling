@@ -12,6 +12,7 @@ import { CompileService } from './service/compile.service';
 import { FileCode } from './file-code';
 import { MatDialog } from '@angular/material/dialog';
 import { AddNewFileComponent } from './add-new-file/add-new-file.component';
+import { FileUploadControl, FileUploadValidators } from '@iplab/ngx-file-upload';
 
 @Component({
   selector: 'app-root',
@@ -28,7 +29,7 @@ export class AppComponent implements OnInit {
   nestedTreeControl: NestedTreeControl<FileNode>;
   nestedDataSource: MatTreeNestedDataSource<FileNode>;
   title = 'trydotnetandjavaandpython';
-
+  public fileUploadControl = new FileUploadControl(null, FileUploadValidators.filesLimit(1));
   themes = [
     { name: 'Visual Studio', value: 'vs' },
     { name: 'Visual Studio Dark', value: 'vs-dark' },
@@ -98,8 +99,22 @@ export class AppComponent implements OnInit {
     this.selectedCVersion = this.langVersions.gcc[0];
     this.selectedCppVersion = this.langVersions.gcc[0];
     this.runFiles = [];
+    this.fileUploadControl.acceptFiles("|.cs|")
+    this.fileUploadControl.multiple(false);
+    this.fileUploadControl.valueChanges.subscribe(item => this.dragDropToList(item[item.length - 1]));
   }
+  dragDropToList(file: File) {
+    if (file != undefined) {
+      if (file.type == "text/plain") {
+        var fileReader = new FileReader();
+        fileReader.readAsText(file);
+        fileReader.onload = () => {
+          console.log(fileReader.result);
+        }
+      }
+    }
 
+  }
   hasNestedChild(_: number, nodeData: FileNode): boolean {
     return nodeData.type === FileNodeType.folder;
   }
@@ -157,10 +172,10 @@ export class AppComponent implements OnInit {
 
   }
   openNewFileDialog() {
-    const dialogRef = this.newFileDialog.open(AddNewFileComponent,{data:this.database.fileNames()});
-    dialogRef.afterClosed().subscribe(result => {dialogRef.componentInstance.validData ? this.addNewFile(dialogRef.componentInstance.emittingData): false})
+    const dialogRef = this.newFileDialog.open(AddNewFileComponent, { data: this.database.fileNames() });
+    dialogRef.afterClosed().subscribe(result => { dialogRef.componentInstance.validData ? this.addNewFile(dialogRef.componentInstance.emittingData) : false })
   }
-  addNewFile(data:any) {
+  addNewFile(data: any) {
     this.database.add(data.name, data.language, data.code);
   }
   ngOnInit() {

@@ -1,3 +1,9 @@
+<file-upload [control]="fileUploadControl">
+  <ng-template let-isFileDragDropAvailable="isFileDragDropAvailable" #placeholder>
+      <span *ngIf="isFileDragDropAvailable">drop or click</span>
+      <span *ngIf="!isFileDragDropAvailable">click</span>
+  </ng-template>
+</file-upload>
 <mat-grid-list cols="12" rows="20" min-rowHeight="400px" rowHeight="4.90%">
 
 
@@ -19,6 +25,7 @@
 </mat-grid-tile>
   <!--File Tree-->
   <mat-grid-tile [colspan]="2" [rowspan]="15">
+    
     <!--File items-->
     <mat-tree [dataSource]="nestedDataSource" [treeControl]="nestedTreeControl" class="file-tree">
       <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
