@@ -1,0 +1,5 @@
+{
+  "CodeExample": "public class HelloWorld {\n\n    public static void main(String[] args) {\n        \/\/ Prints \"Hello, World\" to the terminal window.\n        System.out.println(\"Hello, World\");\n    }\n\n}\n",
+  "Language": "java",
+  "Version": "java"
+}

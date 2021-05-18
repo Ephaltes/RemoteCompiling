@@ -15,7 +15,7 @@ namespace RestWebservice_RemoteCompiling.PipelineBehavior
     {
         private readonly IEnumerable<IValidator<TRequest>> _validators;
 
-        public ValidationBehavior(ILogger<ValidationBehavior<TRequest, TResponse>> logger,IEnumerable<IValidator<TRequest>> validators)
+        public ValidationBehavior(IEnumerable<IValidator<TRequest>> validators)
         {
             _validators = validators;
         }

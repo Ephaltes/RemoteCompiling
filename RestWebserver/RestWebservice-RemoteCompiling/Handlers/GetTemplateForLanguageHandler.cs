@@ -16,8 +16,8 @@ namespace RestWebservice_RemoteCompiling.Handlers
     {
         public async Task<CustomResponse<string>> Handle(GetTemplateForLanguageQuery request, CancellationToken cancellationToken)
         {
-            var result = await System.IO.File.ReadAllTextAsync($"./Templates/{request.Language.ToLower()}Template.json", cancellationToken);
-            return CustomResponse.Success(result);
+                var result = await System.IO.File.ReadAllTextAsync($"./Templates/{request.Language.ToLower()}Template_{request.Version.ToLower()}.json", cancellationToken);               
+                return CustomResponse.Success(result);
         }
     }
 }

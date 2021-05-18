@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RestWebservice_RemoteCompiling.Command;
 using RestWebservice_RemoteCompiling.Entities;
 using RestWebservice_RemoteCompiling.Extensions;
 using RestWebservice_RemoteCompiling.Helpers;
 using RestWebservice_RemoteCompiling.JsonObjClasses;
-using RestWebservice_RemoteCompiling.Query;
 using Serilog;
 
 namespace RestWebservice_RemoteCompiling.Handlers
@@ -33,16 +28,15 @@ namespace RestWebservice_RemoteCompiling.Handlers
             {
                 SendCompileRequest sendCompileRequest = request.ToJsonSendCompileRequest(_pistonHelper);
 
-                var response = await _httpHelper.ExecutePost("jobs", sendCompileRequest);
+                var response = await _httpHelper.ExecutePost("api/v2/execute", sendCompileRequest);
                 
                 if (response.IsSuccessStatusCode)
                 {
                     var settings = new JsonSerializerSettings
                     {
                         NullValueHandling = NullValueHandling.Ignore,
-                        MissingMemberHandling = MissingMemberHandling.Ignore
+                        MissingMemberHandling = MissingMemberHandling.Ignore,
                     };
-                    
                     
                     var resp = await response.Content.ReadAsStringAsync(cancellationToken);
                     var content = JsonConvert.DeserializeObject<PistonCompileAndRun>(resp,settings);

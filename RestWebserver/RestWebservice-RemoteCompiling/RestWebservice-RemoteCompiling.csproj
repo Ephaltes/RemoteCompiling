@@ -24,10 +24,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="Templates\csharpTemplate.json">
+    <Content Update="AliasMap.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Update="Templates\javaTemplate.json">
+    <Content Update="Templates\dotnetTemplate_5.0.201.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Templates\javaTemplate_15.2.01.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

@@ -26,7 +26,7 @@ namespace RestWebservice_RemoteCompiling.Helpers
         //
         public async Task<List<SupportedLanguages>> GetSupportedRuntimes()
         {
-            var result = await _httpHelper.ExecuteGet("runtimes");
+            var result = await _httpHelper.ExecuteGet("api/v2/runtimes");
             var content = JsonConvert.DeserializeObject<List<SupportedLanguages>>(result);
             return content;
         }
