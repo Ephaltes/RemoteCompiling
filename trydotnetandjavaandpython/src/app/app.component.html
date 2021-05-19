@@ -1,12 +1,6 @@
-<file-upload [control]="fileUploadControl">
-  <ng-template let-isFileDragDropAvailable="isFileDragDropAvailable" #placeholder>
-      <span *ngIf="isFileDragDropAvailable">drop or click</span>
-      <span *ngIf="!isFileDragDropAvailable">click</span>
-  </ng-template>
-</file-upload>
-<mat-grid-list cols="12" rows="20" min-rowHeight="400px" rowHeight="4.90%">
-
-
+<mat-grid-list cols="12" rows="20" min-rowHeight="400px" rowHeight="4.90%" draggable="true"
+  (drag)="showDragZone($event)" (dragover)="showDragZone($event)" (drop)="hideDragZone($event)"
+  (dragend)="hideDragZone($event)">
   <!--Logo-->
   <mat-grid-tile [colspan]="2" [rowspan]="4">
     <img src="./assets/logo.png" width="100%" height="100%" style="margin: 25px;">
@@ -19,13 +13,20 @@
       style="width: 100%; height: 100%;" (valueChanged)="onCodeChanged($event)" (loaded)="onEditorLoaded()">
     </ngs-code-editor>
   </mat-grid-tile>
-
-<mat-grid-tile [colspan]="2" [rowspan]="1">
-  <button mat-stroked-button color="accent" (click)="openNewFileDialog()"> + Add new file</button>
-</mat-grid-tile>
+  <!-- File Upload Drag n Drop-->
+  <file-upload [control]="fileUploadControl" style="visibility:hidden; opacity:0" class="dropzone">
+    <ng-template let-isFileDragDropAvailable="isFileDragDropAvailable" #placeholder>
+      <span *ngIf="isFileDragDropAvailable">Drop files here!</span>
+      <span *ngIf="!isFileDragDropAvailable">click</span>
+    </ng-template>
+  </file-upload>
+  <!--Add New File Button-->
+  <mat-grid-tile [colspan]="2" [rowspan]="1">
+    <button mat-stroked-button color="accent" (click)="openNewFileDialog()"> + Add new file</button>
+  </mat-grid-tile>
   <!--File Tree-->
   <mat-grid-tile [colspan]="2" [rowspan]="15">
-    
+
     <!--File items-->
     <mat-tree [dataSource]="nestedDataSource" [treeControl]="nestedTreeControl" class="file-tree">
       <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>

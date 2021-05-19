@@ -30,6 +30,7 @@ export class AppComponent implements OnInit {
   nestedDataSource: MatTreeNestedDataSource<FileNode>;
   title = 'trydotnetandjavaandpython';
   public fileUploadControl = new FileUploadControl(null, FileUploadValidators.filesLimit(1));
+
   themes = [
     { name: 'Visual Studio', value: 'vs' },
     { name: 'Visual Studio Dark', value: 'vs-dark' },
@@ -99,21 +100,43 @@ export class AppComponent implements OnInit {
     this.selectedCVersion = this.langVersions.gcc[0];
     this.selectedCppVersion = this.langVersions.gcc[0];
     this.runFiles = [];
-    this.fileUploadControl.acceptFiles("|.cs|")
-    this.fileUploadControl.multiple(false);
+    this.fileUploadControl.acceptFiles(".java")
     this.fileUploadControl.valueChanges.subscribe(item => this.dragDropToList(item[item.length - 1]));
   }
   dragDropToList(file: File) {
     if (file != undefined) {
-      if (file.type == "text/plain") {
-        var fileReader = new FileReader();
-        fileReader.readAsText(file);
-        fileReader.onload = () => {
-          console.log(fileReader.result);
+      var fileReader = new FileReader();
+      fileReader.readAsText(file);
+      fileReader.onload = () => {
+        if (this.database.fileNames().includes(this.database.fileEndingRemover(file.name.toLowerCase()))) {
+          this.fileUploadControl.removeFile(file);
+          return;
         }
+        if (file.name.endsWith(".cs"))
+          this.database.add(file.name, FileNodeType.csharp, fileReader.result.toString());
+        if (file.name.endsWith(".java"))
+          this.database.add(file.name, FileNodeType.java, fileReader.result.toString());
+        if (file.name.endsWith(".py"))
+          this.database.add(file.name, FileNodeType.python, fileReader.result.toString());
+        if (file.name.endsWith(".c"))
+          this.database.add(file.name, FileNodeType.c, fileReader.result.toString());
+        if (file.name.endsWith(".cpp"))
+          this.database.add(file.name, FileNodeType.cpp, fileReader.result.toString());
+        this.fileUploadControl.removeFile(file);
       }
-    }
 
+    }
+  }
+
+  showDragZone(event: DragEvent) {
+    const element = <HTMLElement>document.getElementsByClassName('dropzone')[0];
+    element.style.visibility = "";
+    element.style.opacity = "1";
+  }
+  hideDragZone(event: DragEvent) {
+    const element = <HTMLElement>document.getElementsByClassName('dropzone')[0];
+    element.style.visibility = "hidden";
+    element.style.opacity = "0";
   }
   hasNestedChild(_: number, nodeData: FileNode): boolean {
     return nodeData.type === FileNodeType.folder;
@@ -137,7 +160,9 @@ export class AppComponent implements OnInit {
     this.isLoading = false;
     this.selectedModel = node.code;
   }
-
+  removeNode(node: FileNode) {
+    this.database.remove(node);
+  }
   onEditorLoaded() {
     console.log('Online Editor loaded!');
   }
