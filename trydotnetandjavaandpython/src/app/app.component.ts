@@ -37,7 +37,7 @@ export class AppComponent implements OnInit {
     { name: 'Visual Studio Dark', value: 'vs-dark' },
     { name: 'High Contrast Dark', value: 'hc-black' },
   ];
-  langVersions = { csharp: ["5.0.201"], java: ["15.0.2"], python: ["3.9.1", "2.7.18"], gcc: ["10.2.0"] };
+  langVersions = { csharp: ["5.0.201"], java: ["15.0.2"], python: ["3.9.1"], gcc: ["10.2.0"] };
   selectedCSharpVersion = "";
   selectedJavaVersion = "";
   selectedPythonVersion = "";
@@ -196,7 +196,7 @@ export class AppComponent implements OnInit {
     }
     if (this.selectedModel.language == 'python') {
       this.selectedVersion = this.selectedPythonVersion;
-      this.nestedDataSource.data.filter(item => item.type == FileNodeType.python ? this.runFiles.push(new FileCode(item.code.uri, item.code.value)) : false);
+      this.runFiles.push(new FileCode(this.selectedModel.uri, this.selectedModel.value));
     }
 
     if (this.selectedModel.language == 'cpp') {
