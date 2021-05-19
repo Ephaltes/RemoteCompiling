@@ -23,7 +23,7 @@
   <!-- File Upload Drag n Drop-->
   <file-upload [control]="fileUploadControl" style="visibility:hidden; opacity:0" class="dropzone">
     <ng-template let-isFileDragDropAvailable="isFileDragDropAvailable" #placeholder>
-      <span *ngIf="isFileDragDropAvailable">Drop files here!</span>
+      <span *ngIf="isFileDragDropAvailable" style="color: white;">Drop files here!</span>
       <span *ngIf="!isFileDragDropAvailable">click</span>
     </ng-template>
   </file-upload>

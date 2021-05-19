@@ -89,6 +89,7 @@
   }
 }
 .dropzone{
+  background-color: rgb(41, 51, 85)!important;
   position: fixed; top: 0; left: 0; 
   /* above all elements, even if z-index is used elsewhere
      it can be lowered as needed, but this value surpasses

@@ -13,6 +13,7 @@ import { FileCode } from './file-code';
 import { MatDialog } from '@angular/material/dialog';
 import { AddNewFileComponent } from './add-new-file/add-new-file.component';
 import { FileUploadControl, FileUploadValidators } from '@iplab/ngx-file-upload';
+import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
 
 @Component({
   selector: 'app-root',
@@ -61,7 +62,7 @@ export class AppComponent implements OnInit {
       enabled: false,
     },
   };
-  constructor(private database: FileDatabase, private editorService: CodeEditorService, private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer, private compileService: CompileService, private newFileDialog: MatDialog) {
+  constructor(private database: FileDatabase, private editorService: CodeEditorService, private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer, private compileService: CompileService, private Dialog: MatDialog) {
     this.nestedTreeControl = new NestedTreeControl<FileNode>(this._getChildren);
     this.nestedDataSource = new MatTreeNestedDataSource();
 
@@ -100,7 +101,7 @@ export class AppComponent implements OnInit {
     this.selectedCVersion = this.langVersions.gcc[0];
     this.selectedCppVersion = this.langVersions.gcc[0];
     this.runFiles = [];
-    this.fileUploadControl.acceptFiles(".java")
+    this.fileUploadControl.acceptFiles(".cs/,.java/,.py/,.c/,.cpp/")
     this.fileUploadControl.valueChanges.subscribe(item => this.dragDropToList(item[item.length - 1]));
   }
   dragDropToList(file: File) {
@@ -110,21 +111,38 @@ export class AppComponent implements OnInit {
       fileReader.onload = () => {
         if (this.database.fileNames().includes(this.database.fileEndingRemover(file.name.toLowerCase()))) {
           this.fileUploadControl.removeFile(file);
+          this.Dialog.open(ErrorDialogComponent, { data: { message: "Found duplicate filenames while uploading files!" } })
           return;
         }
-        if (file.name.endsWith(".cs"))
+        if (file.name.endsWith(".cs")) {
           this.database.add(file.name, FileNodeType.csharp, fileReader.result.toString());
-        if (file.name.endsWith(".java"))
+          this.fileUploadControl.removeFile(file);
+          return;
+        }
+        if (file.name.endsWith(".java")) {
           this.database.add(file.name, FileNodeType.java, fileReader.result.toString());
-        if (file.name.endsWith(".py"))
+          this.fileUploadControl.removeFile(file);
+          return;
+        }
+        if (file.name.endsWith(".py")) {
           this.database.add(file.name, FileNodeType.python, fileReader.result.toString());
-        if (file.name.endsWith(".c"))
+          this.fileUploadControl.removeFile(file);
+          return;
+        }
+        if (file.name.endsWith(".c")) {
           this.database.add(file.name, FileNodeType.c, fileReader.result.toString());
-        if (file.name.endsWith(".cpp"))
+          this.fileUploadControl.removeFile(file);
+          return;
+        }
+        if (file.name.endsWith(".cpp")) {
           this.database.add(file.name, FileNodeType.cpp, fileReader.result.toString());
+          this.fileUploadControl.removeFile(file);
+          return;
+        }
+        this.Dialog.open(ErrorDialogComponent, { data: { message: "File extension is not supported, please only use .cs,.java,.py,.c,.cpp files!" } })
         this.fileUploadControl.removeFile(file);
       }
-
+      this.fileUploadControl.removeFile(file);
     }
   }
 
@@ -197,7 +215,7 @@ export class AppComponent implements OnInit {
 
   }
   openNewFileDialog() {
-    const dialogRef = this.newFileDialog.open(AddNewFileComponent, { data: this.database.fileNames() });
+    const dialogRef = this.Dialog.open(AddNewFileComponent, { data: this.database.fileNames() });
     dialogRef.afterClosed().subscribe(result => { dialogRef.componentInstance.validData ? this.addNewFile(dialogRef.componentInstance.emittingData) : false })
   }
   addNewFile(data: any) {

@@ -16,13 +16,15 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
 import { AddNewFileComponent } from './add-new-file/add-new-file.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {ShContextMenuModule} from 'ng2-right-click-menu'
+import {ShContextMenuModule} from 'ng2-right-click-menu';
+import { ErrorDialogComponent } from './error-dialog/error-dialog.component'
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    AddNewFileComponent
+    AddNewFileComponent,
+    ErrorDialogComponent
   ],
   imports: [
     BrowserModule,
