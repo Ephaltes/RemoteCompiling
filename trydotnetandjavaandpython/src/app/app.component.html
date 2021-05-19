@@ -1,6 +1,13 @@
+<sh-context-menu #menu>
+  <ng-template shContextMenuItem let-data>
+    <div (click)="removeNode(data)">
+      <mat-icon style="vertical-align:middle; font-size: 20px;">delete</mat-icon> Remove
+    </div>
+  </ng-template>
+</sh-context-menu>
 <mat-grid-list cols="12" rows="20" min-rowHeight="400px" rowHeight="4.90%" draggable="true"
-  (drag)="showDragZone($event)" (dragover)="showDragZone($event)" (drop)="hideDragZone($event)" (dragleave)="hideDragZone($event)"
-  (dragend)="hideDragZone($event)">
+  (drag)="showDragZone($event)" (dragover)="showDragZone($event)" (drop)="hideDragZone($event)"
+  (dragleave)="hideDragZone($event)" (dragend)="hideDragZone($event)">
   <!--Logo-->
   <mat-grid-tile [colspan]="2" [rowspan]="4">
     <img src="./assets/logo.png" width="100%" height="100%" style="margin: 25px;">
@@ -32,14 +39,16 @@
       <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
         <li class="mat-tree-node">
           <button mat-icon-button disabled></button>
-          <div class="file-node-label" [attr.title]="node.name"
-            [style.color]="isNodeSelected(node) ? 'blueviolet' : 'black'" (click)="selectNode(node)">
-            <mat-icon *ngIf="node.type === 'csharp'" class="file-node-label__icon" svgIcon="csharp"></mat-icon>
-            <mat-icon *ngIf="node.type === 'java'" class="file-node-label__icon" svgIcon="java"></mat-icon>
-            <mat-icon *ngIf="node.type === 'python'" class="file-node-label__icon" svgIcon="python"></mat-icon>
-            <mat-icon *ngIf="node.type === 'cpp'" class="file-node-label__icon" svgIcon="cpp"></mat-icon>
-            <mat-icon *ngIf="node.type === 'c'" class="file-node-label__icon" svgIcon="c"></mat-icon>
-            <span class="file-node-label__text">{{node.name}}</span>
+          <div [shAttachMenu]="menu" [shMenuData]="node">
+            <div class="file-node-label" [attr.title]="node.name"
+              [style.color]="isNodeSelected(node) ? 'blueviolet' : 'black'" (click)="selectNode(node)">
+              <mat-icon *ngIf="node.type === 'csharp'" class="file-node-label__icon" svgIcon="csharp"></mat-icon>
+              <mat-icon *ngIf="node.type === 'java'" class="file-node-label__icon" svgIcon="java"></mat-icon>
+              <mat-icon *ngIf="node.type === 'python'" class="file-node-label__icon" svgIcon="python"></mat-icon>
+              <mat-icon *ngIf="node.type === 'cpp'" class="file-node-label__icon" svgIcon="cpp"></mat-icon>
+              <mat-icon *ngIf="node.type === 'c'" class="file-node-label__icon" svgIcon="c"></mat-icon>
+              <span class="file-node-label__text">{{node.name}}</span>
+            </div>
           </div>
         </li>
       </mat-tree-node>

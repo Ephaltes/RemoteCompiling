@@ -16,6 +16,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
 import { AddNewFileComponent } from './add-new-file/add-new-file.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {ShContextMenuModule} from 'ng2-right-click-menu'
 
 
 @NgModule({
@@ -27,7 +28,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     BrowserModule,
     HttpClientModule,
     BrowserAnimationsModule, MatGridListModule, MatTreeModule, MatIconModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatCardModule,
-    MatSelectModule,FileUploadModule,
+    MatSelectModule,FileUploadModule, ShContextMenuModule,
     CodeEditorModule.forRoot(),
     FormsModule,
     ReactiveFormsModule,
