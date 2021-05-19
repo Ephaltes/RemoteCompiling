@@ -1,5 +1,5 @@
 <mat-grid-list cols="12" rows="20" min-rowHeight="400px" rowHeight="4.90%" draggable="true"
-  (drag)="showDragZone($event)" (dragover)="showDragZone($event)" (drop)="hideDragZone($event)"
+  (drag)="showDragZone($event)" (dragover)="showDragZone($event)" (drop)="hideDragZone($event)" (dragleave)="hideDragZone($event)"
   (dragend)="hideDragZone($event)">
   <!--Logo-->
   <mat-grid-tile [colspan]="2" [rowspan]="4">
