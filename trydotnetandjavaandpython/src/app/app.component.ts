@@ -14,6 +14,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddNewFileComponent } from './add-new-file/add-new-file.component';
 import { FileUploadControl, FileUploadValidators } from '@iplab/ngx-file-upload';
 import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
+import { Toast, ToasterService } from 'angular2-toaster';
 
 @Component({
   selector: 'app-root',
@@ -23,9 +24,11 @@ import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
   providers: [FileDatabase, CompileService]
 })
 
+
 export class AppComponent implements OnInit, OnDestroy {
+  private toasterSerivce: ToasterService;
   subscription: Subscription;
-  saveSource = interval(30000);
+  saveSource = interval(60000);
   newFile = "Test.cs"
   newType = FileNodeType.csharp;
   newCode = "";
@@ -64,7 +67,7 @@ export class AppComponent implements OnInit, OnDestroy {
       enabled: false,
     },
   };
-  constructor(private database: FileDatabase, private editorService: CodeEditorService, private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer, private compileService: CompileService, private Dialog: MatDialog) {
+  constructor(private database: FileDatabase, private editorService: CodeEditorService, private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer, private compileService: CompileService, private Dialog: MatDialog, private ToasterService: ToasterService) {
     this.nestedTreeControl = new NestedTreeControl<FileNode>(this._getChildren);
     this.nestedDataSource = new MatTreeNestedDataSource();
 
@@ -105,6 +108,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.runFiles = [];
     this.fileUploadControl.acceptFiles(".cs/,.java/,.py/,.c/,.cpp/")
     this.fileUploadControl.valueChanges.subscribe(item => this.dragDropToList(item[item.length - 1]));
+    this.toasterSerivce = ToasterService;
   }
   dragDropToList(file: File) {
     if (file != undefined) {
@@ -224,10 +228,15 @@ export class AppComponent implements OnInit, OnDestroy {
     this.database.add(data.name, data.language, data.code);
   }
   ngOnInit() {
-    this.saveSource.subscribe(val => this.database.save());
+    var toast : Toast = {
+      type: 'success',
+      title: 'Auto save complete',
+      showCloseButton: false
+  };
+    this.saveSource.subscribe(val => {this.database.save(), this.toasterSerivce.pop(toast)});
     this.selectNode(this.nestedDataSource.data[0]);
   }
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.database.save();
     this.subscription.unsubscribe();
   }

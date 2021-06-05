@@ -18,6 +18,7 @@ import { AddNewFileComponent } from './add-new-file/add-new-file.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {ShContextMenuModule} from 'ng2-right-click-menu';
 import { ErrorDialogComponent } from './error-dialog/error-dialog.component'
+import { ToasterModule } from 'angular2-toaster';
 
 
 @NgModule({
@@ -30,7 +31,7 @@ import { ErrorDialogComponent } from './error-dialog/error-dialog.component'
     BrowserModule,
     HttpClientModule,
     BrowserAnimationsModule, MatGridListModule, MatTreeModule, MatIconModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatCardModule,
-    MatSelectModule,FileUploadModule, ShContextMenuModule,
+    MatSelectModule,FileUploadModule, ShContextMenuModule,ToasterModule.forRoot(),
     CodeEditorModule.forRoot(),
     FormsModule,
     ReactiveFormsModule,
