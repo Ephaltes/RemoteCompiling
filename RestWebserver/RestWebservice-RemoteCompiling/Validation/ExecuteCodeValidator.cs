@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using RestWebservice_RemoteCompiling.Command;
+using RestWebservice_RemoteCompiling.JsonObjClasses;
 
 namespace RestWebservice_RemoteCompiling.Validation
 {
@@ -30,9 +33,13 @@ namespace RestWebservice_RemoteCompiling.Validation
                 .NotEmpty()
                 .WithMessage("Code Parameters were empty or wrong");
 
+            RuleFor(x => x.Code.files)
+                .NotEmpty()
+                .WithMessage("No Files provided");
+
             RuleFor(x => x.Code.mainFile)
-                .NotNull()
-                .WithMessage("MainFile is empty");
+                .Must((o, mainFile) => IsValidMainFile(o.Code.files, mainFile))
+                .WithMessage("mainFile not found");
             
             RuleFor(x => x.Code.stdin)
                 .NotNull()
@@ -46,6 +53,11 @@ namespace RestWebservice_RemoteCompiling.Validation
             if (output.Length > maxSize)
                 return false;
             return true;
+        }
+
+        private bool IsValidMainFile(List<FileArray> array , string mainFile)
+        {
+            return array.FirstOrDefault(x => x.name == mainFile) != null;
         }
       
     }
