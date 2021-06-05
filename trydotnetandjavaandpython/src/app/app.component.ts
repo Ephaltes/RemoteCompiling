@@ -1,9 +1,9 @@
 import { NestedTreeControl } from '@angular/cdk/tree';
-import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { CodeEditorService, CodeModel } from '@ngstack/code-editor';
-import { Observable } from 'rxjs';
+import { interval, Observable, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { FileDatabase } from './file-database';
 import { FileNode, FileNodeType } from './file-node';
@@ -23,7 +23,9 @@ import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
   providers: [FileDatabase, CompileService]
 })
 
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
+  subscription: Subscription;
+  saveSource = interval(30000);
   newFile = "Test.cs"
   newType = FileNodeType.csharp;
   newCode = "";
@@ -222,14 +224,12 @@ export class AppComponent implements OnInit {
     this.database.add(data.name, data.language, data.code);
   }
   ngOnInit() {
+    this.saveSource.subscribe(val => this.database.save());
     this.selectNode(this.nestedDataSource.data[0]);
-    /*
-    this.selectedModel = {
-      language: 'json',
-      uri: 'main.json',
-      value: '{}'
-    };
-    */
+  }
+  ngOnDestroy(){
+    this.database.save();
+    this.subscription.unsubscribe();
   }
 
 }

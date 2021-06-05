@@ -134,10 +134,18 @@ export class FileDatabase {
   fileEndingRemover(fileName: string): string {
     return fileName.slice(0, fileName.lastIndexOf(".")).toLowerCase();
   }
+  save() {
+    localStorage.setItem("dataSource", JSON.stringify(this.data));
+  }
   initialize() {
-    const data = FILES_DATA;
-
-    // Notify the change.
+    var data;
+    if (localStorage.getItem("dataSource") === null) {
+      data = FILES_DATA;
+    } else if (JSON.parse(localStorage.getItem("dataSource")).length == 0) {
+      data = FILES_DATA;
+    } else {
+      data = JSON.parse(localStorage.getItem("dataSource"));
+    }
     this.dataChange.next(data);
   }
 }
