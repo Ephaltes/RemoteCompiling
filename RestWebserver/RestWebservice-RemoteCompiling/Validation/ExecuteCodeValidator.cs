@@ -41,9 +41,9 @@ namespace RestWebservice_RemoteCompiling.Validation
                 .Must((o, mainFile) => IsValidMainFile(o.Code.files, mainFile))
                 .WithMessage("mainFile not found");
             
-            RuleFor(x => x.Code.stdin)
-                .NotNull()
-                .WithMessage("stdin is empty");
+            // RuleFor(x => x.Code.stdin) //optional parameter
+            //     .NotNull()
+            //     .WithMessage("stdin is empty");
         }
 
         private bool MaxFileSize(ExecuteCodeCommand command)
@@ -57,6 +57,9 @@ namespace RestWebservice_RemoteCompiling.Validation
 
         private bool IsValidMainFile(List<FileArray> array , string mainFile)
         {
+            if (string.IsNullOrWhiteSpace(mainFile))
+                return true;
+            
             return array.FirstOrDefault(x => x.name == mainFile) != null;
         }
       

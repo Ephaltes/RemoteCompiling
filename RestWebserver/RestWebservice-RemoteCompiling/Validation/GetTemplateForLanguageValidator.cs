@@ -14,7 +14,7 @@ namespace RestWebservice_RemoteCompiling.Validation
                 .WithMessage("Language was empty");
             RuleFor(x => x.Version).NotEmpty()
                 .WithMessage("Version was empty");
-            RuleFor(x => x).Must((x) => { return FileExists(x.Language, x.Version); }).WithMessage($"No Template for Language and Version found");
+            RuleFor(x => x).Must((x) => FileExists(x.Language, x.Version)).WithMessage($"No Template for Language and Version found");
         }
 
         private bool FileExists(string language, string version)
