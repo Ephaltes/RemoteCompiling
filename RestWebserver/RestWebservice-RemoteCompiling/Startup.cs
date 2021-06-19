@@ -42,7 +42,7 @@ namespace RestWebservice_RemoteCompiling
                 options.AddPolicy(name: _AllAllowedPolicy,
                                   builder =>
                                   {
-                                      builder.AllowAnyOrigin().AllowAnyMethod();
+                                      builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin();
                                       //.WithMethods("POST", "GET");
                                   });
             });
