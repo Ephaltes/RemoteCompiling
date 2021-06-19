@@ -1,0 +1,5 @@
+{
+    "Language": "csharp",
+    "Version": "5.0.201",
+    "CodeExample": "using System;\r\n\r\nnamespace HelloWorld\r\n{\r\n    class Program\r\n    {\r\n        static void Main(string[] args)\r\n        {\r\n            Console.WriteLine(\"Hello World!\");\r\n        }\r\n    }\r\n}"
+}

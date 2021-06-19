@@ -348,6 +348,11 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
-trydotnetandjavaandpython/ssl/server.crt
-.gitignore
-trydotnetandjavaandpython/ssl/server.key
+
+.idea/
+
+build/
+
+appsettings*
+
+log*.txt
