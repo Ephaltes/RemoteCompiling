@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using RestWebservice_RemoteCompiling.Command;
 using RestWebservice_RemoteCompiling.Entities;
@@ -26,14 +28,29 @@ namespace RestWebservice_RemoteCompiling.Extensions
             {
                 language = command.Language,
                 version = command.Version,
-                main = command.Code.mainFile,
                 stdin = command.Code.stdin ,
                 compile_timeout = Int32.Parse(pistonHelper.GetCompileTimeout()),
                 run_timeout = Int32.Parse(pistonHelper.GetRunTimeout())
             };
+            
             command.Code.files.ForEach(x => item.files.Add(x));
+            
+            if(!string.IsNullOrWhiteSpace(command.Code.mainFile))
+                MoveMainFileToFirstElement(item.files, command.Code.mainFile);
+            
             command.Code.args.ForEach(x => item.args.Add(x));
             return item;
+        }
+
+        private static void MoveMainFileToFirstElement(List<FileArray> array, string mainFileName)
+        {
+            var mainFile = array.FirstOrDefault(x => x.name == mainFileName);
+
+            if (mainFile == null)
+                return;
+
+            array.Remove(mainFile);
+            array.Insert(0,mainFile);
         }
     }
 }

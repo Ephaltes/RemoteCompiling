@@ -33,6 +33,25 @@
     <Content Update="Templates\javaTemplate_15.2.01.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Remove="UnitTests\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="UnitTests\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="UnitTests\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="UnitTests\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="UnitTests\obj\project.assets.json" />
+    <_ContentIncludedByDefault Remove="UnitTests\obj\project.packagespec.json" />
+    <_ContentIncludedByDefault Remove="UnitTests\obj\UnitTests.csproj.nuget.dgspec.json" />
   </ItemGroup>
 
 </Project>
