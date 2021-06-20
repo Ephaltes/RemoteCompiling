@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: piston-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: piston-api
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: piston-api
+    spec:
+      containers:
+        - image: piston_preinstalled
+          name: piston-api
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 2000
+          resources: {}
+      restartPolicy: Always
+status: {}
