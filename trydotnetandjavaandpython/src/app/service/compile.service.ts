@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CodeModel } from '@ngstack/code-editor';
 import { FileCode } from '../file-code';
+import * as globalVar from '../../../globals'
 export interface CompileCode {
   data: {
     compile?: { code: number, signal: any, stderr: "", stdout: "" },
@@ -14,6 +15,6 @@ export class CompileService {
 
   constructor(private http: HttpClient) { }
   public compile(version: string, code: CodeModel, runFiles: FileCode[]) {
-    return this.http.post<CompileCode>(`https://localhost:5001/Api/Compile`, { language: code.language, version: version, code: { args: [""], stdin: "", mainFile: code.uri, files: runFiles } });
+    return this.http.post<CompileCode>(globalVar.apiURL + `/Api/Compile`, { language: code.language, version: version, code: { args: [""], stdin: "", mainFile: code.uri, files: runFiles } });
   }
 }
