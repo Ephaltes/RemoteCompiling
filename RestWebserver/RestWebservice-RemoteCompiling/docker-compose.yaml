@@ -1,0 +1,12 @@
+version: '3'
+services:
+  rest-api:
+    container_name: rest-api
+    build: .
+    image: rest-api:latest
+    ports:
+      - "5000:80" # port 80 from container to port 5000 on host
+#    environment:
+#      AppSettingsPath:/data/appsettings.json
+#    volumes:
+#      - ./data:/data

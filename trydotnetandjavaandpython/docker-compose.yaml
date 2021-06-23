@@ -1,0 +1,7 @@
+version: '3'
+services:
+  angular-docker:
+    container_name: remote-compiler-website
+    build: .
+    ports:
+      - '9000:80'
