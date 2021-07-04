@@ -1,0 +1,1 @@
+pandoc -t beamer --filter remote-compiling.py remote-compiling-sample.md -o remote-compiling-sample.pdf
