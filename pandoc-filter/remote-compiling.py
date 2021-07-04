@@ -11,15 +11,14 @@ remote server. The code's output on stdout is
 then returned.
 """
 
-REMOTE_COMPILE_URL = "https://localhost:44301"
+REMOTE_COMPILE_URL = "https://localhost:5001"
 
 logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 
 
-def execute_code(code, stdin, args, language, language_version, language_file_extension):
+def execute_code(code, stdin, args, language, language_version):
     url = REMOTE_COMPILE_URL + "/Api/Compile"
     headers = {"content-type": "application/json"}
-    main_file = "main." + language_file_extension
 
     payload = json.dumps({
         "language": language,
@@ -27,10 +26,9 @@ def execute_code(code, stdin, args, language, language_version, language_file_ex
         "code": {
             "args": args,
             "stdin": stdin,
-            "mainFile": main_file,
             "files": [
                 {
-                    "name": main_file,
+                    "name": "main-file",
                     "content": code
                 }
             ]
@@ -78,24 +76,6 @@ def remote_compile(key, value, format_, meta):
     stdin = ""
     args = []
 
-    # check that requested language is supported and choose matching file extension
-    file_extension_switcher = {
-        "cs":      "cs",
-        "csharp":  "cs",
-        "dotnet":  "cs",
-        "py":      "py",
-        "python":  "py",
-        "python2": "py",
-        "python3": "py",
-    }
-
-    language_file_extension = file_extension_switcher.get(language, "unknown")
-
-    if language_file_extension == "unknown":
-        raise ValueError('Remote-compile is of unknown language "' + language + '". Please check the remote ' +
-                         'compilers runtime page (' + REMOTE_COMPILE_URL + '/Api/Help/Runtimes) to see all ' +
-                         'supported runtimes.')
-
     # parse optional parameters
     if 'stdin' in property_names:
         stdin = properties['stdin']
@@ -104,7 +84,7 @@ def remote_compile(key, value, format_, meta):
         args = properties['args'].split(',')
 
     # execute code and get output stdout
-    response = execute_code(code, stdin, args, language, language_version, language_file_extension)
+    response = execute_code(code, stdin, args, language, language_version)
     stdout = response["run"]["stdout"]
     
     # replace "\n" in stdout with pandoc's LineBreak-elements

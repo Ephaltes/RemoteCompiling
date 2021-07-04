@@ -6,7 +6,7 @@
 
 ## Code input:
 
-```
+```csharp
 using System;
 
 namespace ConsoleApp1
@@ -26,11 +26,12 @@ namespace ConsoleApp1
 
 ## Code output:
 
-``` {
-  .remote-compile 
-  language=dotnet 
-  language-version=5.0.201 
-  args='argumentOne,secondArgument' 
+```csharp
+{
+  .remote-compile
+  language=dotnet
+  language-version=5.0.201
+  args='argumentOne,secondArgument'
   stdin='this input is sent to the program'
 }
 using System;
@@ -42,15 +43,15 @@ namespace ConsoleApp1
         static void Main(string[] args)
         {
             Console.WriteLine("Arguments: ");
-            
-            foreach (string argument in args) 
+
+            foreach (string argument in args)
             {
                 Console.WriteLine("+ " + argument);
             }
-            
+
             string input = Console.ReadLine();
             Console.WriteLine("Received input: '" + input + "'");
-            
+
             int x = 5;
             x *= 10;
             x /= 3;
