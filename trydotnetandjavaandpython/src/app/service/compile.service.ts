@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CodeModel } from '@ngstack/code-editor';
-import { FileCode } from '../file-code';
+import { FileCode } from '../file-module/file-code';
 import * as globalVar from '../../../globals'
 export interface CompileCode {
   data: {
