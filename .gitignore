@@ -351,3 +351,5 @@ MigrationBackup/
 trydotnetandjavaandpython/ssl/server.crt
 .gitignore
 trydotnetandjavaandpython/ssl/server.key
+#vscode
+.vscode/
