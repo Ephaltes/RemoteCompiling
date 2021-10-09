@@ -1,0 +1,7 @@
+how to write a test report
+https://github.com/nunit/nunit3-vs-adapter/issues/215
+
+dotnet test runsettings
+https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-test
+https://docs.microsoft.com/en-us/visualstudio/test/configure-unit-tests-by-using-a-dot-runsettings-file?view=vs-2019#specify-a-run-settings-file-from-the-command-line
+
