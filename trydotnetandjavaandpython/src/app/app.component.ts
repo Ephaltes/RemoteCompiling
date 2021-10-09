@@ -15,6 +15,7 @@ import { AddNewFileComponent } from './add-new-file/add-new-file.component';
 import { FileUploadControl, FileUploadValidators } from '@iplab/ngx-file-upload';
 import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
 import { Toast, ToasterService } from 'angular2-toaster';
+import { languageAmount, languages } from './code-meta/codeLanguageMeta';
 
 @Component({
   selector: 'app-root',
@@ -43,6 +44,7 @@ export class AppComponent implements OnInit, OnDestroy {
     { name: 'High Contrast Dark', value: 'hc-black' },
   ];
   langVersions = { csharp: ["5.0.201"], java: ["15.0.2"], python: ["3.9.1"], gcc: ["10.2.0"] };
+  selectedLanguageVersion : string[] = []
   selectedCSharpVersion = "";
   selectedJavaVersion = "";
   selectedPythonVersion = "";
@@ -99,7 +101,9 @@ export class AppComponent implements OnInit, OnDestroy {
       `c`,
       this.domSanitizer.bypassSecurityTrustResourceUrl(`./assets/c.svg`)
     );
-
+    languages.forEach((language, idx)=> {
+      this.selectedLanguageVersion[idx]=language.version
+    });
     this.selectedCSharpVersion = this.langVersions.csharp[0];
     this.selectedJavaVersion = this.langVersions.java[0];
     this.selectedPythonVersion = this.langVersions.python[0];
