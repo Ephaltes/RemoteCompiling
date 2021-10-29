@@ -44,7 +44,7 @@ export class AppComponent implements OnInit, OnDestroy {
     { name: 'High Contrast Dark', value: 'hc-black' },
   ];
   langVersions = { csharp: ["5.0.201"], java: ["15.0.2"], python: ["3.9.1"], gcc: ["10.2.0"] };
-  selectedLanguageVersion : string[] = []
+  selectedLanguageVersion: string[] = []
   selectedCSharpVersion = "";
   selectedJavaVersion = "";
   selectedPythonVersion = "";
@@ -101,8 +101,8 @@ export class AppComponent implements OnInit, OnDestroy {
       `c`,
       this.domSanitizer.bypassSecurityTrustResourceUrl(`./assets/c.svg`)
     );
-    languages.forEach((language, idx)=> {
-      this.selectedLanguageVersion[idx]=language.version
+    languages.forEach((language, idx) => {
+      this.selectedLanguageVersion[idx] = language.version
     });
     this.selectedCSharpVersion = this.langVersions.csharp[0];
     this.selectedJavaVersion = this.langVersions.java[0];
@@ -188,6 +188,20 @@ export class AppComponent implements OnInit, OnDestroy {
     this.isLoading = false;
     this.selectedModel = node.code;
   }
+  downloadFile(node: FileNode) {
+    const blob = new Blob([node.code.value], { type: 'text/plain' });
+    const dataURL = window.URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = dataURL;
+    link.download = node.name;
+    link.click();
+
+    setTimeout(() => {
+      // For Firefox it is necessary to delay revoking the ObjectURL
+      window.URL.revokeObjectURL(dataURL);
+      }, 100);
+  }
   removeNode(node: FileNode) {
     this.database.remove(node);
   }
@@ -232,12 +246,12 @@ export class AppComponent implements OnInit, OnDestroy {
     this.database.add(data.name, data.language, data.code);
   }
   ngOnInit() {
-    var toast : Toast = {
+    var toast: Toast = {
       type: 'success',
       title: 'Auto save complete',
       showCloseButton: false
-  };
-    this.saveSource.subscribe(val => {this.database.save(), this.toasterSerivce.pop(toast)});
+    };
+    this.saveSource.subscribe(val => { this.database.save(), this.toasterSerivce.pop(toast) });
     this.selectNode(this.nestedDataSource.data[0]);
   }
   ngOnDestroy() {
