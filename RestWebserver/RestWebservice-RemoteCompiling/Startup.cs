@@ -1,15 +1,19 @@
 using System.Net;
 using FluentValidation;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Npgsql;
+using RestWebservice_RemoteCompiling.Database;
 using RestWebservice_RemoteCompiling.Helpers;
 using RestWebservice_RemoteCompiling.PipelineBehavior;
 using Serilog;
+using Npgsql.EntityFrameworkCore.PostgreSQL;
 
 namespace RestWebservice_RemoteCompiling
 {
@@ -37,6 +41,10 @@ namespace RestWebservice_RemoteCompiling
             services.AddSingleton<IHttpHelper>(x => new HttpHelper
             (Configuration.GetSection("RemoteCompilerApiLocation").Value));
             services.AddSingleton<ILdapHelper, LdapHelper>();
+            
+            string connectionString = Configuration.GetConnectionString("Database");
+            services.AddDbContext<RemoteCompileDbContext>(options => options.UseNpgsql(connectionString));
+
 
             services.AddCors(options =>
             {
