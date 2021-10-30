@@ -36,6 +36,7 @@ namespace RestWebservice_RemoteCompiling
             services.AddSingleton<IAliasHelper, AliasHelper>();
             services.AddSingleton<IHttpHelper>(x => new HttpHelper
             (Configuration.GetSection("RemoteCompilerApiLocation").Value));
+            services.AddSingleton<ILdapHelper, LdapHelper>();
 
             services.AddCors(options =>
             {
