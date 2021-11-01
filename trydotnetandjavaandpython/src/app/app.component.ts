@@ -16,6 +16,7 @@ import { FileUploadControl, FileUploadValidators } from '@iplab/ngx-file-upload'
 import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
 import { Toast, ToasterService } from 'angular2-toaster';
 import { languageAmount, languages } from './code-meta/codeLanguageMeta';
+import * as JSZip from 'jszip';
 
 @Component({
   selector: 'app-root',
@@ -200,7 +201,26 @@ export class AppComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       // For Firefox it is necessary to delay revoking the ObjectURL
       window.URL.revokeObjectURL(dataURL);
+    }, 100);
+  }
+  downloadAllFiles() {
+    var zip = new JSZip();
+    for (let i = 0; i < this.database.data?.length; i++)
+      zip.file(this.database.data[i].name, this.database.data[i].code.value);
+
+    zip.generateAsync({type:"blob"}).then(function(content){
+      const current = new Date();
+      const dataURL = window.URL.createObjectURL(content);
+      const link = document.createElement('a');
+      link.href = dataURL;
+      link.download = "CodeFiles-"+current.getTime().toString();
+      link.click();
+  
+      setTimeout(() => {
+        // For Firefox it is necessary to delay revoking the ObjectURL
+        window.URL.revokeObjectURL(dataURL);
       }, 100);
+    })
   }
   removeNode(node: FileNode) {
     this.database.remove(node);
