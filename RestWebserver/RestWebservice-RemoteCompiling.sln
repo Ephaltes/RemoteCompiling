@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestWebservice-RemoteCompil
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestWebService-RemoteCompiling.UnitTests", "RestWebservice-RemoteCompiling\UnitTests\RestWebService-RemoteCompiling.UnitTests.csproj", "{44EB3A91-9596-42CC-A085-855820ADF006}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestWebservice-StaticCodeAnalysis", "RestWebservice-StaticCodeAnalysis\RestWebservice-StaticCodeAnalysis.csproj", "{307E7D39-67D2-4373-A260-74AFB9C19F0C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestWebservice-StaticCodeAnalysis", "RestWebservice-StaticCodeAnalysis\RestWebservice-StaticCodeAnalysis.csproj", "{307E7D39-67D2-4373-A260-74AFB9C19F0C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestWebservice-StaticCodeAnalysis.DTOs", "RestWebservice-StaticCodeAnalysis.DTOs\RestWebservice-StaticCodeAnalysis.DTOs.csproj", "{6D226074-67A9-432B-934C-01BB7A9C3F09}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{307E7D39-67D2-4373-A260-74AFB9C19F0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{307E7D39-67D2-4373-A260-74AFB9C19F0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{307E7D39-67D2-4373-A260-74AFB9C19F0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D226074-67A9-432B-934C-01BB7A9C3F09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D226074-67A9-432B-934C-01BB7A9C3F09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D226074-67A9-432B-934C-01BB7A9C3F09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D226074-67A9-432B-934C-01BB7A9C3F09}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
