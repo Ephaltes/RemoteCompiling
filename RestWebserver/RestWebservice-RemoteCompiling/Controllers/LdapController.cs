@@ -25,7 +25,7 @@ namespace RestWebservice_RemoteCompiling.Controllers
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginCommand command)
         {
-            CustomResponse<LdapUser> result = await _mediator.Send(command);
+            CustomResponse<SessionUser> result = await _mediator.Send(command);
             return result.ToResponse();
         }
     }

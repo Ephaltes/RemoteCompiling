@@ -1,178 +1,173 @@
 ﻿using System;
-using System.Linq;
 using MediatR;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using RestWebservice_RemoteCompiling.Database;
 using RestWebservice_RemoteCompiling.Entities;
 using RestWebservice_RemoteCompiling.Extensions;
+using RestWebservice_RemoteCompiling.Repositories;
 
 namespace RestWebservice_RemoteCompiling.Controllers
 {
-    [Route("Api/Database")] 
-    [ApiController] 
+    [Route("Api/Database")]
+    [ApiController]
     [EnableCors("AllAllowedPolicy")]
     public class DatabaseController
     {
         private readonly IMediator _mediator;
-        private readonly Repository _repository;
-        
-        public DatabaseController(IMediator mediator,RemoteCompileDbContext context)
+        private readonly UserRepository _userRepository;
+
+        public DatabaseController(IMediator mediator, RemoteCompileDbContext context)
         {
             _mediator = mediator;
-            _repository = new Repository(context);
+            _userRepository = new UserRepository(context);
         }
         [HttpPost("AddUser")]
         public IActionResult AddFileForUser(User newUser)
         {
-            _repository.AddUser(newUser);
+            _userRepository.AddUser(newUser);
+
             return CustomResponse.Success("yey").ToResponse();
         }
         [HttpPost("AddFileForUser")]
-        public IActionResult AddFileForUser(string ldapIdent,File newFile)
+        public IActionResult AddFileForUser(string ldapIdent, File newFile)
         {
-            var findUser = _repository.GetUserByLdapIdentWithFilesAndWithCheckpoints(ldapIdent);
+            User? findUser = _userRepository.GetUserByLdapUid(ldapIdent);
             findUser.Files.Add(newFile);
-            _repository.UpdateUser(findUser);
+            _userRepository.UpdateUser(findUser);
+
             return CustomResponse.Success("yey").ToResponse();
         }
         [HttpPost("AddCheckpointForFile")]
-        public IActionResult AddFileForUser(string ldapIdent,int fileId,Checkpoint checkpoint)
+        public IActionResult AddCheckpointForFile(string ldapIdent, int fileId, Checkpoint checkpoint)
         {
-            var findUser = _repository.GetUserByLdapIdentWithFilesAndWithCheckpoints(ldapIdent);
+            User? findUser = _userRepository.GetUserByLdapUid(ldapIdent);
             bool flag = false;
             foreach (var i in findUser.Files)
-            {
                 if (i.Id == fileId)
                 {
                     i.LastModified = DateTime.Now;
                     i.Checkpoints.Add(checkpoint);
                     flag = true;
                 }
-            }
 
             if (!flag)
-            {
                 return CustomResponse.Error<string>(401, "File not found").ToResponse();
-            }
-            _repository.UpdateUser(findUser);
+
+            _userRepository.UpdateUser(findUser);
+
             return CustomResponse.Success("yey").ToResponse();
         }
-        
-        
-        
-        
-        
+
+
         [HttpPut("UpdateFileForUser")]
-        public IActionResult UpdateFileForUser(string ldapIdent,int fileId,File newFile)
+        public IActionResult UpdateFileForUser(string ldapIdent, int fileId, File newFile)
         {
-            var findUser = _repository.GetUserByLdapIdentWithFilesAndWithCheckpoints(ldapIdent);
-            
-            
+            User? findUser = _userRepository.GetUserByLdapUid(ldapIdent);
+
+
             bool flag = false;
             foreach (var i in findUser.Files)
-            {
                 if (i.Id == fileId)
                 {
                     i.LastModified = DateTime.Now;
                     i.FileName = newFile.FileName;
                     flag = true;
                 }
-            }
 
             if (!flag)
-            {
                 return CustomResponse.Error<string>(401, "File not found").ToResponse();
-            }
 
-            _repository.UpdateUser(findUser);
+            _userRepository.UpdateUser(findUser);
+
             return CustomResponse.Success("yey").ToResponse();
         }
-        
-        
-        
+
+
         [HttpDelete("RemoveFileForUser")]
-        public IActionResult RemoveFileForUser(string ldapIdent,int fileId)
+        public IActionResult RemoveFileForUser(string ldapIdent, int fileId)
         {
-            var findUser = _repository.GetUserByLdapIdentWithFilesAndWithCheckpoints(ldapIdent);
-            
+            User? findUser = _userRepository.GetUserByLdapUid(ldapIdent);
+
             bool deleted = false;
-            for (int i = 0; i < findUser.Files.Count; i++)
+
+            foreach (File userFile in findUser.Files)
             {
-                if (findUser.Files[i].Id == fileId)
+                if (userFile.Id != fileId)
+                    continue;
+
+                findUser.Files.Remove(userFile);
+                deleted = true;
+
+                break;
+            }
+
+            if (!deleted)
+                return CustomResponse.Error<string>(401, "File not found").ToResponse();
+
+            _userRepository.UpdateUser(findUser);
+
+            return CustomResponse.Success("yey").ToResponse();
+        }
+        [HttpDelete("RemoveCheckpointForFile")]
+        public IActionResult RemoveCheckpointForFile(string ldapIdent, int fileId, int checkpointId)
+        {
+            User? findUser = _userRepository.GetUserByLdapUid(ldapIdent);
+
+            bool deleted = false;
+            foreach (File file in findUser.Files)
+            {
+                file.LastModified = DateTime.Now;
+
+                foreach (Checkpoint checkpoint in file.Checkpoints)
                 {
-                    findUser.Files.RemoveAt(i);
+                    if (checkpoint.Id != checkpointId)
+                        continue;
+
+                    file.Checkpoints.Remove(checkpoint);
                     deleted = true;
+
                     break;
                 }
             }
 
             if (!deleted)
-            {
                 return CustomResponse.Error<string>(401, "File not found").ToResponse();
-            }
-            
-            _repository.UpdateUser(findUser);
+
+            _userRepository.UpdateUser(findUser);
+
             return CustomResponse.Success("yey").ToResponse();
         }
-        [HttpDelete("RemoveCheckpointForFile")]
-        public IActionResult RemoveCheckpointForFile(string ldapIdent,int fileId,int checkpointId)
-        {
-            var findUser = _repository.GetUserByLdapIdentWithFilesAndWithCheckpoints(ldapIdent);
-            
-            bool deleted = false;
-            foreach (var x in findUser.Files)
-            {
-                x.LastModified = DateTime.Now;
-                for (int i = 0; i < x.Checkpoints.Count; i++)
-                {
-                    if (x.Checkpoints[i].Id == checkpointId)
-                    {
-                        x.Checkpoints.RemoveAt(i);
-                        deleted = true;
-                        break;
-                    }
-                } 
-            }
-            
-            if (!deleted)
-            {
-                return CustomResponse.Error<string>(401, "File not found").ToResponse();
-            }
-            
-            _repository.UpdateUser(findUser);
-            return CustomResponse.Success("yey").ToResponse();
-        }
-        
-        
-        
+
+
         [HttpGet("getUser")]
         public IActionResult GetUser(string ldapIdent)
         {
-            return CustomResponse.Success(_repository.GetUserByLdapIdentWithFilesAndWithCheckpoints(ldapIdent)).ToResponse();
+            return CustomResponse.Success(_userRepository.GetUserByLdapUid(ldapIdent)).ToResponse();
         }
 
         internal void CreateNewUser(LdapUser ldapUser)
         {
-            var newUser = new User();
-            newUser.LdapUri = ldapUser.Uid;
+            User? newUser = new User();
+            newUser.LdapUid = ldapUser.Uid;
             newUser.Email = ldapUser.Mail;
             newUser.Name = ldapUser.GivenName;
-            
-            //todolater switch ldap user to internal user
-            newUser.UserRole = UserRole.DefaultUser; 
 
-            _repository.AddUser(newUser);
+            //todolater switch ldap user to internal user
+            newUser.UserRole = UserRole.DefaultUser;
+
+            _userRepository.AddUser(newUser);
         }
         internal void UpdateUserData(User user)
         {
             // todolater verify that files and checkpoints get stored anyway without loading 
-            User userFromDb = _repository.GetUserByLdapIdentWithoutFilesAndWithoutCheckpoints(user.LdapUri);
+            // TODO: userFromDB could be null
+            User userFromDb = _userRepository.GetUserByLdapUid(user.LdapUid);
             userFromDb.Email = user.Email;
             userFromDb.Name = user.Name;
             userFromDb.UserRole = user.UserRole;
-            
-            _repository.UpdateUser(userFromDb);
+
+            _userRepository.UpdateUser(userFromDb);
         }
     }
 }

@@ -12,11 +12,11 @@ namespace RestWebservice_RemoteCompiling.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public string LdapUri { get; set; }
+        public string LdapUid { get; set; }
         public UserRole UserRole { get; set; }
         public string Email { get; set; }
         public string Name { get; set; }
-        public Collection<File> Files { get; set; } = new();
+        public virtual ICollection<File> Files { get; set; }
     }
 
     public enum UserRole

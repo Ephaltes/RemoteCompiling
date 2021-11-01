@@ -14,6 +14,7 @@ using RestWebservice_RemoteCompiling.Helpers;
 using RestWebservice_RemoteCompiling.PipelineBehavior;
 using Serilog;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
+using RestWebservice_RemoteCompiling.Repositories;
 
 namespace RestWebservice_RemoteCompiling
 {
@@ -41,9 +42,14 @@ namespace RestWebservice_RemoteCompiling
             services.AddSingleton<IHttpHelper>(x => new HttpHelper
             (Configuration.GetSection("RemoteCompilerApiLocation").Value));
             services.AddSingleton<ILdapHelper, LdapHelper>();
+            services.AddSingleton<IUserRepository, UserRepository>();
+            services.AddSingleton<ISessionRepository,SessionRepository>();
             
             string connectionString = Configuration.GetConnectionString("Database");
-            services.AddDbContext<RemoteCompileDbContext>(options => options.UseNpgsql(connectionString));
+            services.AddDbContext<RemoteCompileDbContext>(options => options
+                .UseLazyLoadingProxies()
+                .UseNpgsql(connectionString)
+                ,ServiceLifetime.Singleton);
 
 
             services.AddCors(options =>

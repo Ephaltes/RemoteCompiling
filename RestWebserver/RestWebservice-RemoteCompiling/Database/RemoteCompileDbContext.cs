@@ -14,6 +14,7 @@ namespace RestWebservice_RemoteCompiling.Database
         public DbSet<User> Users { get; set; }
         public DbSet<File> Files { get; set; }
         public DbSet<Checkpoint> Checkpoints { get; set; }
+        public DbSet<Session> Sessions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

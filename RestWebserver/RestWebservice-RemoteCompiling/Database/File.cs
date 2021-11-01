@@ -11,6 +11,6 @@ namespace RestWebservice_RemoteCompiling.Database
         public int Id { get; set; }
         public DateTime LastModified { get; set; }
         public string FileName { get; set; }
-        public Collection<Checkpoint> Checkpoints { get; set; } = new();
+        public virtual ICollection<Checkpoint> Checkpoints { get; set; }
     }
 }
