@@ -8,7 +8,7 @@ namespace RestWebservice_StaticCodeAnalysis.DTOs.Enums
     /// 
     /// </summary>
     [JsonConverter(typeof(StringEnumConverter))]
-    public enum StatusEnum
+    public enum ScanStatus
     {
         /// <summary>
         /// Enum PendingEnum for pending

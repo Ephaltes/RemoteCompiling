@@ -17,14 +17,14 @@ namespace RestWebservice_StaticCodeAnalysis.DTOs
         /// </summary>
         [Required]
         [DataMember(Name = "type")]
-        public IssueTypeEnum? Type { get; set; }
+        public IssueType? Type { get; set; }
 
         /// <summary>
         /// Gets or Sets Severity
         /// </summary>
         [Required]
         [DataMember(Name = "severity")]
-        public SeverityEnum? Severity { get; set; }
+        public IssueSeverity? Severity { get; set; }
 
         /// <summary>
         /// Gets or Sets Component

@@ -23,6 +23,6 @@ namespace RestWebservice_StaticCodeAnalysis.DTOs
         /// </summary>
         [Required]
         [DataMember(Name = "status")]
-        public StatusEnum? Status { get; set; }
+        public ScanStatus? Status { get; set; }
     }
 }

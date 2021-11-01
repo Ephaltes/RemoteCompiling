@@ -8,7 +8,7 @@ namespace RestWebservice_StaticCodeAnalysis.DTOs.Enums
     /// 
     /// </summary>
     [JsonConverter(typeof(StringEnumConverter))]
-    public enum SeverityEnum
+    public enum IssueSeverity
     {
         /// <summary>
         /// Enum MajorEnum for major

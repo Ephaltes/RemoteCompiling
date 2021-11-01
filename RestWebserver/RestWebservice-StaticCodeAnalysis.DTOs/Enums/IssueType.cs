@@ -8,7 +8,7 @@ namespace RestWebservice_StaticCodeAnalysis.DTOs.Enums
     /// 
     /// </summary>
     [JsonConverter(typeof(StringEnumConverter))]
-    public enum IssueTypeEnum
+    public enum IssueType
     {
         /// <summary>
         /// Enum CodeSmellEnum for CodeSmell
