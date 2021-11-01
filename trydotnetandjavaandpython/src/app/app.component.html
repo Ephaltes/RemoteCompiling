@@ -3,13 +3,13 @@
 <!-- context menu for files-->
 <sh-context-menu #menu>
   <ng-template shContextMenuItem let-data>
-    <div (click)="downloadAllFiles()">
-      <mat-icon style="vertical-align:middle; font-size: 20px;">download</mat-icon> Downloadall
+    <div (click)="downloadFile(data)">
+      <mat-icon style="vertical-align:middle; font-size: 20px;">download</mat-icon> Download
     </div>
   </ng-template>
   <ng-template shContextMenuItem let-data>
-    <div (click)="downloadFile(data)">
-      <mat-icon style="vertical-align:middle; font-size: 20px;">download</mat-icon> Download
+    <div (click)="downloadAllFiles()">
+      <mat-icon style="vertical-align:middle; font-size: 20px;">download</mat-icon> Download all Files As Zip
     </div>
   </ng-template>
   <ng-template shContextMenuItem let-data>
