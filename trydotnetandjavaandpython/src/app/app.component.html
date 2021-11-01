@@ -3,6 +3,11 @@
 <!-- context menu for files-->
 <sh-context-menu #menu>
   <ng-template shContextMenuItem let-data>
+    <div (click)="downloadFile(data)">
+      <mat-icon style="vertical-align:middle; font-size: 20px;">download</mat-icon> Download
+    </div>
+  </ng-template>
+  <ng-template shContextMenuItem let-data>
     <div (click)="removeNode(data)">
       <mat-icon style="vertical-align:middle; font-size: 20px;">delete</mat-icon> Remove
     </div>
