@@ -5,7 +5,9 @@ VisualStudioVersion = 17.0.31808.319
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestWebservice-RemoteCompiling", "RestWebservice-RemoteCompiling\RestWebservice-RemoteCompiling.csproj", "{6067057D-B8CE-4192-B8C4-537C1C0B0E07}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests", "RestWebservice-RemoteCompiling\UnitTests\UnitTests.csproj", "{44EB3A91-9596-42CC-A085-855820ADF006}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestWebService-RemoteCompiling.UnitTests", "RestWebservice-RemoteCompiling\UnitTests\RestWebService-RemoteCompiling.UnitTests.csproj", "{44EB3A91-9596-42CC-A085-855820ADF006}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestWebservice-StaticCodeAnalysis", "RestWebservice-StaticCodeAnalysis\RestWebservice-StaticCodeAnalysis.csproj", "{307E7D39-67D2-4373-A260-74AFB9C19F0C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{44EB3A91-9596-42CC-A085-855820ADF006}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{44EB3A91-9596-42CC-A085-855820ADF006}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{44EB3A91-9596-42CC-A085-855820ADF006}.Release|Any CPU.Build.0 = Release|Any CPU
+		{307E7D39-67D2-4373-A260-74AFB9C19F0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{307E7D39-67D2-4373-A260-74AFB9C19F0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{307E7D39-67D2-4373-A260-74AFB9C19F0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{307E7D39-67D2-4373-A260-74AFB9C19F0C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
