@@ -14,7 +14,8 @@ namespace RestWebservice_RemoteCompiling.Database
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public string LdapUri { get; set; }
         public UserRole UserRole { get; set; }
-
+        public string Email { get; set; }
+        public string Name { get; set; }
         public Collection<File> Files { get; set; } = new();
     }
 

@@ -31,7 +31,7 @@ namespace RestWebservice_RemoteCompiling.Controllers
         [HttpPost("AddFileForUser")]
         public IActionResult AddFileForUser(string ldapIdent,File newFile)
         {
-            var findUser = _repository.GetUserByLdapIdent(ldapIdent);
+            var findUser = _repository.GetUserByLdapIdentWithFilesAndWithCheckpoints(ldapIdent);
             findUser.Files.Add(newFile);
             _repository.UpdateUser(findUser);
             return CustomResponse.Success("yey").ToResponse();
@@ -39,7 +39,7 @@ namespace RestWebservice_RemoteCompiling.Controllers
         [HttpPost("AddCheckpointForFile")]
         public IActionResult AddFileForUser(string ldapIdent,int fileId,Checkpoint checkpoint)
         {
-            var findUser = _repository.GetUserByLdapIdent(ldapIdent);
+            var findUser = _repository.GetUserByLdapIdentWithFilesAndWithCheckpoints(ldapIdent);
             bool flag = false;
             foreach (var i in findUser.Files)
             {
@@ -66,7 +66,7 @@ namespace RestWebservice_RemoteCompiling.Controllers
         [HttpPut("UpdateFileForUser")]
         public IActionResult UpdateFileForUser(string ldapIdent,int fileId,File newFile)
         {
-            var findUser = _repository.GetUserByLdapIdent(ldapIdent);
+            var findUser = _repository.GetUserByLdapIdentWithFilesAndWithCheckpoints(ldapIdent);
             
             
             bool flag = false;
@@ -94,7 +94,7 @@ namespace RestWebservice_RemoteCompiling.Controllers
         [HttpDelete("RemoveFileForUser")]
         public IActionResult RemoveFileForUser(string ldapIdent,int fileId)
         {
-            var findUser = _repository.GetUserByLdapIdent(ldapIdent);
+            var findUser = _repository.GetUserByLdapIdentWithFilesAndWithCheckpoints(ldapIdent);
             
             bool deleted = false;
             for (int i = 0; i < findUser.Files.Count; i++)
@@ -118,7 +118,7 @@ namespace RestWebservice_RemoteCompiling.Controllers
         [HttpDelete("RemoveCheckpointForFile")]
         public IActionResult RemoveCheckpointForFile(string ldapIdent,int fileId,int checkpointId)
         {
-            var findUser = _repository.GetUserByLdapIdent(ldapIdent);
+            var findUser = _repository.GetUserByLdapIdentWithFilesAndWithCheckpoints(ldapIdent);
             
             bool deleted = false;
             foreach (var x in findUser.Files)
@@ -149,7 +149,30 @@ namespace RestWebservice_RemoteCompiling.Controllers
         [HttpGet("getUser")]
         public IActionResult GetUser(string ldapIdent)
         {
-            return CustomResponse.Success(_repository.GetUserByLdapIdent(ldapIdent)).ToResponse();
+            return CustomResponse.Success(_repository.GetUserByLdapIdentWithFilesAndWithCheckpoints(ldapIdent)).ToResponse();
+        }
+
+        internal void CreateNewUser(LdapUser ldapUser)
+        {
+            var newUser = new User();
+            newUser.LdapUri = ldapUser.Uid;
+            newUser.Email = ldapUser.Mail;
+            newUser.Name = ldapUser.GivenName;
+            
+            //todolater switch ldap user to internal user
+            newUser.UserRole = UserRole.DefaultUser; 
+
+            _repository.AddUser(newUser);
+        }
+        internal void UpdateUserData(User user)
+        {
+            // todolater verify that files and checkpoints get stored anyway without loading 
+            User userFromDb = _repository.GetUserByLdapIdentWithoutFilesAndWithoutCheckpoints(user.LdapUri);
+            userFromDb.Email = user.Email;
+            userFromDb.Name = user.Name;
+            userFromDb.UserRole = user.UserRole;
+            
+            _repository.UpdateUser(userFromDb);
         }
     }
 }

@@ -27,9 +27,17 @@ namespace RestWebservice_RemoteCompiling.Database
             _context.SaveChanges();
         }
 
-        public User GetUserByLdapIdent(string userLdapUri)
+        public User GetUserByLdapIdentWithFilesAndWithCheckpoints(string userLdapUri)
         {
-            return _context.Users.Include(x => x.Files).ThenInclude(x => x.Checkpoints).FirstOrDefault(x => x.LdapUri == userLdapUri);
+            return _context.Users.Include(x => x.Files).ThenInclude(x => x.Checkpoints).First(x => x.LdapUri == userLdapUri);
+        }
+        public User GetUserByLdapIdentWithoutFilesAndWithoutCheckpoints(string userLdapUri)
+        {
+            return _context.Users.First(x => x.LdapUri == userLdapUri);
+        }
+        public User GetUserByLdapIdentWithFilesButWithoutCheckpoints(string userLdapUri)
+        {
+            return _context.Users.Include(x => x.Files).First(x => x.LdapUri == userLdapUri);
         }
     }
 }
