@@ -23,7 +23,7 @@ namespace RestWebservice_RemoteCompiling.Controllers
             _userRepository = new UserRepository(context);
         }
         [HttpPost("AddUser")]
-        public IActionResult AddFileForUser(User newUser)
+        public IActionResult AddUser(User newUser)
         {
             _userRepository.AddUser(newUser);
 
@@ -153,21 +153,26 @@ namespace RestWebservice_RemoteCompiling.Controllers
             newUser.Email = ldapUser.Mail;
             newUser.Name = ldapUser.GivenName;
 
-            //todolater switch ldap user to internal user
+            //todo switch ldap user to internal user
             newUser.UserRole = UserRole.DefaultUser;
 
             _userRepository.AddUser(newUser);
         }
-        internal void UpdateUserData(User user)
+        internal bool UpdateUserData(User user)
         {
-            // todolater verify that files and checkpoints get stored anyway without loading 
+            // todo verify that files and checkpoints get stored anyway without loading 
             // TODO: userFromDB could be null
             User userFromDb = _userRepository.GetUserByLdapUid(user.LdapUid);
+            if (userFromDb is null)
+            {
+                return false;
+            }
             userFromDb.Email = user.Email;
             userFromDb.Name = user.Name;
             userFromDb.UserRole = user.UserRole;
 
             _userRepository.UpdateUser(userFromDb);
+            return true;
         }
     }
 }
