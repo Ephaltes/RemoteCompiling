@@ -23,7 +23,7 @@ namespace RestWebservice_RemoteCompiling.Controllers
             _userRepository = new UserRepository(context);
         }
         [HttpPost("AddUser")]
-        public IActionResult AddFileForUser(User newUser)
+        public IActionResult AddUser(User newUser)
         {
             _userRepository.AddUser(newUser);
 
