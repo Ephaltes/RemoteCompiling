@@ -9,6 +9,7 @@ using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using RestWebservice_StaticCodeAnalysis.Security;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace RestWebservice_StaticCodeAnalysis
@@ -23,17 +24,14 @@ namespace RestWebservice_StaticCodeAnalysis
         /// </summary>
         public IConfiguration Configuration { get; }
 
-        private readonly IWebHostEnvironment _hostingEnv;
-
         /// <summary>
         /// Startup constructor
         /// </summary>
         /// <param name="configuration"></param>
         /// <param name="env"></param>
-        public Startup(IConfiguration configuration, IWebHostEnvironment env)
+        public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            _hostingEnv = env;
         }
 
         /// <summary>
@@ -58,7 +56,25 @@ namespace RestWebservice_StaticCodeAnalysis
             services.AddAuthentication(BearerAuthenticationHandler.SchemeName)
                 .AddScheme<AuthenticationSchemeOptions, BearerAuthenticationHandler>(BearerAuthenticationHandler.SchemeName, null);
 
-            services.AddControllers();
+            services.AddControllers().ConfigureApiBehaviorOptions(o =>
+            {
+                o.SuppressMapClientErrors = true;
+            });
+
+            var securityScheme = new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = BearerAuthenticationHandler.SchemeName
+                },
+                Name = "Authorization",
+                Type = SecuritySchemeType.Http,
+                In = ParameterLocation.Header,
+                Scheme = BearerAuthenticationHandler.SchemeName,
+                BearerFormat = "JWT",
+                Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+            };
 
             services.AddSwaggerGen(c =>
                 {
@@ -74,7 +90,14 @@ namespace RestWebservice_StaticCodeAnalysis
                         }
                     });
                     c.CustomSchemaIds(type => type.FullName);
-                    c.IncludeXmlComments($"{AppContext.BaseDirectory}{Path.DirectorySeparatorChar}{_hostingEnv.ApplicationName}.xml");
+                    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                    {
+                        {
+                            securityScheme,
+                            Array.Empty<string>()
+                        }
+                    });
+                    c.AddSecurityDefinition(BearerAuthenticationHandler.SchemeName, securityScheme);
                 });
         }
 

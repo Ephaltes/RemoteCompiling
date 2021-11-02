@@ -34,6 +34,12 @@ namespace RestWebservice_StaticCodeAnalysis.DTOs
         public string Component { get; set; }
 
         /// <summary>
+        /// Gets or Sets Message
+        /// </summary>
+        [DataMember(Name = "message")]
+        public string Message { get; set; }
+
+        /// <summary>
         /// Gets or Sets TextLocation
         /// </summary>
         [Required]

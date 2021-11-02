@@ -20,9 +20,6 @@ namespace RestWebservice_StaticCodeAnalysis.Controllers
         /// Create a code analysis job
         /// </summary>
         /// <param name="body">Code to perform the analysis on</param>
-        /// <response code="200">A job that corresponds to the code analysis</response>
-        /// <response code="400">Not supported code-language or invalid code</response>
-        /// <response code="401">Token is missing or has expired</response>
         [HttpPost]
         [Route("/scans")]
         [Authorize(AuthenticationSchemes = BearerAuthenticationHandler.SchemeName)]
@@ -53,9 +50,6 @@ namespace RestWebservice_StaticCodeAnalysis.Controllers
         /// Delete a scan job and it's results
         /// </summary>
         /// <param name="scanId">Id of the scan to retrieve</param>
-        /// <response code="204">Scan job was deleted</response>
-        /// <response code="401">Token is missing or has expired or user is not permitted to see this scan job</response>
-        /// <response code="404">Scan with this id was not found</response>
         [HttpDelete]
         [Route("/scans/{scanId}")]
         [Authorize(AuthenticationSchemes = BearerAuthenticationHandler.SchemeName)]
@@ -80,8 +74,6 @@ namespace RestWebservice_StaticCodeAnalysis.Controllers
         /// <summary>
         /// See all of the current user's scan jobs
         /// </summary>
-        /// <response code="200">List of all scan jobs</response>
-        /// <response code="401">Token is missing or has expired</response>
         [HttpGet]
         [Route("/scans")]
         [Authorize(AuthenticationSchemes = BearerAuthenticationHandler.SchemeName)]
@@ -108,9 +100,6 @@ namespace RestWebservice_StaticCodeAnalysis.Controllers
         /// Retrieve a scan job's status
         /// </summary>
         /// <param name="scanId">Id of the scan to retrieve</param>
-        /// <response code="200">Results of the scan</response>
-        /// <response code="401">Token is missing or has expired or user is not permitted to see this scan job</response>
-        /// <response code="404">Scan with this id was not found</response>
         [HttpGet]
         [Route("/scans/{scanId}")]
         [Authorize(AuthenticationSchemes = BearerAuthenticationHandler.SchemeName)]
@@ -141,10 +130,6 @@ namespace RestWebservice_StaticCodeAnalysis.Controllers
         /// Retrieves a scan's results
         /// </summary>
         /// <param name="scanId">Id of the scan to retrieve</param>
-        /// <response code="200">Results of the scan</response>
-        /// <response code="401">Token is missing or has expired or user is not permitted to see this scan job</response>
-        /// <response code="404">Scan with this scanId was not found</response>
-        /// <response code="409">Scan job does not yet have status 'available'</response>
         [HttpGet]
         [Route("/scans/{scanId}/results")]
         [Authorize(AuthenticationSchemes = BearerAuthenticationHandler.SchemeName)]
