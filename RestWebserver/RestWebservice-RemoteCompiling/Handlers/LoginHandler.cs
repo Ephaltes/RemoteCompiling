@@ -11,26 +11,26 @@ using Serilog;
 
 namespace RestWebservice_RemoteCompiling.Handlers
 {
-    public class LoginHandler : IRequestHandler<LoginCommand, CustomResponse<SessionUser>>
+    public class LoginHandler : IRequestHandler<LoginCommand, CustomResponse<string>>
     {
         private readonly ILdapHelper _ldapHelper;
         private readonly IUserRepository _userRepository;
-        private readonly ISessionRepository _sessionRepository;
-        public LoginHandler(ILdapHelper ldapHelper, IUserRepository userRepository, ISessionRepository sessionRepository)
+        private readonly ITokenService _tokenService;
+        public LoginHandler(ILdapHelper ldapHelper, IUserRepository userRepository, ITokenService tokenService)
         {
             _ldapHelper = ldapHelper;
             _userRepository = userRepository;
-            _sessionRepository = sessionRepository;
+            _tokenService = tokenService;
         }
 
-        public async Task<CustomResponse<SessionUser>> Handle(LoginCommand request, CancellationToken cancellationToken)
+        public async Task<CustomResponse<string>> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
             try
             {
                 LdapUser? user = _ldapHelper.LogInUser(request.Username, request.Password);
 
                 if (user is null)
-                    return CustomResponse.Error<SessionUser>(401, "Invalid Credentials");
+                    return CustomResponse.Error<string>(401, "Invalid Credentials");
 
                 User? dbUser = _userRepository.GetUserByLdapUid(user.Uid);
 
@@ -47,18 +47,16 @@ namespace RestWebservice_RemoteCompiling.Handlers
                     dbUser = _userRepository.AddUser(dbUser);
                 }
 
-                Session session = new Session() { LdapUser = dbUser };
-                session = _sessionRepository.Add(session);
+                
+               
 
-                SessionUser sessionUser = new SessionUser() { Token = session.Id.ToString("N"), User = user };
-
-                return CustomResponse.Success(sessionUser);
+                return CustomResponse.Success(_tokenService.BuildToken(dbUser));
             }
             catch (Exception e)
             {
                 Log.Error(e, $"{e.Message} \n\n{e.StackTrace}");
 
-                return CustomResponse.Error<SessionUser>(500, "Unexpected Error");
+                return CustomResponse.Error<string>(500, "Unexpected Error");
             }
         }
     }

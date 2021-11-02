@@ -5,7 +5,7 @@ using RestWebservice_RemoteCompiling.JsonObjClasses;
 
 namespace RestWebservice_RemoteCompiling.Command
 {
-    public class LoginCommand : IRequest<CustomResponse<SessionUser>>
+    public class LoginCommand : IRequest<CustomResponse<string>>
     {
         public string Username { get; set; }
         public string Password { get; set; }
