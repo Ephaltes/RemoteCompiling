@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.DirectoryServices.Protocols;
 
 namespace RestWebservice_RemoteCompiling.Entities
@@ -11,7 +12,12 @@ namespace RestWebservice_RemoteCompiling.Entities
         public string Uid { get; init; }
         public string EmployeeType { get; init; }
         public string GivenName { get; init; }
-        public string Ou { get; init; }
+
+        public List<string> Ou
+        {
+            get;
+            init;
+        } = new List<string>();
         public string Sn { get; init; }
 
         public LdapUser(SearchResultEntry entry)
@@ -41,7 +47,10 @@ namespace RestWebservice_RemoteCompiling.Entities
                          Mail = attribute[0].ToString();
                          break;
                      case "ou":
-                         Ou = attribute[0].ToString();
+                         foreach (string organization in attribute.GetValues(typeof(string)))
+                         {
+                             Ou.Add(organization);
+                         }
                          break;
                      case "givenname":
                          GivenName = attribute[0].ToString();

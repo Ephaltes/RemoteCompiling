@@ -34,21 +34,18 @@ namespace RestWebservice_RemoteCompiling.Handlers
 
                 User? dbUser = _userRepository.GetUserByLdapUid(user.Uid);
 
-                if (dbUser is null)
-                {
-                    dbUser = new User
-                    {
-                        Email = user.Mail,
-                        Name = user.Cn,
-                        LdapUid = user.Uid,
-                        UserRole = UserRole.DefaultUser
-                    };
+                if (dbUser is not null)
+                    return CustomResponse.Success(_tokenService.BuildToken(dbUser));
 
-                    dbUser = _userRepository.AddUser(dbUser);
-                }
+                dbUser = new User
+                         {
+                             Email = user.Mail,
+                             Name = user.Cn,
+                             LdapUid = user.Uid,
+                             UserRole = user.Ou.Contains("Teacher") ? UserRole.Teacher : UserRole.DefaultUser
+                         };
 
-                
-               
+                dbUser = _userRepository.AddUser(dbUser);
 
                 return CustomResponse.Success(_tokenService.BuildToken(dbUser));
             }
