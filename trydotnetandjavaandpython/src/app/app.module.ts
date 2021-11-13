@@ -19,13 +19,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {ShContextMenuModule} from 'ng2-right-click-menu';
 import { ErrorDialogComponent } from './error-dialog/error-dialog.component'
 import { ToasterModule } from 'angular2-toaster';
+import { FolderOptionDialogComponent } from './folder-option-dialog/folder-option-dialog.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     AddNewFileComponent,
-    ErrorDialogComponent
+    ErrorDialogComponent,
+    FolderOptionDialogComponent
   ],
   imports: [
     BrowserModule,

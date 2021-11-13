@@ -129,11 +129,11 @@ export class FileDatabase {
   constructor() {
     this.initialize();
   }
-  getAllFolders() : FileNode[]{
-    var list : FileNode[];
+  getAllFolders(): FileNode[] {
+    var list: FileNode[] = [];
     this.data.forEach(element => {
-      if(element.type===FileNodeType.folder)
-      list.push(element);
+      if (element.type === FileNodeType.folder)
+        list.push(element)
     });
     return list;
   }

@@ -17,6 +17,7 @@ import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
 import { Toast, ToasterService } from 'angular2-toaster';
 import { languageAmount, languages } from './code-meta/codeLanguageMeta';
 import * as JSZip from 'jszip';
+import { FolderOptionDialogComponent } from './folder-option-dialog/folder-option-dialog.component';
 
 @Component({
   selector: 'app-root',
@@ -120,6 +121,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.nestedDataSource.data = _data;
   }
   dragDropToList(file: File) {
+    const dialogRef = this.Dialog.open(FolderOptionDialogComponent, { data: this.database.getAllFolders() });
     if (file != undefined) {
       var fileReader = new FileReader();
       fileReader.readAsText(file);
