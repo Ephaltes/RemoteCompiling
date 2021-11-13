@@ -1,15 +1,28 @@
 <!--toast-->
 <toaster-container></toaster-container>
-<!-- context menu for files-->
-<sh-context-menu #menu>
+<!-- context menu for folders-->
+<sh-context-menu #folderMenu>
   <ng-template shContextMenuItem let-data>
-    <div (click)="downloadFile(data)">
-      <mat-icon style="vertical-align:middle; font-size: 20px;">download</mat-icon> Download
+    <div (click)="openNewFileDialog()">
+      <mat-icon style="vertical-align:middle; font-size: 20px;">add</mat-icon> Add new file
     </div>
   </ng-template>
   <ng-template shContextMenuItem let-data>
-    <div (click)="downloadAllFiles()">
+    <div (click)="downloadAllFiles(data)">
       <mat-icon style="vertical-align:middle; font-size: 20px;">download</mat-icon> Download all Files As Zip
+    </div>
+  </ng-template>
+  <ng-template shContextMenuItem let-data>
+    <div (click)="removeNode(data)">
+      <mat-icon style="vertical-align:middle; font-size: 20px;">delete</mat-icon> Remove
+    </div>
+  </ng-template>
+</sh-context-menu>
+<!-- context menu for files-->
+<sh-context-menu #fileMenu>
+  <ng-template shContextMenuItem let-data>
+    <div (click)="downloadFile(data)">
+      <mat-icon style="vertical-align:middle; font-size: 20px;">download</mat-icon> Download
     </div>
   </ng-template>
   <ng-template shContextMenuItem let-data>
@@ -52,7 +65,7 @@
       <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
         <li class="mat-tree-node">
           <button mat-icon-button disabled></button>
-          <div [shAttachMenu]="menu" [shMenuData]="node">
+          <div [shAttachMenu]="fileMenu" [shMenuData]="node">
             <div class="file-node-label" [attr.title]="node.name"
               [style.color]="isNodeSelected(node) ? 'blueviolet' : 'black'" (click)="selectNode(node)">
               <mat-icon *ngIf="node.type === 'csharp'" class="file-node-label__icon" svgIcon="csharp"></mat-icon>
@@ -74,12 +87,13 @@
                 {{nestedTreeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
               </mat-icon>
             </button>
-            <div class="file-node-label" [attr.title]="node.name" (click)="nestedTreeControl.toggle(node)">
-              <mat-icon *ngIf="node.type === 'folder'" class="file-node-label__icon">
-                {{ nestedTreeControl.isExpanded(node) ? 'folder_open' : 'folder' }}
-              </mat-icon>
-              <span class="file-node-label__text">{{node.name}}</span>
-
+            <div [shAttachMenu]="folderMenu" [shMenuData]="node">
+              <div class="file-node-label" [attr.title]="node.name" (click)="nestedTreeControl.toggle(node)">
+                <mat-icon *ngIf="node.type === 'folder'" class="file-node-label__icon">
+                  {{ nestedTreeControl.isExpanded(node) ? 'folder_open' : 'folder' }}
+                </mat-icon>
+                <span class="file-node-label__text">{{node.name}}</span>
+              </div>
             </div>
           </div>
           <ul [class.file-tree-invisible]="!nestedTreeControl.isExpanded(node)">

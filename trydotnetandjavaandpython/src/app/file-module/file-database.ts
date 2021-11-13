@@ -4,101 +4,117 @@ import { FileNode, FileNodeType } from './file-node';
 
 const FILES_DATA: FileNode[] = [
   {
-    name: 'HelloWorldCSharp.cs',
-    type: FileNodeType.csharp,
-    code: {
-      language: 'csharp',
-      uri: 'HelloWorldCSharp.cs',
-      value: [
-        'using System;',
-        `namespace HelloWorld`,
-        '{',
-        '    class Program',
-        '    {',
-        `        static void Main(string[] args)`,
-        `        {`,
-        `            Console.WriteLine($"Hello, world from .NET and {Angular.name}!");`,
-        '        }',
-        '    }',
-        '}'
-      ].join('\r\n')
-    }
+    name: 'HellowWorldAngular',
+    type: FileNodeType.folder,
+    children: [{
+      name: 'HelloWorldCSharp.cs',
+      type: FileNodeType.csharp,
+      code: {
+        language: 'csharp',
+        uri: 'HelloWorldCSharp.cs',
+        value: [
+          'using System;',
+          `namespace HelloWorld`,
+          '{',
+          '    class Program',
+          '    {',
+          `        static void Main(string[] args)`,
+          `        {`,
+          `            Console.WriteLine($"Hello, world from .NET and {Angular.name}!");`,
+          '        }',
+          '    }',
+          '}'
+        ].join('\r\n')
+      }
+    },
+    {
+      name: 'HelloAngular.cs',
+      type: FileNodeType.csharp,
+      code: {
+        language: 'csharp',
+        uri: 'HelloAngular.cs',
+        value: [
+          'using System;',
+          `namespace HelloWorld`,
+          '{',
+          '    public class Angular',
+          '    {',
+          `        public static string name="Angular";`,
+          '    }',
+          '}'
+        ].join('\r\n')
+      }
+    }]
   },
   {
-    name: 'HelloAngular.cs',
-    type: FileNodeType.csharp,
-    code: {
-      language: 'csharp',
-      uri: 'HelloAngular.cs',
-      value: [
-        'using System;',
-        `namespace HelloWorld`,
-        '{',
-        '    public class Angular',
-        '    {',
-        `        public static string name="Angular";`,
-        '    }',
-        '}'
-      ].join('\r\n')
-    }
+    name: 'HellowWorldJava',
+    type: FileNodeType.folder,
+    children: [{
+      name: 'HelloWorldJava.java',
+      type: FileNodeType.java,
+      code: {
+        language: 'java',
+        uri: 'HelloWorldJava.java',
+        value: [
+          'public class HelloWorld',
+          `{`,
+          `       public static void main (String[] args)`,
+          `       {`,
+          `            System.out.println("Hello, world from Java!");`,
+          `       }`,
+          `}`
+        ].join('\r\n')
+      }
+    }]
   },
   {
-    name: 'HelloWorldJava.java',
-    type: FileNodeType.java,
-    code: {
-      language: 'java',
-      uri: 'HelloWorldJava.java',
-      value: [
-        'public class HelloWorld',
-        `{`,
-        `       public static void main (String[] args)`,
-        `       {`,
-        `            System.out.println("Hello, world from Java!");`,
-        `       }`,
-        `}`
-      ].join('\r\n')
-    }
+    name: 'HellowWorldPython',
+    type: FileNodeType.folder,
+    children: [{
+      name: 'HelloWorldPython.py',
+      type: FileNodeType.python,
+      code: {
+        language: 'python',
+        uri: 'HelloWorldPython.py',
+        value: [
+          `print('Hello, world from Python!')`
+        ].join('\r\n')
+      }
+    }]
   },
   {
-    name: 'HelloWorldPython.py',
-    type: FileNodeType.python,
-    code: {
-      language: 'python',
-      uri: 'HelloWorldPython.py',
-      value: [
-        `print('Hello, world from Python!')`
-      ].join('\r\n')
-    }
-  },
-  {
-    name: 'HelloWorldCpp.cpp',
-    type: FileNodeType.cpp,
-    code: {
-      language: 'cpp',
-      uri: 'HelloWorldCpp.cpp',
-      value: [
-        '#include <iostream>',
-        `    int main() {`,
-        `        std::cout << "Hello World!";`,
-        `        return 0;`,
-        '    }',
-      ].join('\r\n')
-    }
-  },
-  {
-    name: 'HelloWorldC.c',
-    type: FileNodeType.c,
-    code: {
-      language: 'c',
-      uri: 'HelloWorldC.c',
-      value: [
-        '#include <stdio.h>',
-        `    int main() {`,
-        `        printf("Hello World!");`,
-        `        return 0;`,
-        '    }',
-      ].join('\r\n')
-    }
+    name: 'HellowWorldC',
+    type: FileNodeType.folder,
+    children: [{
+      name: 'HelloWorldCpp.cpp',
+      type: FileNodeType.cpp,
+      code: {
+        language: 'cpp',
+        uri: 'HelloWorldCpp.cpp',
+        value: [
+          '#include <iostream>',
+          `    int main() {`,
+          `        std::cout << "Hello World!";`,
+          `        return 0;`,
+          '    }',
+        ].join('\r\n')
+      }
+    },
+    {
+      name: 'HelloWorldC.c',
+      type: FileNodeType.c,
+      code: {
+        language: 'c',
+        uri: 'HelloWorldC.c',
+        value: [
+          '#include <stdio.h>',
+          `    int main() {`,
+          `        printf("Hello World!");`,
+          `        return 0;`,
+          '    }',
+        ].join('\r\n')
+      }
+    }]
   }
 ];
 

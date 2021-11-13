@@ -77,7 +77,6 @@ export class AppComponent implements OnInit, OnDestroy {
     database.dataChange.subscribe(
       (data) => { (this.nestedDataSource.data = data); }
     );
-
     this.isLoading$ = editorService.loadingTypings.pipe(debounceTime(300));
     this.matIconRegistry.addSvgIcon(
       `csharp`,
@@ -203,10 +202,11 @@ export class AppComponent implements OnInit, OnDestroy {
       window.URL.revokeObjectURL(dataURL);
     }, 100);
   }
-  downloadAllFiles() {
+  downloadAllFiles(node: FileNode) {
+    console.log(node)
     var zip = new JSZip();
-    for (let i = 0; i < this.database.data?.length; i++)
-      zip.file(this.database.data[i].name, this.database.data[i].code.value);
+    for (let i = 0; i < node.children?.length; i++)
+      zip.file(node.children[i].name, node.children[i].code.value);
 
     zip.generateAsync({type:"blob"}).then(function(content){
       const current = new Date();
@@ -272,7 +272,8 @@ export class AppComponent implements OnInit, OnDestroy {
       showCloseButton: false
     };
     this.saveSource.subscribe(val => { this.database.save(), this.toasterSerivce.pop(toast) });
-    this.selectNode(this.nestedDataSource.data[0]);
+    this.nestedTreeControl.expand(this.nestedDataSource.data[0]);
+    this.selectNode(this.nestedDataSource.data[0].children[0]);
   }
   ngOnDestroy() {
     this.database.save();
