@@ -129,15 +129,40 @@ export class FileDatabase {
   constructor() {
     this.initialize();
   }
+  getAllFolders() : FileNode[]{
+    var list : FileNode[];
+    this.data.forEach(element => {
+      if(element.type===FileNodeType.folder)
+      list.push(element);
+    });
+    return list;
+  }
   add(name: string, language: FileNodeType, code: string) {
     this.dataChange.next(this.dataChange.getValue().concat({ name: name, type: language, code: { language: language, uri: name, value: code } }));
   }
   remove(file: FileNode) {
     const dataRemoveArray: FileNode[] = this.dataChange.getValue();
-    dataRemoveArray.forEach((item, index) => {
-      if (item === file)
+    var found = false;
+    for (let index = 0; index < dataRemoveArray.length; index++) {
+      let item = dataRemoveArray[index];
+      if (found) {
+        break;
+      }
+      if (item === file) {
         dataRemoveArray.splice(index, 1);
-    });
+        break;
+      }
+      if (item.type === FileNodeType.folder) {
+        for (let indexchild = 0; indexchild < item.children.length; indexchild++) {
+          let child = item.children[indexchild];
+          if (child === file) {
+            dataRemoveArray[index].children.splice(indexchild, 1);
+            found = true;
+            break;
+          }
+        }
+      }
+    }
     this.dataChange.next(dataRemoveArray);
   }
   fileNames(): string[] {
