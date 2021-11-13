@@ -114,6 +114,11 @@ export class AppComponent implements OnInit, OnDestroy {
     this.fileUploadControl.valueChanges.subscribe(item => this.dragDropToList(item[item.length - 1]));
     this.toasterSerivce = ToasterService;
   }
+  refreshTree() {
+    let _data = this.nestedDataSource.data;
+    this.nestedDataSource.data = null;
+    this.nestedDataSource.data = _data;
+  }
   dragDropToList(file: File) {
     if (file != undefined) {
       var fileReader = new FileReader();
@@ -169,7 +174,6 @@ export class AppComponent implements OnInit, OnDestroy {
   hasNestedChild(_: number, nodeData: FileNode): boolean {
     return nodeData.type === FileNodeType.folder;
   }
-
   private _getChildren = (node: FileNode) => node.children;
 
   onCodeChanged(value: any) {
@@ -208,14 +212,14 @@ export class AppComponent implements OnInit, OnDestroy {
     for (let i = 0; i < node.children?.length; i++)
       zip.file(node.children[i].name, node.children[i].code.value);
 
-    zip.generateAsync({type:"blob"}).then(function(content){
+    zip.generateAsync({ type: "blob" }).then(function (content) {
       const current = new Date();
       const dataURL = window.URL.createObjectURL(content);
       const link = document.createElement('a');
       link.href = dataURL;
-      link.download = "CodeFiles-"+current.getTime().toString();
+      link.download = "CodeFiles-" + current.getTime().toString();
       link.click();
-  
+
       setTimeout(() => {
         // For Firefox it is necessary to delay revoking the ObjectURL
         window.URL.revokeObjectURL(dataURL);
@@ -223,7 +227,10 @@ export class AppComponent implements OnInit, OnDestroy {
     })
   }
   removeNode(node: FileNode) {
+    if(this.isNodeSelected(node))
+    this.selectedModel
     this.database.remove(node);
+    this.refreshTree();
   }
   onEditorLoaded() {
     console.log('Online Editor loaded!');
