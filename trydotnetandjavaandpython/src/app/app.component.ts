@@ -280,6 +280,7 @@ export class AppComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(result => { dialogRef.componentInstance.validData ? this.addNewFile(node.name,dialogRef.componentInstance.emittingData) : false })
   }
   addNewFolder(data:any){
+    this.database.addFolder(data.name);
     this.refreshTree();
   }
   addNewFile(folderName:string,data: any) {

@@ -138,7 +138,7 @@ export class FileDatabase {
     return list;
   }
   addFolder(name: string) {
-    this.dataChange.next(this.dataChange.getValue().concat({ name: name, type: FileNodeType.folder }));
+    this.dataChange.next(this.dataChange.getValue().concat({ name: name, type: FileNodeType.folder, children:[] }));
   }
   addFile(folderName: string, name: string, language: FileNodeType, code: string) {
     this.dataChange.getValue().find(folder => folder.name == folderName).children.push({ name: name, type: language, code: { language: language, uri: name, value: code } })
@@ -173,7 +173,7 @@ export class FileDatabase {
   fileNames(): string[] {
     var list = new Array();
     this.data.forEach(element => {
-      list.push(element.name);
+      list.push(element.name.toLowerCase());
     });
     console.log(list);
     return list;
