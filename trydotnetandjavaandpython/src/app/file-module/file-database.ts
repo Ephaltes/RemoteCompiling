@@ -4,7 +4,7 @@ import { FileNode, FileNodeType } from './file-node';
 
 const FILES_DATA: FileNode[] = [
   {
-    name: 'HellowWorldAngular',
+    name: 'HelloWorldAngular',
     type: FileNodeType.folder,
     children: [{
       name: 'HelloWorldCSharp.cs',
@@ -47,7 +47,7 @@ const FILES_DATA: FileNode[] = [
     }]
   },
   {
-    name: 'HellowWorldJava',
+    name: 'HelloWorldJava',
     type: FileNodeType.folder,
     children: [{
       name: 'HelloWorldJava.java',
@@ -68,7 +68,7 @@ const FILES_DATA: FileNode[] = [
     }]
   },
   {
-    name: 'HellowWorldPython',
+    name: 'HelloWorldPython',
     type: FileNodeType.folder,
     children: [{
       name: 'HelloWorldPython.py',
@@ -83,7 +83,7 @@ const FILES_DATA: FileNode[] = [
     }]
   },
   {
-    name: 'HellowWorldC',
+    name: 'HelloWorldC',
     type: FileNodeType.folder,
     children: [{
       name: 'HelloWorldCpp.cpp',
@@ -173,11 +173,24 @@ export class FileDatabase {
   fileNames(): string[] {
     var list = new Array();
     this.data.forEach(element => {
-      list.push(this.fileEndingRemover(element.name));
+      list.push(element.name);
     });
+    console.log(list);
     return list;
   }
   fileNamesForFolders(folderName: string): string[] {
+    var list = new Array();
+    this.data.forEach((element) => {
+      if (element.name == folderName) {
+        element.children.forEach(file => {
+          list.push(this.fileEndingRemover(file.name.toLowerCase()));
+        });
+      }
+    });
+
+    return list;
+  }
+  fileNamesForFoldersWithExt(folderName: string): string[] {
     var list = new Array();
     this.data.forEach((element) => {
       if (element.name == folderName) {

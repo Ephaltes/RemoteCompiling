@@ -126,7 +126,7 @@ export class AppComponent implements OnInit, OnDestroy {
       const dialogRef = this.Dialog.open(FolderOptionDialogComponent, { data: this.database.getAllFolders() });
       dialogRef.afterClosed().subscribe(result => {
         var folderName = dialogRef.componentInstance.emittingData;
-        var folderList = this.database.fileNamesForFolders(folderName);
+        var folderList = this.database.fileNamesForFoldersWithExt(folderName);
         var fileReader = new FileReader();
         fileReader.readAsText(file);
         fileReader.onload = () => {
@@ -276,7 +276,7 @@ export class AppComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(result => { dialogRef.componentInstance.validData ? this.addNewFolder(dialogRef.componentInstance.emittingData) : false })
   }
   openNewFileDialog(node:FileNode) {
-    const dialogRef = this.Dialog.open(AddNewFileComponent, { data: this.database.fileNames() });
+    const dialogRef = this.Dialog.open(AddNewFileComponent, { data: this.database.fileNamesForFolders(node.name) });
     dialogRef.afterClosed().subscribe(result => { dialogRef.componentInstance.validData ? this.addNewFile(node.name,dialogRef.componentInstance.emittingData) : false })
   }
   addNewFolder(data:any){

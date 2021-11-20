@@ -12,13 +12,6 @@ import { forbiddenEndingValidator, forbiddenNameValidator } from '../forbidden-n
 
 export class AddNewFolderComponent implements OnInit {
   newFileForm: FormGroup;
-  languages = [
-    { name: 'C#', value: 'csharp' },
-    { name: 'Java', value: 'java' },
-    { name: 'Python', value: 'python' },
-    { name: 'C', value: 'c' },
-    { name: 'C++', value: 'cpp' },
-  ];
   templates = [
     {
       name: 'Hello World', value: `using System;
@@ -33,11 +26,11 @@ export class AddNewFolderComponent implements OnInit {
         }
     }` },
   ];
-  emittingData: { name: string, language: FileNodeType, code: string }
+  emittingData: { name: string, language: FileNodeType }
   validData: boolean;
   constructor(private fb: FormBuilder, @Inject(MAT_DIALOG_DATA) public fileList: string[]) {
     this.validData = false;
-    this.emittingData = { name: "", language: FileNodeType.csharp, code: "" };
+    this.emittingData = { name: "", language: FileNodeType.folder };
     this.newFileForm = fb.group({
       name: [null, {
         validators: [
@@ -50,7 +43,6 @@ export class AddNewFolderComponent implements OnInit {
         ],
         updateOn: 'change'
       }],
-      language: ['', [Validators.required]],
       template: [''],
 
     });
@@ -64,36 +56,14 @@ export class AddNewFolderComponent implements OnInit {
       return;
     }
     const value = this.newFileForm.value;
-    if (value.language == "csharp") {
-      this.emittingData.language = FileNodeType.csharp;
-      this.emittingData.name = value.name + ".cs";
-    }
-    if (value.language == "java") {
-      this.emittingData.language = FileNodeType.java;
-      this.emittingData.name = value.name + ".java";
-    }
-    if (value.language == "python") {
-      this.emittingData.language = FileNodeType.python;
-      this.emittingData.name = value.name + ".py";
-    }
-    if (value.language == "c") {
-      this.emittingData.language = FileNodeType.c;
-      this.emittingData.name = value.name + ".c";
-    }
-    if (value.language == "cpp") {
-      this.emittingData.language = FileNodeType.cpp;
-      this.emittingData.name = value.name + ".cpp";
-    }
-    this.emittingData.code = value.template;
+    this.emittingData.name = value.name;
+    // template implement as 'aufgabe'
     this.validData = true;
     this.newFileForm.reset();
 
   }
   get name() {
     return this.newFileForm.get('name')!;
-  }
-  get language() {
-    return this.newFileForm.get('language')!;
   }
   get template() {
     return this.newFileForm.get('template')!;
