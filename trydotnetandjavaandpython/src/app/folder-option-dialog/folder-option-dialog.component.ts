@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FileNode } from '../file-module/file-node';
+import { FileNode, FileNodeType } from '../file-module/file-node';
 
 @Component({
   selector: 'app-folder-option-dialog',
@@ -10,12 +10,12 @@ import { FileNode } from '../file-module/file-node';
 })
 export class FolderOptionDialogComponent implements OnInit {
   newFileForm: FormGroup;
-  emittingData: FileNode;
+  emittingData: string;
   validData: boolean;
   folders: FileNode[];
   constructor(private fb: FormBuilder, @Inject(MAT_DIALOG_DATA) public folderList: FileNode[]) {
     this.validData = false;
-    this.emittingData=null;
+    this.emittingData="";
     this.folders=folderList;
     this.newFileForm = fb.group({
       folder: ['', [Validators.required]],
@@ -31,7 +31,7 @@ export class FolderOptionDialogComponent implements OnInit {
     const value = this.newFileForm.value;
     this.emittingData=value.folder;
     this.validData = true;
-    this.newFileForm.reset();
+    
   }
   get folder() {
     return this.newFileForm.get('folder')!;
