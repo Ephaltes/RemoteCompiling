@@ -137,8 +137,13 @@ export class FileDatabase {
     });
     return list;
   }
-  add(name: string, language: FileNodeType, code: string) {
-    this.dataChange.next(this.dataChange.getValue().concat({ name: name, type: language, code: { language: language, uri: name, value: code } }));
+  addFolder(name: string) {
+    this.dataChange.next(this.dataChange.getValue().concat({ name: name, type: FileNodeType.folder }));
+  }
+  addFile(folderName: string, name: string, language: FileNodeType, code: string) {
+    this.dataChange.getValue().find(folder => folder.name == folderName).children.push({ name: name, type: language, code: { language: language, uri: name, value: code } })
+    this.dataChange.next(this.dataChange.getValue());
+    console.log(this.dataChange.getValue());
   }
   remove(file: FileNode) {
     const dataRemoveArray: FileNode[] = this.dataChange.getValue();
@@ -170,6 +175,18 @@ export class FileDatabase {
     this.data.forEach(element => {
       list.push(this.fileEndingRemover(element.name));
     });
+    return list;
+  }
+  fileNamesForFolders(folderName: string): string[] {
+    var list = new Array();
+    this.data.forEach((element) => {
+      if (element.name == folderName) {
+        element.children.forEach(file => {
+          list.push(file.name.toLowerCase());
+        });
+      }
+    });
+
     return list;
   }
   fileEndingRemover(fileName: string): string {

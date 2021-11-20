@@ -18,6 +18,7 @@ import { Toast, ToasterService } from 'angular2-toaster';
 import { languageAmount, languages } from './code-meta/codeLanguageMeta';
 import * as JSZip from 'jszip';
 import { FolderOptionDialogComponent } from './folder-option-dialog/folder-option-dialog.component';
+import { AddNewFolderComponent } from './add-new-folder/add-new-folder.component';
 
 @Component({
   selector: 'app-root',
@@ -121,45 +122,47 @@ export class AppComponent implements OnInit, OnDestroy {
     this.nestedDataSource.data = _data;
   }
   dragDropToList(file: File) {
-    const dialogRef = this.Dialog.open(FolderOptionDialogComponent, { data: this.database.getAllFolders() });
     if (file != undefined) {
-      var fileReader = new FileReader();
-      fileReader.readAsText(file);
-      fileReader.onload = () => {
-        if (this.database.fileNames().includes(this.database.fileEndingRemover(file.name.toLowerCase()))) {
+      const dialogRef = this.Dialog.open(FolderOptionDialogComponent, { data: this.database.getAllFolders() });
+      dialogRef.afterClosed().subscribe(result => {
+        var folderName = dialogRef.componentInstance.emittingData;
+        var folderList = this.database.fileNamesForFolders(folderName);
+        var fileReader = new FileReader();
+        fileReader.readAsText(file);
+        fileReader.onload = () => {
+          if (folderList.includes(file.name.toLowerCase())) {
+            this.fileUploadControl.removeFile(file);
+            this.Dialog.open(ErrorDialogComponent, { data: { message: "Found duplicate filenames while uploading files!" } })
+            return;
+          }
+          var fileType = null
+          if (file.name.endsWith(".cs")) {
+            fileType = FileNodeType.csharp
+          }
+          if (file.name.endsWith(".java")) {
+            fileType = FileNodeType.java
+          }
+          if (file.name.endsWith(".py")) {
+            fileType = FileNodeType.python
+          }
+          if (file.name.endsWith(".c")) {
+            fileType = FileNodeType.c
+          }
+          if (file.name.endsWith(".cpp")) {
+            fileType = FileNodeType.cpp
+          }
+
+          if (fileType == null) {
+            this.Dialog.open(ErrorDialogComponent, { data: { message: "File extension is not supported, please only use .cs,.java,.py,.c,.cpp files!" } })
+            this.fileUploadControl.removeFile(file);
+          }
+          this.database.addFile(folderName,file.name, fileType, fileReader.result.toString());
           this.fileUploadControl.removeFile(file);
-          this.Dialog.open(ErrorDialogComponent, { data: { message: "Found duplicate filenames while uploading files!" } })
+          this.refreshTree();
           return;
         }
-        if (file.name.endsWith(".cs")) {
-          this.database.add(file.name, FileNodeType.csharp, fileReader.result.toString());
-          this.fileUploadControl.removeFile(file);
-          return;
-        }
-        if (file.name.endsWith(".java")) {
-          this.database.add(file.name, FileNodeType.java, fileReader.result.toString());
-          this.fileUploadControl.removeFile(file);
-          return;
-        }
-        if (file.name.endsWith(".py")) {
-          this.database.add(file.name, FileNodeType.python, fileReader.result.toString());
-          this.fileUploadControl.removeFile(file);
-          return;
-        }
-        if (file.name.endsWith(".c")) {
-          this.database.add(file.name, FileNodeType.c, fileReader.result.toString());
-          this.fileUploadControl.removeFile(file);
-          return;
-        }
-        if (file.name.endsWith(".cpp")) {
-          this.database.add(file.name, FileNodeType.cpp, fileReader.result.toString());
-          this.fileUploadControl.removeFile(file);
-          return;
-        }
-        this.Dialog.open(ErrorDialogComponent, { data: { message: "File extension is not supported, please only use .cs,.java,.py,.c,.cpp files!" } })
         this.fileUploadControl.removeFile(file);
-      }
-      this.fileUploadControl.removeFile(file);
+      });
     }
   }
 
@@ -230,7 +233,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
   removeNode(node: FileNode) {
     if (this.isNodeSelected(node)) {
-      this.selectedModel={uri:"",language:"",value:""};
+      this.selectedModel = { uri: "", language: "", value: "" };
     }
     this.database.remove(node);
     this.refreshTree();
@@ -268,13 +271,22 @@ export class AppComponent implements OnInit, OnDestroy {
     this.compileService.compile(this.selectedVersion, this.selectedModel, this.runFiles).subscribe((item => { this.isLoading = false; item.data.run.stderr.length > 0 ? this.output = item.data.run.stderr : this.output = item.data.run.stdout }))
 
   }
-  openNewFileDialog() {
+  openNewFolderDialog() {
+    const dialogRef = this.Dialog.open(AddNewFolderComponent, { data: this.database.fileNames() });
+    dialogRef.afterClosed().subscribe(result => { dialogRef.componentInstance.validData ? this.addNewFolder(dialogRef.componentInstance.emittingData) : false })
+  }
+  openNewFileDialog(node:FileNode) {
     const dialogRef = this.Dialog.open(AddNewFileComponent, { data: this.database.fileNames() });
-    dialogRef.afterClosed().subscribe(result => { dialogRef.componentInstance.validData ? this.addNewFile(dialogRef.componentInstance.emittingData) : false })
+    dialogRef.afterClosed().subscribe(result => { dialogRef.componentInstance.validData ? this.addNewFile(node.name,dialogRef.componentInstance.emittingData) : false })
   }
-  addNewFile(data: any) {
-    this.database.add(data.name, data.language, data.code);
+  addNewFolder(data:any){
+    this.refreshTree();
   }
+  addNewFile(folderName:string,data: any) {
+    this.database.addFile(folderName,data.name, data.language, data.code);
+    this.refreshTree();
+  }
+  
   ngOnInit() {
     var toast: Toast = {
       type: 'success',

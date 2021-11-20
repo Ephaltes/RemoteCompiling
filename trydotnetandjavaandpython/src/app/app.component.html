@@ -3,7 +3,7 @@
 <!-- context menu for folders-->
 <sh-context-menu #folderMenu>
   <ng-template shContextMenuItem let-data>
-    <div (click)="openNewFileDialog()">
+    <div (click)="openNewFileDialog(data)">
       <mat-icon style="vertical-align:middle; font-size: 20px;">add</mat-icon> Add new file
     </div>
   </ng-template>
@@ -55,7 +55,7 @@
   </file-upload>
   <!--Add New File Button-->
   <mat-grid-tile [colspan]="2" [rowspan]="1">
-    <button mat-stroked-button color="accent" (click)="openNewFileDialog()"> + Add new file</button>
+    <button mat-stroked-button color="accent" (click)="openNewFolderDialog()"> + Add new project</button>
   </mat-grid-tile>
   <!--File Tree-->
   <mat-grid-tile [colspan]="2" [rowspan]="15">

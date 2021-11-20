@@ -1,0 +1,45 @@
+<div class="container-fluid" id="contentWrapper">
+    <mat-card id="createFileCard">
+        <mat-card-header>
+            <mat-card-title>Add new project ...</mat-card-title>
+        </mat-card-header>
+        <form [formGroup]="newFileForm" (ngSubmit)="submit()">
+            <mat-card-content>
+                <div class="col-md-12 mb-3">
+                    <mat-form-field appearance="outline" [style.width.%]="49" style="padding-right: 2%;"
+                        class="newFileForm">
+                        <mat-label>Project name</mat-label>
+                        <input matInput formControlName="name" value="" autocomplete="off" placeholder="HelloWorld">
+                        <mat-hint *ngIf="name.invalid && (name.dirty || name.touched)"
+                            class="text-danger margin-bottom-thin my-mat-hint">
+                            <div *ngIf="name.errors!['required']">
+                                Project name is required
+                            </div>
+                            <div *ngIf="name.errors!['minlength']">
+                                Project name must be at least 3 characters long.
+                            </div>
+                            <div *ngIf="name.errors!['fileNameExists']">
+                                Project name is already in use!
+                            </div>
+                            <div *ngIf="name.errors!['fileNameEnding']">
+                                File extension is not needed!
+                            </div>
+                        </mat-hint>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" [style.width.%]="49" class="newFileForm">
+                        <mat-label>Template</mat-label>
+                        <mat-select matInput formControlName="template" name="template">
+                            <mat-option *ngFor="let template of templates" [value]="template.value">
+                                {{template.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </mat-card-content>
+            <mat-card-actions style="padding: 20px;">
+                <button style="float: left;" mat-raised-button color="primary" type="submit"
+                    [disabled]="newFileForm.invalid" mat-dialog-close>Submit</button>
+            </mat-card-actions>
+        </form>
+    </mat-card>
+</div>

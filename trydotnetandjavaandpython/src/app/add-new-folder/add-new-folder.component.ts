@@ -5,12 +5,12 @@ import { FileNodeType } from '../file-module/file-node';
 import { forbiddenEndingValidator, forbiddenNameValidator } from '../forbidden-name.directive';
 
 @Component({
-  selector: 'app-add-new-file',
-  templateUrl: './add-new-file.component.html',
-  styleUrls: ['./add-new-file.component.scss']
+  selector: 'app-add-new-folder',
+  templateUrl: './add-new-folder.component.html',
+  styleUrls: ['./add-new-folder.component.scss']
 })
 
-export class AddNewFileComponent implements OnInit {
+export class AddNewFolderComponent implements OnInit {
   newFileForm: FormGroup;
   languages = [
     { name: 'C#', value: 'csharp' },

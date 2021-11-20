@@ -8,8 +8,8 @@
                 <div class="col-md-12 mb-3">
                     <mat-form-field appearance="outline" [style.width.%]="49" class="newFileForm">
                         <mat-label>Project</mat-label>
-                        <mat-select matInput formControlName="language" name="language">
-                            <mat-option *ngFor="let folder of folders" [value]="folder">
+                        <mat-select matInput formControlName="folder" name="folder">
+                            <mat-option *ngFor="let folder of folders" [value]="folder.name">
                                 {{folder.name}}
                             </mat-option>
                         </mat-select>

@@ -20,6 +20,7 @@ import {ShContextMenuModule} from 'ng2-right-click-menu';
 import { ErrorDialogComponent } from './error-dialog/error-dialog.component'
 import { ToasterModule } from 'angular2-toaster';
 import { FolderOptionDialogComponent } from './folder-option-dialog/folder-option-dialog.component';
+import { AddNewFolderComponent } from './add-new-folder/add-new-folder.component';
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import { FolderOptionDialogComponent } from './folder-option-dialog/folder-optio
     AppComponent,
     AddNewFileComponent,
     ErrorDialogComponent,
-    FolderOptionDialogComponent
+    FolderOptionDialogComponent,
+    AddNewFolderComponent
   ],
   imports: [
     BrowserModule,
