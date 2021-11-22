@@ -9,6 +9,9 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using MediatR;
+
+using Microsoft.AspNetCore.Authorization;
+
 using RestWebservice_RemoteCompiling.Command;
 using RestWebservice_RemoteCompiling.Extensions;
 using Serilog;
@@ -18,6 +21,7 @@ namespace RestWebservice_RemoteCompiling.Controllers
     [ApiController]
     [Route("/Api/Compile")]
     [EnableCors("AllAllowedPolicy")]
+    [Authorize]
     public class CompileController : ControllerBase
     {
         private readonly IMediator _mediator;

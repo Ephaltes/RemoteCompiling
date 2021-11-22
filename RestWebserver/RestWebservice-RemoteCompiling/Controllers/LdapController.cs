@@ -39,7 +39,7 @@ namespace RestWebservice_RemoteCompiling.Controllers
         [HttpGet]
         public async Task<IActionResult> AmILoggedIn()
         {
-            string data = "";
+            string data = Request.Headers["Authorization"].ToString().Split(" ")[1];
             _tokenService.ValidateToken(data);
 
             return null;

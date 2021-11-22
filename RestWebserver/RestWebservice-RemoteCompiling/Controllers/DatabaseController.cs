@@ -1,5 +1,7 @@
 ﻿using System;
 using MediatR;
+
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using RestWebservice_RemoteCompiling.Database;
@@ -12,6 +14,7 @@ namespace RestWebservice_RemoteCompiling.Controllers
     [Route("Api/Database")]
     [ApiController]
     [EnableCors("AllAllowedPolicy")]
+    [Authorize]
     public class DatabaseController
     {
         private readonly IMediator _mediator;

@@ -75,7 +75,7 @@ namespace RestWebservice_RemoteCompiling.Helpers
                 
                 JwtSecurityToken? jwt = validatedToken as JwtSecurityToken;
 
-                if (jwt?.ValidTo > DateTime.UtcNow)
+                if (jwt?.ValidTo < DateTime.UtcNow)
                 {
                     _sessionRepository.DeleteExpiredSessions();
 
