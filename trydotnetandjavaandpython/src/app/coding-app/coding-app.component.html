@@ -1,0 +1,182 @@
+<!--toast-->
+<toaster-container></toaster-container>
+<!-- context menu for folders-->
+<sh-context-menu #folderMenu>
+  <ng-template shContextMenuItem let-data>
+    <div (click)="openNewFileDialog(data)">
+      <mat-icon style="vertical-align:middle; font-size: 20px;">add</mat-icon> Add new file
+    </div>
+  </ng-template>
+  <ng-template shContextMenuItem let-data>
+    <div (click)="downloadAllFiles(data)">
+      <mat-icon style="vertical-align:middle; font-size: 20px;">download</mat-icon> Download all Files As Zip
+    </div>
+  </ng-template>
+  <ng-template shContextMenuItem let-data>
+    <div (click)="removeNode(data)">
+      <mat-icon style="vertical-align:middle; font-size: 20px;">delete</mat-icon> Remove
+    </div>
+  </ng-template>
+</sh-context-menu>
+<!-- context menu for files-->
+<sh-context-menu #fileMenu>
+  <ng-template shContextMenuItem let-data>
+    <div (click)="downloadFile(data)">
+      <mat-icon style="vertical-align:middle; font-size: 20px;">download</mat-icon> Download
+    </div>
+  </ng-template>
+  <ng-template shContextMenuItem let-data>
+    <div (click)="removeNode(data)">
+      <mat-icon style="vertical-align:middle; font-size: 20px;">delete</mat-icon> Remove
+    </div>
+  </ng-template>
+</sh-context-menu>
+<mat-grid-list cols="12" rows="20" min-rowHeight="400px" rowHeight="4.90%" draggable="true"
+  (drag)="showDragZone($event)" (dragover)="showDragZone($event)" (drop)="hideDragZone($event)"
+  (dragleave)="hideDragZone($event)" (dragend)="hideDragZone($event)">
+  <!--Logo-->
+  <mat-grid-tile [colspan]="2" [rowspan]="4">
+    <img src="./assets/logo.png" width="100%" height="100%" style="margin: 25px;">
+  </mat-grid-tile>
+
+
+  <!-- Code Editor-->
+  <mat-grid-tile [colspan]="10" [rowspan]="14">
+    <ngs-code-editor [codeModel]="selectedModel" [theme]="selectedTheme" [options]="options"
+      style="width: 100%; height: 100%;" (valueChanged)="onCodeChanged($event)" (loaded)="onEditorLoaded()">
+    </ngs-code-editor>
+  </mat-grid-tile>
+  <!-- File Upload Drag n Drop-->
+  <file-upload [control]="fileUploadControl" style="visibility:hidden; opacity:0" class="dropzone">
+    <ng-template let-isFileDragDropAvailable="isFileDragDropAvailable" #placeholder>
+      <span *ngIf="isFileDragDropAvailable" style="color: white;">Drop files here!</span>
+      <span *ngIf="!isFileDragDropAvailable">click</span>
+    </ng-template>
+  </file-upload>
+  <!--Add New File Button-->
+  <mat-grid-tile [colspan]="2" [rowspan]="1">
+    <button mat-stroked-button color="accent" (click)="openNewFolderDialog()"> + Add new project</button>
+  </mat-grid-tile>
+  <!--File Tree-->
+  <mat-grid-tile [colspan]="2" [rowspan]="15">
+
+    <!--File items-->
+    <mat-tree [dataSource]="nestedDataSource" [treeControl]="nestedTreeControl" class="file-tree">
+      <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+        <li class="mat-tree-node">
+          <button mat-icon-button disabled></button>
+          <div [shAttachMenu]="fileMenu" [shMenuData]="node">
+            <div class="file-node-label" [attr.title]="node.name"
+              [style.color]="isNodeSelected(node) ? 'blueviolet' : 'black'" (click)="selectNode(node)">
+              <mat-icon *ngIf="node.type === 'csharp'" class="file-node-label__icon" svgIcon="csharp"></mat-icon>
+              <mat-icon *ngIf="node.type === 'java'" class="file-node-label__icon" svgIcon="java"></mat-icon>
+              <mat-icon *ngIf="node.type === 'python'" class="file-node-label__icon" svgIcon="python"></mat-icon>
+              <mat-icon *ngIf="node.type === 'cpp'" class="file-node-label__icon" svgIcon="cpp"></mat-icon>
+              <mat-icon *ngIf="node.type === 'c'" class="file-node-label__icon" svgIcon="c"></mat-icon>
+              <span class="file-node-label__text">{{node.name}}</span>
+            </div>
+          </div>
+        </li>
+      </mat-tree-node>
+      <!--file folders-->
+      <mat-nested-tree-node *matTreeNodeDef="let node; when: hasNestedChild">
+        <li>
+          <div class="mat-tree-node">
+            <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'toggle ' + node.name">
+              <mat-icon class="mat-icon-rtl-mirror">
+                {{nestedTreeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+              </mat-icon>
+            </button>
+            <div [shAttachMenu]="folderMenu" [shMenuData]="node">
+              <div class="file-node-label" [attr.title]="node.name" (click)="nestedTreeControl.toggle(node)">
+                <mat-icon *ngIf="node.type === 'folder'" class="file-node-label__icon">
+                  {{ nestedTreeControl.isExpanded(node) ? 'folder_open' : 'folder' }}
+                </mat-icon>
+                <span class="file-node-label__text">{{node.name}}</span>
+              </div>
+            </div>
+          </div>
+          <ul [class.file-tree-invisible]="!nestedTreeControl.isExpanded(node)">
+            <ng-container matTreeNodeOutlet></ng-container>
+          </ul>
+        </li>
+      </mat-nested-tree-node>
+    </mat-tree>
+  </mat-grid-tile>
+
+
+  <!--Actionbar-->
+  <mat-grid-tile [colspan]="10" [rowspan]="1">
+    <div class="wrap margin">
+      <div>
+        <mat-form-field appearance="fill" [style.height.px]="45" class="selectVersionActionBar">
+          <mat-label>Version</mat-label>
+          <!--C-Sharp Version List-->
+          <ng-container *ngIf="selectedModel.language=='csharp'">
+            <mat-select [(value)]="selectedCSharpVersion">
+              <mat-option *ngFor="let version of langVersions.csharp" [value]="version">
+                {{version}}
+              </mat-option>
+            </mat-select>
+          </ng-container>
+          <!--Java Version List-->
+          <ng-container *ngIf="selectedModel.language=='java'">
+            <mat-select [(value)]="selectedJavaVersion">
+              <mat-option *ngFor="let version of langVersions.java" [value]="version">
+                {{version}}
+              </mat-option>
+            </mat-select>
+          </ng-container>
+          <!--Python Version List-->
+          <ng-container *ngIf="selectedModel.language=='python'">
+            <mat-select [(value)]="selectedPythonVersion">
+              <mat-option *ngFor="let version of langVersions.python" [value]="version">
+                {{version}}
+              </mat-option>
+            </mat-select>
+          </ng-container>
+
+          <!--c++ Version List-->
+          <ng-container *ngIf="selectedModel.language=='cpp'">
+            <mat-select [(value)]="selectedCppVersion">
+              <mat-option *ngFor="let version of langVersions.gcc" [value]="version">
+                {{version}} gcc
+              </mat-option>
+            </mat-select>
+          </ng-container>
+
+          <!--c Version List-->
+          <ng-container *ngIf="selectedModel.language=='c'">
+            <mat-select [(value)]="selectedCVersion">
+              <mat-option *ngFor="let version of langVersions.gcc" [value]="version">
+                {{version}} gcc
+              </mat-option>
+            </mat-select>
+          </ng-container>
+
+        </mat-form-field>
+      </div>
+      <div class="runActionBar">
+        <button mat-raised-button color="primary" [disabled]="isLoading" (click)="runCode()">Run</button>
+      </div>
+      <!--<mat-grid-tile [colspan]="15" [rowspan]="3"></mat-grid-tile>-->
+      <div>
+        <mat-form-field appearance="fill" [style.height.px]="45" class="selectThemeActionBar">
+          <mat-label>Theme</mat-label>
+          <mat-select [(value)]="selectedTheme">
+            <mat-option *ngFor="let theme of themes" [value]="theme.value">
+              {{theme.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </mat-grid-tile>
+  <!--Output-->
+  <mat-grid-tile [colspan]="10" [rowspan]="5">
+    <div class="outputWindow">
+      {{output}}
+    </div>
+  </mat-grid-tile>
+
+</mat-grid-list>

@@ -16,11 +16,17 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
 import { AddNewFileComponent } from './add-new-file/add-new-file.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {ShContextMenuModule} from 'ng2-right-click-menu';
+import { ShContextMenuModule } from 'ng2-right-click-menu';
 import { ErrorDialogComponent } from './error-dialog/error-dialog.component'
 import { ToasterModule } from 'angular2-toaster';
 import { FolderOptionDialogComponent } from './folder-option-dialog/folder-option-dialog.component';
 import { AddNewFolderComponent } from './add-new-folder/add-new-folder.component';
+import { CodingAppComponent } from './coding-app/coding-app.component';
+import { RouterModule } from '@angular/router';
+import { ExercisePlatformAppComponent } from './exercise-platform-app/exercise-platform-app.component';
+import { ExercisePlatformNavigationComponent } from './exercise-platform-navigation/exercise-platform-navigation.component';
+import { ExercisePlatformCreateComponent } from './exercise-platform-create/exercise-platform-create.component';
+import { ExercisePlatformCorrectComponent } from './exercise-platform-correct/exercise-platform-correct.component';
 
 
 @NgModule({
@@ -29,13 +35,28 @@ import { AddNewFolderComponent } from './add-new-folder/add-new-folder.component
     AddNewFileComponent,
     ErrorDialogComponent,
     FolderOptionDialogComponent,
-    AddNewFolderComponent
+    AddNewFolderComponent,
+    CodingAppComponent,
+    ExercisePlatformAppComponent,
+    ExercisePlatformNavigationComponent,
+    ExercisePlatformCreateComponent,
+    ExercisePlatformCorrectComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     BrowserAnimationsModule, MatGridListModule, MatTreeModule, MatIconModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatCardModule,
-    MatSelectModule,FileUploadModule, ShContextMenuModule,ToasterModule.forRoot(),
+    RouterModule.forRoot([
+      { path: '', pathMatch: 'full', redirectTo: 'coding' },
+      { path: 'coding', component: CodingAppComponent },
+      {
+        path: 'platform', component: ExercisePlatformAppComponent, children: [
+          { path: 'create', component: ExercisePlatformCreateComponent },
+          { path: 'correct', component: ExercisePlatformCorrectComponent },
+        ]
+      }
+    ]),
+    MatSelectModule, FileUploadModule, ShContextMenuModule, ToasterModule.forRoot(),
     CodeEditorModule.forRoot(),
     FormsModule,
     ReactiveFormsModule,
