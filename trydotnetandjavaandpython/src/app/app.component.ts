@@ -232,7 +232,7 @@ export class AppComponent implements OnInit, OnDestroy {
     })
   }
   removeNode(node: FileNode) {
-    if (this.isNodeSelected(node)) {
+    if (this.isNodeSelected(node) || ) {
       this.selectedModel = { uri: "", language: "", value: "" };
     }
     this.database.remove(node);
