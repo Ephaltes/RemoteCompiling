@@ -1,0 +1,14 @@
+<!--outer-shell-begin-->
+<mat-grid-list cols="12" rows="20" min-rowHeight="400px" rowHeight="4.90%">
+    <mat-grid-tile [colspan]="2" [rowspan]="4">
+        <img src="./assets/fh_technikum_wien_logo_4c_rgb_800x504px_72dpi_2020.png" width="100%" height="100%"
+            style="margin: 25px;">
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="10" [rowspan]="20">
+        <router-outlet></router-outlet>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="2" [rowspan]="16">
+       <app-exercise-platform-navigation></app-exercise-platform-navigation>
+    </mat-grid-tile>
+</mat-grid-list>
+<!--outer-shell-end-->
