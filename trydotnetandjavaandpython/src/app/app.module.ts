@@ -28,6 +28,7 @@ import { ExercisePlatformNavigationComponent } from './exercise-platform-navigat
 import { ExercisePlatformCreateComponent } from './exercise-platform-create/exercise-platform-create.component';
 import { ExercisePlatformCorrectComponent } from './exercise-platform-correct/exercise-platform-correct.component';
 import { ExercisePlatformOverviewComponent } from './exercise-platform-overview/exercise-platform-overview.component';
+import { ExerciseCodeEditorComponent } from './exercise-code-editor/exercise-code-editor.component';
 
 
 @NgModule({
@@ -42,7 +43,8 @@ import { ExercisePlatformOverviewComponent } from './exercise-platform-overview/
     ExercisePlatformNavigationComponent,
     ExercisePlatformCreateComponent,
     ExercisePlatformCorrectComponent,
-    ExercisePlatformOverviewComponent
+    ExercisePlatformOverviewComponent,
+    ExerciseCodeEditorComponent
   ],
   imports: [
     BrowserModule,
