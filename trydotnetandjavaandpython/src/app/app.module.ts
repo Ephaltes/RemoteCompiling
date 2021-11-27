@@ -27,6 +27,7 @@ import { ExercisePlatformAppComponent } from './exercise-platform-app/exercise-p
 import { ExercisePlatformNavigationComponent } from './exercise-platform-navigation/exercise-platform-navigation.component';
 import { ExercisePlatformCreateComponent } from './exercise-platform-create/exercise-platform-create.component';
 import { ExercisePlatformCorrectComponent } from './exercise-platform-correct/exercise-platform-correct.component';
+import { ExercisePlatformOverviewComponent } from './exercise-platform-overview/exercise-platform-overview.component';
 
 
 @NgModule({
@@ -40,7 +41,8 @@ import { ExercisePlatformCorrectComponent } from './exercise-platform-correct/ex
     ExercisePlatformAppComponent,
     ExercisePlatformNavigationComponent,
     ExercisePlatformCreateComponent,
-    ExercisePlatformCorrectComponent
+    ExercisePlatformCorrectComponent,
+    ExercisePlatformOverviewComponent
   ],
   imports: [
     BrowserModule,
@@ -51,6 +53,8 @@ import { ExercisePlatformCorrectComponent } from './exercise-platform-correct/ex
       { path: 'coding', component: CodingAppComponent },
       {
         path: 'platform', component: ExercisePlatformAppComponent, children: [
+          {path: '', redirectTo: 'overview', pathMatch: 'full'},
+          { path: 'overview', component: ExercisePlatformOverviewComponent },
           { path: 'create', component: ExercisePlatformCreateComponent },
           { path: 'correct', component: ExercisePlatformCorrectComponent },
         ]
