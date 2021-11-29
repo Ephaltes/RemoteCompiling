@@ -1,50 +1,70 @@
 .file-tree-container {
-    height: calc(100vh - 64px);
-    overflow: hidden;
+  height: calc(100vh - 64px);
+  overflow: hidden;
+}
+.file-tree {
+  background-color: rgba(26, 32, 53, 1);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  min-height: 0;
+  overflow: auto;
+
+  &-invisible {
+    display: none;
   }
-  .file-tree {
-    background-color: rgba(26, 32, 53, 1);
+  ul,
+  li {
+    margin-top: 0;
+    margin-bottom: 0;
+    list-style-type: none;
+  }
+
+  .mat-icon-button[disabled] {
+    display: none;
+  }
+
+  .file-node-label {
+    margin-left: 15px;
+    color: #fff;
     display: flex;
-    flex-direction: column;
-    flex: 1;
-    height: 100%;
-    max-height: 100%;
-    overflow: hidden;
-    min-height: 0;
-    overflow: auto;
-  
-    &-invisible {
-      display: none;
+    cursor: pointer;
+    user-select: none;
+
+    &__icon {
+      float: left;
     }
-    ul,
-    li {
-      margin-top: 0;
-      margin-bottom: 0;
-      list-style-type: none;
-    }
-  
-    .mat-icon-button[disabled] {
-      display: none;
-    }
-  
-    .file-node-label {
-      margin-left: 15px;
+
+    &__text {
       color: #fff;
-      display: flex;
-      cursor: pointer;
-      user-select: none;
-  
-      &__icon {
-        float: left;
-      }
-  
-      &__text {
-        color: #fff;
-        float: left;
-        margin-top: 4px;
-        margin-left: 4px;
-        white-space: nowrap;
-      }
+      float: left;
+      margin-top: 4px;
+      margin-left: 4px;
+      white-space: nowrap;
     }
   }
-  
+}
+textarea {
+  margin-top: 10px;
+  margin-left: 5px;
+  -moz-border-bottom-colors: none;
+  -moz-border-left-colors: none;
+  -moz-border-right-colors: none;
+  -moz-border-top-colors: none;
+  background: none repeat scroll 0 0 rgba(255, 255, 255, 0.07);
+  border-color: -moz-use-text-color #FFFFFF #FFFFFF -moz-use-text-color;
+  border-image: none;
+  border-radius: 6px 6px 6px 6px;
+  border-style: none solid solid none;
+  border-width: medium 1px 1px medium;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+  color: #FFF;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 1em;
+  line-height: 1.4em;
+  padding: 5px 8px;
+  transition: background-color 0.2s ease 0s;
+}

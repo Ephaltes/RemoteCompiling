@@ -29,7 +29,7 @@ import { ExercisePlatformCreateComponent } from './exercise-platform-create/exer
 import { ExercisePlatformCorrectComponent } from './exercise-platform-correct/exercise-platform-correct.component';
 import { ExercisePlatformOverviewComponent } from './exercise-platform-overview/exercise-platform-overview.component';
 import { ExerciseCodeEditorComponent } from './exercise-code-editor/exercise-code-editor.component';
-
+import {MatTableModule} from '@angular/material/table';
 
 @NgModule({
   declarations: [
@@ -49,7 +49,7 @@ import { ExerciseCodeEditorComponent } from './exercise-code-editor/exercise-cod
   imports: [
     BrowserModule,
     HttpClientModule,
-    BrowserAnimationsModule, MatGridListModule, MatTreeModule, MatIconModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatCardModule,
+    BrowserAnimationsModule, MatGridListModule, MatTreeModule, MatIconModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatCardModule, MatTableModule,
     RouterModule.forRoot([
       { path: '', pathMatch: 'full', redirectTo: 'coding' },
       { path: 'coding', component: CodingAppComponent },

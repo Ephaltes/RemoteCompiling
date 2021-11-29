@@ -1,13 +1,13 @@
 <!--outer-shell-begin-->
-<mat-grid-list cols="14" rows="20" min-rowHeight="400px" rowHeight="4.90%">
-    <mat-grid-tile [colspan]="2" [rowspan]="4">
+<mat-grid-list cols="14" rows="20" min-rowHeight="400px" rowHeight="4.90%" >
+    <mat-grid-tile [colspan]="2" [rowspan]="4" class="leftBar">
         <img src="./assets/fh_technikum_wien_logo_4c_rgb_800x504px_72dpi_2020.png" 
            id="fhImgLogo">
     </mat-grid-tile>
     <mat-grid-tile [colspan]="12" [rowspan]="20" style="padding: 15px;">
         <router-outlet></router-outlet>
     </mat-grid-tile>
-    <mat-grid-tile [colspan]="2" [rowspan]="16" style="border-style: solid; border-color: white; border-width: 2px;">
+    <mat-grid-tile [colspan]="2" [rowspan]="16" class="leftBar">
             <app-exercise-platform-navigation></app-exercise-platform-navigation>
     </mat-grid-tile>
 </mat-grid-list>

@@ -105,10 +105,13 @@
     /* a nice fade effect, visibility toggles after 175ms, opacity will animate for 175ms. note display:none cannot be animated.  */
     transition: visibility 175ms, opacity 175ms;
 }
+.leftBar{
+    border-right: 2px solid #373c4f;
+}
 #fhImgLogo {
     display: block;
-    max-width: 300px;
-    max-height: 300px;
+    max-width: 250px;
+    max-height: 250px;
     width: auto;
     height: auto;
 }
