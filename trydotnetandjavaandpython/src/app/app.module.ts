@@ -33,6 +33,7 @@ import { MatTableModule} from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { ExercisePlatformExerciseOverviewTableComponent } from './exercise-platform-exercise-overview-table/exercise-platform-exercise-overview-table.component';
 import { ExercisePlatformExerciseStudentTableComponent } from './exercise-platform-exercise-student-table/exercise-platform-exercise-student-table.component';
+import { ExercisePlatformAddNewExerciseComponent } from './exercise-platform-add-new-exercise/exercise-platform-add-new-exercise.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { ExercisePlatformExerciseStudentTableComponent } from './exercise-platfo
     ExercisePlatformOverviewComponent,
     ExerciseCodeEditorComponent,
     ExercisePlatformExerciseOverviewTableComponent,
-    ExercisePlatformExerciseStudentTableComponent
+    ExercisePlatformExerciseStudentTableComponent,
+    ExercisePlatformAddNewExerciseComponent
   ],
   imports: [
     BrowserModule,

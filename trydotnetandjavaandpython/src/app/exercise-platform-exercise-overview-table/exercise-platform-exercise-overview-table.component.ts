@@ -1,9 +1,11 @@
 import { AfterViewInit, Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { CodeEditorComponent, CodeModel } from '@ngstack/code-editor';
 import { ExerciseNode } from '../exercise-module/exercise-node';
+import { ExercisePlatformAddNewExerciseComponent } from '../exercise-platform-add-new-exercise/exercise-platform-add-new-exercise.component';
 import { FileNode, FileNodeType } from '../file-module/file-node';
 
 const TEMP_DATA: ExerciseNode[] = [
@@ -80,7 +82,7 @@ export class ExercisePlatformExerciseOverviewTableComponent implements OnInit {
   nestedDataSource: MatTreeNestedDataSource<FileNode>
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor() { }
+  constructor(private Dialog: MatDialog) { }
 
   ngOnInit(): void {
   }
@@ -96,6 +98,10 @@ export class ExercisePlatformExerciseOverviewTableComponent implements OnInit {
   }
   backFromCodingApp(status: boolean) {
     this.exerciseSelected = status;
+  }
+  createNewExercise(){
+    const dialogRef = this.Dialog.open(ExercisePlatformAddNewExerciseComponent);
+    dialogRef.afterClosed().subscribe(result => { dialogRef.componentInstance.validData ? true : false }) 
   }
   editExercise(row: ExerciseNode) {
     console.log(row.id);
