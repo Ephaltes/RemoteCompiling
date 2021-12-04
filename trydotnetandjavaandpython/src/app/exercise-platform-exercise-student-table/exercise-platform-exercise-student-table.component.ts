@@ -14,11 +14,18 @@ import { FileNode, FileNodeType } from '../file-module/file-node';
 })
 
 export class ExercisePlatformExerciseStudentTableComponent implements OnInit {
-  @Input() data: StudentNode[] = []
+  private _currentStudentList: StudentNode[] = []
+  @Input() set currentStudentList(value: StudentNode[]) {
+    this._currentStudentList = value;
+    this.dataSource = new MatTableDataSource<StudentNode>(value)
+  }
+  get currentStudentList(): StudentNode[] {
+    return this._currentStudentList;
+  }
   @Output() itemSelectedEvent = new EventEmitter<StudentNode>();
   @Output() finishedStudentListEvent = new EventEmitter<boolean>();
   displayedColumns: string[] = ['id', 'name', 'grading'];
-  dataSource = new MatTableDataSource<StudentNode>(this.data);
+  dataSource = new MatTableDataSource<StudentNode>(this._currentStudentList);
   exerciseSelected = false;
   nestedDataSource: MatTreeNestedDataSource<FileNode>
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -26,9 +33,6 @@ export class ExercisePlatformExerciseStudentTableComponent implements OnInit {
   constructor(private Dialog: MatDialog) { }
 
   ngOnInit(): void {
-  }
-  ngDoCheck(){
-    this.dataSource = new MatTableDataSource<StudentNode>(this.data);
   }
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;

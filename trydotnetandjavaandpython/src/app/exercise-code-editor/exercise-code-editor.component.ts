@@ -1,9 +1,11 @@
 import { NestedTreeControl } from '@angular/cdk/tree';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CodeModel } from '@ngstack/code-editor';
+import { debounceTime } from 'rxjs/operators';
+import { StudentNode } from '../exercise-module/student-node';
 import { FileNode, FileNodeType } from '../file-module/file-node';
 
 @Component({
@@ -12,7 +14,21 @@ import { FileNode, FileNodeType } from '../file-module/file-node';
   styleUrls: ['./exercise-code-editor.component.scss']
 })
 export class ExerciseCodeEditorComponent implements OnInit {
-  @Input() data: FileNode[] = []
+  private _currentEditor: FileNode[]
+  @Input() set currentEditor(value: FileNode[]) {
+    this._currentEditor = value;
+    this.nestedDataSource.data = value;
+    if (value != undefined) {
+      if (value.length > 0) {
+        this.selectNode(this.nestedDataSource.data[0])
+      }
+    } else {
+      this.selectedModel = { uri: "", value: "", language: "" }
+    }
+  }
+  get currentEditor(): FileNode[] {
+    return this._currentEditor;
+  }
   @Output() finishedWorkingEvent = new EventEmitter<boolean>();
   selectedModel: CodeModel = null;
   selectedTheme = 'vs-dark';
@@ -28,7 +44,7 @@ export class ExerciseCodeEditorComponent implements OnInit {
   constructor(private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer) {
     this.nestedTreeControl = new NestedTreeControl<FileNode>(this._getChildren);
     this.nestedDataSource = new MatTreeNestedDataSource();
-    this.nestedDataSource.data = this.data;
+    this.nestedDataSource.data = this._currentEditor;
     this.matIconRegistry.addSvgIcon(
       `csharp`,
       this.domSanitizer.bypassSecurityTrustResourceUrl(`./assets/csharp.svg`)
@@ -57,7 +73,13 @@ export class ExerciseCodeEditorComponent implements OnInit {
   ngOnInit(): void {
   }
   ngDoCheck(): void {
-    this.nestedDataSource.data = this.data;
+
+  }
+  ngOnChange(changes: SimpleChanges) {
+    console.log("working?")
+    if (this.nestedDataSource.data != undefined)
+      if (this.nestedDataSource.data.length > 0)
+        this.selectNode(this.nestedDataSource.data[0])
   }
   removeNode(node: FileNode) {
   }

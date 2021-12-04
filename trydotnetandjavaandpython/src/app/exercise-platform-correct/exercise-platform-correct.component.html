@@ -5,11 +5,29 @@
 
 <ng-container *ngIf="exerciseSelected && !studentSelected">
     <app-exercise-platform-exercise-student-table (itemSelectedEvent)="openCodingApp($event)"
-        (finishedStudentListEvent)="backFromStudentList($event)" [data]="selectedItem.students">
+        (finishedStudentListEvent)="backFromStudentList($event)" [currentStudentList]="selectedItem.students">
     </app-exercise-platform-exercise-student-table>
 </ng-container>
 
 <ng-container *ngIf="studentSelected">
-    <app-exercise-code-editor (finishedWorkingEvent)="backFromCodingApp($event)" [data]="selectedStudent.files">
+    <div style="color:white; padding: 35px 0 0 25px;">
+        <h3 style="display: inline-block; padding-right: 40%;">Student: {{selectedStudent.id}} {{selectedStudent.name}}
+        </h3>
+        <button mat-stroked-button color="primary" (click)="changeToPreviousStudent()">
+            <mat-icon aria-hidden="false" aria-label="Back">
+                keyboard_arrow_left
+            </mat-icon>Back
+        </button>
+
+        Student {{currentStudentIndex}}/{{lengthOfStudentList}}
+        <button mat-stroked-button color="primary" (click)="changeToNextStudent()">
+            Next
+            <mat-icon aria-hidden="false" aria-label="Next">
+                keyboard_arrow_right
+            </mat-icon>
+        </button>
+    </div>
+    <app-exercise-code-editor (finishedWorkingEvent)="backFromCodingApp($event)"
+        [currentEditor]="selectedStudent.files">
     </app-exercise-code-editor>
 </ng-container>
