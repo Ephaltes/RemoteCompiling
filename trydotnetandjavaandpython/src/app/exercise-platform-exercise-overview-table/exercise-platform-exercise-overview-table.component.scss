@@ -1,3 +1,7 @@
+#table-overview{
+    background-color: #1a2035;
+    color: white;
+}
 .mat-cell,
 .mat-footer-cell,
 .mat-header-cell {
@@ -16,6 +20,8 @@ td.mat-cell {
     background-color: rgba(55, 60, 79, 1);
   }
 ::ng-deep .filterForm {
+    padding-left: 15px;
+    width: 97%;
     .mat-input-element {
         color: white;
     }
