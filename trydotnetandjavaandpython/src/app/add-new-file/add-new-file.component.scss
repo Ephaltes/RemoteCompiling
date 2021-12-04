@@ -45,4 +45,7 @@
     .mat-input-element {
         color: white;
     }
+    .mat-input-element::placeholder{
+        color: rgba(255, 255, 255, 0.4);
+    }
 }
