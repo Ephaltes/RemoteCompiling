@@ -31,6 +31,8 @@ import { ExercisePlatformOverviewComponent } from './exercise-platform-overview/
 import { ExerciseCodeEditorComponent } from './exercise-code-editor/exercise-code-editor.component';
 import { MatTableModule} from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { ExercisePlatformExerciseOverviewTableComponent } from './exercise-platform-exercise-overview-table/exercise-platform-exercise-overview-table.component';
+import { ExercisePlatformExerciseStudentTableComponent } from './exercise-platform-exercise-student-table/exercise-platform-exercise-student-table.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +47,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     ExercisePlatformCreateComponent,
     ExercisePlatformCorrectComponent,
     ExercisePlatformOverviewComponent,
-    ExerciseCodeEditorComponent
+    ExerciseCodeEditorComponent,
+    ExercisePlatformExerciseOverviewTableComponent,
+    ExercisePlatformExerciseStudentTableComponent
   ],
   imports: [
     BrowserModule,
