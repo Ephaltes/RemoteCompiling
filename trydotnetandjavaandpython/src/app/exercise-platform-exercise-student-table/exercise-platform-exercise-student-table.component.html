@@ -1,1 +1,44 @@
-<p>exercise-platform-exercise-student-table works!</p>
+<div style="height: 95vh; min-width: 85.7142857vw; width: 100%;">
+    <button mat-stroked-button color="primary" (click)="backToParent()">
+        <mat-icon aria-hidden="false" aria-label="Back" style="vertical-align: -7px;">
+            keyboard_arrow_left
+        </mat-icon>Back
+    </button>
+    <mat-card id="table-overview">
+        <mat-card-header>
+            <mat-card-title>Studenten</mat-card-title>
+        </mat-card-header>
+        <mat-form-field appearance="standard" class="filterForm">
+            <mat-label>Filter</mat-label>
+            <input matInput (keyup)="applyFilter($event)" placeholder="Max Mustermann" #input>
+        </mat-form-field>
+        <div style="max-height: 80vh; overflow: auto;">
+            <table mat-table [dataSource]="dataSource"
+                style="width: 98%; height: 85%; background-color: #1a2035; color: white;">
+
+                <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef style="width: 34%"> Kennzeichen </th>
+                    <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+                </ng-container>
+
+
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef style="width:33%"> Student </th>
+                    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                </ng-container>
+
+
+                <ng-container matColumnDef="grading">
+                    <th mat-header-cell *matHeaderCellDef style="width: 33%;"> Bewertung </th>
+                    <td mat-cell *matCellDef="let element"> {{element.grading}} </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row (click)="openCodingApp(row)" *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+        </div>
+        <mat-paginator [pageSizeOptions]="[10,25,50]" showFirstLastButtons aria-label="Select page of exercise elements"
+            style="background-color: #1a2035; color: white;">
+        </mat-paginator>
+    </mat-card>
+</div>

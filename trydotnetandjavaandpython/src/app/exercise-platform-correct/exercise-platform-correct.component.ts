@@ -1,7 +1,6 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import { CodeEditorComponent, CodeModel } from '@ngstack/code-editor';
+import { Component, OnInit } from '@angular/core';
+import { ExerciseNode } from '../exercise-module/exercise-node';
+import { StudentNode } from '../exercise-module/student-node';
 
 export interface PeriodicElement {
   name: string;
@@ -29,27 +28,27 @@ const ELEMENT_DATA: PeriodicElement[] = [
 })
 
 export class ExercisePlatformCorrectComponent implements OnInit {
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol', 'action'];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+  selectedItem: ExerciseNode = { id: 1, name: "", author: "", description: "", files: [], students: [] };
   exerciseSelected = false;
-  selectedItem: CodeModel = {language:"", value:"", uri:""};
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  studentSelected = false;
+  selectedStudent: StudentNode = { id: "ifxxbxxx", name: "", grading: 0, files: [] }
 
   constructor() { }
 
   ngOnInit(): void {
   }
-  ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
+  openStudentList(row: ExerciseNode) {
+    this.exerciseSelected = true;
+    this.selectedItem = row;
   }
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+  openCodingApp(row: StudentNode) {
+    this.studentSelected = true;
+    this.selectedStudent = row;
   }
-  openCodingApp(row:any){
-    console.log(row);
-    this.exerciseSelected=true;
-    this.selectedItem.value=row.name;
+  backFromCodingApp(status:boolean){
+    this.studentSelected=status
   }
-
+  backFromStudentList(status:boolean){
+    this.exerciseSelected=status
+  }
 }

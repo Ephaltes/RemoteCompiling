@@ -1,7 +1,15 @@
-<ng-container *ngIf="!exerciseSelected">
-    <app-exercise-platform-exercise-overview-table></app-exercise-platform-exercise-overview-table>
+<ng-container *ngIf="!exerciseSelected && !studentSelected">
+    <app-exercise-platform-exercise-overview-table (itemSelectedEvent)="openStudentList($event)">
+    </app-exercise-platform-exercise-overview-table>
 </ng-container>
-<app-exercise-platform-exercise-student-table></app-exercise-platform-exercise-student-table>
-<ng-container *ngIf="exerciseSelected">
-    <app-exercise-code-editor></app-exercise-code-editor>
+
+<ng-container *ngIf="exerciseSelected && !studentSelected">
+    <app-exercise-platform-exercise-student-table (itemSelectedEvent)="openCodingApp($event)"
+        (finishedStudentListEvent)="backFromStudentList($event)" [data]="selectedItem.students">
+    </app-exercise-platform-exercise-student-table>
+</ng-container>
+
+<ng-container *ngIf="studentSelected">
+    <app-exercise-code-editor (finishedWorkingEvent)="backFromCodingApp($event)" [data]="selectedStudent.files">
+    </app-exercise-code-editor>
 </ng-container>

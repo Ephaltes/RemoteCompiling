@@ -24,7 +24,7 @@ const TEMP_DATA: ExerciseNode[] = [
           '    {',
           `        static void Main(string[] args)`,
           `        {`,
-          `            Console.WriteLine($"Hello, world from .NET and {Angular.name}!");`,
+          `            Console.WriteLine($"Hello, World from .NET and {Angular.name}!");`,
           '        }',
           '    }',
           '}'
@@ -49,24 +49,49 @@ const TEMP_DATA: ExerciseNode[] = [
         ].join('\r\n')
       }
     }]
-  }, { id: 2, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
-  { id: 3, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
-  { id: 4, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
-  { id: 5, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
-  { id: 6, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
-  { id: 7, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
-  { id: 8, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
-  { id: 9, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
-  { id: 10, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
-  { id: 11, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
-  { id: 12, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
-  { id: 13, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
-  { id: 14, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
-  { id: 15, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
-  { id: 16, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
-  { id: 17, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
-  { id: 18, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
-  { id: 19, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },]
+    , students: [{
+      id: "if20b212", name: "gsingh", grading: 0, files: [{
+        name: 'HelloWorldCSharp.cs',
+        type: FileNodeType.csharp,
+        code: {
+          language: 'csharp',
+          uri: 'HelloWorldCSharp.cs',
+          value: [
+            'using System;',
+            `namespace HelloWorld`,
+            '{',
+            '    class Program',
+            '    {',
+            `        static void Main(string[] args)`,
+            `        {`,
+            `            Console.WriteLine($"Hello, world from .NET and {Angular.name}!");`,
+            '        }',
+            '    }',
+            '}'
+          ].join('\r\n')
+        }
+      },
+      {
+        name: 'HelloAngular.cs',
+        type: FileNodeType.csharp,
+        code: {
+          language: 'csharp',
+          uri: 'HelloAngular.cs',
+          value: [
+            'using System;',
+            `namespace HelloWorld`,
+            '{',
+            '    public class Angular',
+            '    {',
+            `        public static string name="Angular";`,
+            '    }',
+            '}'
+          ].join('\r\n')
+        }
+      }]
+    }]
+  }]
+
 
   @Component({
     selector: 'app-exercise-platform-exercise-overview-table',
