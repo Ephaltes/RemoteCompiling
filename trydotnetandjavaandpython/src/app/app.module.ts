@@ -29,7 +29,8 @@ import { ExercisePlatformCreateComponent } from './exercise-platform-create/exer
 import { ExercisePlatformCorrectComponent } from './exercise-platform-correct/exercise-platform-correct.component';
 import { ExercisePlatformOverviewComponent } from './exercise-platform-overview/exercise-platform-overview.component';
 import { ExerciseCodeEditorComponent } from './exercise-code-editor/exercise-code-editor.component';
-import {MatTableModule} from '@angular/material/table';
+import { MatTableModule} from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,7 @@ import {MatTableModule} from '@angular/material/table';
   imports: [
     BrowserModule,
     HttpClientModule,
-    BrowserAnimationsModule, MatGridListModule, MatTreeModule, MatIconModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatCardModule, MatTableModule,
+    BrowserAnimationsModule, MatGridListModule, MatTreeModule, MatIconModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatCardModule, MatTableModule,MatPaginatorModule,
     RouterModule.forRoot([
       { path: '', pathMatch: 'full', redirectTo: 'coding' },
       { path: 'coding', component: CodingAppComponent },

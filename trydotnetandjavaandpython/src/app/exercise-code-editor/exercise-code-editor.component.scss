@@ -26,7 +26,9 @@
   .mat-icon-button[disabled] {
     display: none;
   }
-
+  .mat-tree-node{
+    flex: 0;
+  }
   .file-node-label {
     margin-left: 15px;
     color: #fff;

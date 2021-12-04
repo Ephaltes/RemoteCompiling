@@ -1,1 +1,54 @@
-<app-exercise-code-editor></app-exercise-code-editor>
+<ng-container *ngIf="!exerciseSelected">
+    <div style="height: 95vh; min-width: 85.7142857vw; width: 100%;">
+        <mat-form-field appearance="standard" style="width: 100%; color: white;" class="filterForm">
+            <mat-label>Filter</mat-label>
+            <input matInput (keyup)="applyFilter($event)" placeholder="Hello World..." #input>
+        </mat-form-field>
+        <div style="max-height: 80vh; overflow: auto;">
+            <table mat-table [dataSource]="dataSource"
+                style="width: 98%; height: 85%; background-color: #1a2035; color: white;">
+                <!--- Note that these columns can be defined in any order.
+              The actual rendered columns are set as a property on the row definition" -->
+
+                <!-- Position Column -->
+                <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef> No. </th>
+                    <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+                </ng-container>
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef> Name </th>
+                    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                </ng-container>
+
+                <!-- Weight Column -->
+                <ng-container matColumnDef="author">
+                    <th mat-header-cell *matHeaderCellDef> Author </th>
+                    <td mat-cell *matCellDef="let element"> {{element.author}} </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="description">
+                    <th mat-header-cell *matHeaderCellDef> Beschreibung </th>
+                    <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef> Action </th>
+                    <td mat-cell *matCellDef="let element"> {{element.action}} </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row (click)="openCodingApp(row)" *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+        </div>
+        <mat-paginator [pageSizeOptions]="[10,25,50]" showFirstLastButtons
+            aria-label="Select page of exercise elements"
+            style="background-color: #1a2035; color: white;">
+        </mat-paginator>
+    </div>
+</ng-container>
+<ng-container *ngIf="exerciseSelected">
+    <app-exercise-code-editor (finishedWorkingEvent)="backFromCodingApp($event)" [data]="selectedItem.files"></app-exercise-code-editor>
+</ng-container>

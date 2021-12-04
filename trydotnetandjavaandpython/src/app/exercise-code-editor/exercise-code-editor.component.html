@@ -10,7 +10,7 @@
         <mat-grid-tile [colspan]="2" [rowspan]="1">
             <button mat-stroked-button color="accent">+ Add new files...</button>
         </mat-grid-tile>
-        
+
         <mat-grid-tile [colspan]="12" [rowspan]="15">
             <ngs-code-editor [codeModel]="selectedModel" [theme]="selectedTheme" [options]="options"
                 style="height: 100%; width: 97%;">
@@ -68,7 +68,7 @@
             <div style="height: 100%; width: 100%;">
                 <textarea style="width: 97%; max-height: 60%; height: 60%; max-width: 97%;">Aufgabenstellung</textarea>
                 <br>
-                <button mat-stroked-button color="accent">Save</button>
+                <button mat-stroked-button color="accent" (click)="saveExercise()">Save</button>
             </div>
         </mat-grid-tile>
     </mat-grid-list>

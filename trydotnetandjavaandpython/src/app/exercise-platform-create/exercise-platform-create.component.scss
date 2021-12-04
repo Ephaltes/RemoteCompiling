@@ -1,0 +1,50 @@
+.mat-cell,
+.mat-footer-cell,
+.mat-header-cell {
+    color: white;
+}
+td.mat-cell {
+    border-bottom: 1px solid #fff ;
+    flex: 0;
+}
+
+::ng-deep .filterForm {
+    .mat-input-element {
+        color: white;
+    }
+    .mat-form-field-label {
+        color: white;
+    }
+    .mat-form-field-underline {
+        background-color: white;
+    }
+    .mat-form-field-ripple {
+        background-color: white;
+    }
+    .mat-form-field-required-marker {
+        color: white;
+    }
+    .mat-form-field .mat-select{
+        color: white;
+    }
+     .mat-hint {
+        color: red;
+    }
+    .mat-select-value{
+        color: white;
+    }
+}
+::ng-deep .filterForm.mat-focused {
+    .mat-form-field-label {
+        color: white;
+    }
+    .mat-form-field-ripple {
+        background-color: white;
+    }
+    .mat-form-field-required-marker {
+        color: white;
+    }
+    .mat-input-element {
+        color: white;
+    }
+}
