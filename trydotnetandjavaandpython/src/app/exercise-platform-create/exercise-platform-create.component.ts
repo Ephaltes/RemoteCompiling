@@ -47,24 +47,24 @@ const TEMP_DATA: ExerciseNode[] = [
         ].join('\r\n')
       }
     }]
-  }, { id: 1, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
-  { id: 1, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
-  { id: 1, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
-  { id: 1, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
-  { id: 1, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
-  { id: 1, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
-  { id: 1, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
-  { id: 1, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
-  { id: 1, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
-  { id: 1, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
-  { id: 1, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
-  { id: 1, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
-  { id: 1, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
-  { id: 1, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
-  { id: 1, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
-  { id: 1, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
-  { id: 1, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
-  { id: 1, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },]
+  }, { id: 2, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
+  { id: 3, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
+  { id: 4, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
+  { id: 5, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
+  { id: 6, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
+  { id: 7, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
+  { id: 8, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
+  { id: 9, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
+  { id: 10, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
+  { id: 11, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
+  { id: 12, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
+  { id: 13, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
+  { id: 14, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
+  { id: 15, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
+  { id: 16, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
+  { id: 17, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
+  { id: 18, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },
+  { id: 19, name: "hello world", author: "test author", description: "hello world aufgabe", files: [] },]
 
 @Component({
   selector: 'app-exercise-platform-create',
@@ -95,7 +95,13 @@ export class ExercisePlatformCreateComponent implements OnInit {
     this.exerciseSelected = true;
     this.selectedItem = row;
   }
-  backFromCodingApp(status:boolean){
-    this.exerciseSelected=status;
+  backFromCodingApp(status: boolean) {
+    this.exerciseSelected = status;
+  }
+  editExercise(row: ExerciseNode) {
+    console.log(row.id);
+  }
+  deleteExercise(row: ExerciseNode) {
+    console.log(row.id);
   }
 }

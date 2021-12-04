@@ -4,8 +4,17 @@
     color: white;
 }
 td.mat-cell {
-    border-bottom: 1px solid #fff ;
+    border-bottom: 1px solid #fff;
+    flex: 0;
 }
+.mat-column {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+}
+.mat-row:hover {
+    background-color: rgba(55, 60, 79, 1);
+  }
 ::ng-deep .filterForm {
     .mat-input-element {
         color: white;
@@ -22,13 +31,13 @@ td.mat-cell {
     .mat-form-field-required-marker {
         color: white;
     }
-    .mat-form-field .mat-select{
+    .mat-form-field .mat-select {
         color: white;
     }
-     .mat-hint {
+    .mat-hint {
         color: red;
     }
-    .mat-select-value{
+    .mat-select-value {
         color: white;
     }
 }

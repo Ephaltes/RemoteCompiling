@@ -80,4 +80,7 @@ export class ExerciseCodeEditorComponent implements OnInit {
   saveExercise() {
     this.finishedWorkingEvent.emit(false);
   }
+  backToParent() {
+    this.finishedWorkingEvent.emit(false);
+  }
 }

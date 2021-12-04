@@ -8,15 +8,23 @@
 <div style="height: 100vh; min-width: 85.7142857vw; width: 100%;">
     <mat-grid-list cols="14" rows="20" min-rowHeight="400px" rowHeight="4.90%">
         <mat-grid-tile [colspan]="2" [rowspan]="1">
-            <button mat-stroked-button color="accent">+ Add new files...</button>
+            <button mat-stroked-button color="primary" style="position: absolute;
+            left: 5px;" (click)="backToParent()">
+                <mat-icon aria-hidden="false" aria-label="Back" style="vertical-align: -7px;">keyboard_arrow_left
+                </mat-icon>Back
+            </button>
         </mat-grid-tile>
+
 
         <mat-grid-tile [colspan]="12" [rowspan]="15">
             <ngs-code-editor [codeModel]="selectedModel" [theme]="selectedTheme" [options]="options"
                 style="height: 100%; width: 97%;">
             </ngs-code-editor>
         </mat-grid-tile>
-        <mat-grid-tile [colspan]="2" [rowspan]="14">
+        <mat-grid-tile [colspan]="2" [rowspan]="1">
+            <button mat-stroked-button color="accent">+ Add new files...</button>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="2" [rowspan]="13">
             <mat-tree [dataSource]="nestedDataSource" [treeControl]="nestedTreeControl" class="file-tree">
                 <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
                     <li class="mat-tree-node">
