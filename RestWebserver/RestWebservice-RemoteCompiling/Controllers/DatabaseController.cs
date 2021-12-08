@@ -1,9 +1,12 @@
-﻿using System;
+﻿using System.Threading.Tasks;
+
 using MediatR;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+
+using RestWebservice_RemoteCompiling.Command;
 using RestWebservice_RemoteCompiling.Database;
 using RestWebservice_RemoteCompiling.Entities;
 using RestWebservice_RemoteCompiling.Extensions;
@@ -25,94 +28,40 @@ namespace RestWebservice_RemoteCompiling.Controllers
             _mediator = mediator;
             _userRepository = new UserRepository(context);
         }
-        [HttpPost("AddUser")]
-        public IActionResult AddUser(User newUser)
-        {
-            _userRepository.AddUser(newUser);
 
-            return CustomResponse.Success("yey").ToResponse();
-        }
         [HttpPost("AddFileForUser")]
-        public IActionResult AddFileForUser(string ldapIdent, File newFile)
+        public async Task<IActionResult> AddFileForUser(AddFileForUserCommand command)
         {
-            User? findUser = _userRepository.GetUserByLdapUid(ldapIdent);
-            findUser.Files.Add(newFile);
-            _userRepository.UpdateUser(findUser);
+            CustomResponse<bool> result = await _mediator.Send(command);
 
-            return CustomResponse.Success("yey").ToResponse();
+            return result.ToResponse();
         }
+
         [HttpPost("AddCheckpointForFile")]
-        public IActionResult AddCheckpointForFile(string ldapIdent, int fileId, Checkpoint checkpoint)
+        public async Task<IActionResult> AddCheckpointForFile(AddCheckpointForFileCommand command)
         {
-            User? findUser = _userRepository.GetUserByLdapUid(ldapIdent);
-            bool flag = false;
-            foreach (var i in findUser.Files)
-                if (i.Id == fileId)
-                {
-                    i.LastModified = DateTime.Now;
-                    i.Checkpoints.Add(checkpoint);
-                    flag = true;
-                }
+            CustomResponse<bool> result = await _mediator.Send(command);
 
-            if (!flag)
-                return CustomResponse.Error<string>(401, "File not found").ToResponse();
-
-            _userRepository.UpdateUser(findUser);
-
-            return CustomResponse.Success("yey").ToResponse();
+            return result.ToResponse();
         }
 
 
         [HttpPut("UpdateFileForUser")]
-        public IActionResult UpdateFileForUser(string ldapIdent, int fileId, File newFile)
+        public async Task<IActionResult> UpdateFileForUser(UpdateFileForUserCommand command)
         {
-            User? findUser = _userRepository.GetUserByLdapUid(ldapIdent);
+            CustomResponse<bool> result = await _mediator.Send(command);
 
-
-            bool flag = false;
-            foreach (var i in findUser.Files)
-                if (i.Id == fileId)
-                {
-                    i.LastModified = DateTime.Now;
-                    i.FileName = newFile.FileName;
-                    flag = true;
-                }
-
-            if (!flag)
-                return CustomResponse.Error<string>(401, "File not found").ToResponse();
-
-            _userRepository.UpdateUser(findUser);
-
-            return CustomResponse.Success("yey").ToResponse();
+            return result.ToResponse();
         }
 
 
         [HttpDelete("RemoveFileForUser")]
-        public IActionResult RemoveFileForUser(string ldapIdent, int fileId)
+        public async Task<IActionResult> RemoveFileForUser(RemoveFileForUserCommand command)
         {
-            User? findUser = _userRepository.GetUserByLdapUid(ldapIdent);
-
-            bool deleted = false;
-
-            foreach (File userFile in findUser.Files)
-            {
-                if (userFile.Id != fileId)
-                    continue;
-
-                findUser.Files.Remove(userFile);
-                deleted = true;
-
-                break;
-            }
-
-            if (!deleted)
-                return CustomResponse.Error<string>(401, "File not found").ToResponse();
-
-            _userRepository.UpdateUser(findUser);
-
-            return CustomResponse.Success("yey").ToResponse();
+            CustomResponse<bool> response = await _mediator.Send(command);
+            return response.ToResponse();
         }
-        [HttpDelete("RemoveCheckpointForFile")]
+        /*[HttpDelete("RemoveCheckpointForFile")]
         public IActionResult RemoveCheckpointForFile(string ldapIdent, int fileId, int checkpointId)
         {
             User? findUser = _userRepository.GetUserByLdapUid(ldapIdent);
@@ -140,42 +89,13 @@ namespace RestWebservice_RemoteCompiling.Controllers
             _userRepository.UpdateUser(findUser);
 
             return CustomResponse.Success("yey").ToResponse();
-        }
+        } */
 
 
         [HttpGet("getUser")]
         public IActionResult GetUser(string ldapIdent)
         {
             return CustomResponse.Success(_userRepository.GetUserByLdapUid(ldapIdent)).ToResponse();
-        }
-
-        internal void CreateNewUser(LdapUser ldapUser)
-        {
-            User? newUser = new User();
-            newUser.LdapUid = ldapUser.Uid;
-            newUser.Email = ldapUser.Mail;
-            newUser.Name = ldapUser.GivenName;
-
-            //todo switch ldap user to internal user
-            newUser.UserRole = UserRole.DefaultUser;
-
-            _userRepository.AddUser(newUser);
-        }
-        internal bool UpdateUserData(User user)
-        {
-            // todo verify that files and checkpoints get stored anyway without loading 
-            // TODO: userFromDB could be null
-            User userFromDb = _userRepository.GetUserByLdapUid(user.LdapUid);
-            if (userFromDb is null)
-            {
-                return false;
-            }
-            userFromDb.Email = user.Email;
-            userFromDb.Name = user.Name;
-            userFromDb.UserRole = user.UserRole;
-
-            _userRepository.UpdateUser(userFromDb);
-            return true;
         }
     }
 }

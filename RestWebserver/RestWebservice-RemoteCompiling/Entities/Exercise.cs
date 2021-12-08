@@ -5,7 +5,7 @@ using RestWebservice_RemoteCompiling.Database;
 
 namespace RestWebservice_RemoteCompiling.Entities
 {
-    public class Excercise
+    public class Exercise
     {
         public int Id
         {

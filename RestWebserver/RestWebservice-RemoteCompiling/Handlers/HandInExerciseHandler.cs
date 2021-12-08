@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,13 +10,15 @@ using RestWebservice_RemoteCompiling.Database;
 using RestWebservice_RemoteCompiling.Entities;
 using RestWebservice_RemoteCompiling.Repositories;
 
+using Exercise = RestWebservice_RemoteCompiling.Database.Exercise;
+
 namespace RestWebservice_RemoteCompiling.Handlers
 {
-    public class HandInExerciseHandler : IRequestHandler<HandinCommand, CustomResponse<bool>>
+    public class HandInExerciseHandler : IRequestHandler<HandInCommand, CustomResponse<bool>>
     {
         private readonly IExerciseRepository _exerciseRepository;
         private readonly IUserRepository _userRepository;
-        
+
 
         public HandInExerciseHandler(IExerciseRepository exerciseRepository, IUserRepository userRepository)
         {
@@ -25,27 +26,29 @@ namespace RestWebservice_RemoteCompiling.Handlers
             _userRepository = userRepository;
         }
 
-        public async Task<CustomResponse<bool>> Handle(HandinCommand request, CancellationToken cancellationToken)
+        public async Task<CustomResponse<bool>> Handle(HandInCommand request, CancellationToken cancellationToken)
         {
-            var exercise = _exerciseRepository.Get(request.Id);
-            var user = _userRepository.GetUserByLdapUid(request.Token.Claims.First(x => x.Type == ClaimTypes.Sid).Value);
+            Exercise exercise = _exerciseRepository.Get(request.ExerciseId);
+            User? user = _userRepository.GetUserByLdapUid(request.Token.Claims.First(x => x.Type == ClaimTypes.Sid).Value);
 
-            foreach (var files in request.Files)
+            foreach (string fileName in request.FilesNames)
             {
-                var userFile = user.Files.First(x => x.FileName == files.Name);
+                File userFile = user.Files.First(x => x.FileName == fileName);
 
-                var exerciseFile = new ExerciseFile()
-                        {
-                            User = user,
-                            Exercise = exercise,
-                            Checkpoint = userFile.Checkpoints.Last(),
-                            FileName = userFile.FileName,
-                            FileNodeType = userFile.FileNodeType,
-                            LastModified = userFile.LastModified
-                        };
+                ExerciseFile exerciseFile = new ExerciseFile
+                                            {
+                                                User = user,
+                                                Exercise = exercise,
+                                                Checkpoint = userFile.Checkpoints.Last(),
+                                                FileName = userFile.FileName,
+                                                FileNodeType = userFile.FileNodeType,
+                                                LastModified = userFile.LastModified
+                                            };
                 exercise.Files.Add(exerciseFile);
             }
+
             _exerciseRepository.Update(exercise);
+
             return CustomResponse.Success(true);
         }
     }

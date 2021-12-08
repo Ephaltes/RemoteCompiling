@@ -35,7 +35,7 @@ namespace RestWebservice_RemoteCompiling.Database
             set;
         }
         
-        public virtual User User
+        public virtual User? User
         {
             get;
             set;

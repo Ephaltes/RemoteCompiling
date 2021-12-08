@@ -1,17 +1,18 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Threading.Tasks;
 
 using MediatR;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
 
 using RestWebservice_RemoteCompiling.Command;
 using RestWebservice_RemoteCompiling.Entities;
 using RestWebservice_RemoteCompiling.Extensions;
 using RestWebservice_RemoteCompiling.Helpers;
-using RestWebservice_RemoteCompiling.Repositories;
+using RestWebservice_RemoteCompiling.Query;
 
 namespace RestWebservice_RemoteCompiling.Controllers
 {
@@ -23,21 +24,40 @@ namespace RestWebservice_RemoteCompiling.Controllers
     {
         private readonly IMediator _mediator;
         private readonly ITokenService _tokenService;
-        
+
         public ExerciceController(IMediator mediator, ITokenService tokenService)
         {
             _mediator = mediator;
             _tokenService = tokenService;
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetExercices()
+        {
+            CustomResponse<List<Exercise>> response = await _mediator.Send(new GetExercisesQuery());
+
+            return response.ToResponse();
+        }
+        
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetExercices(int id)
+        {
+            GetExerciseQuery query = new GetExerciseQuery() { Id = id };
+            CustomResponse<Exercise> response = await _mediator.Send(query);
+
+            return response.ToResponse();
+        }
+
         [HttpPost("")]
-        public async Task<IActionResult> CreateExercise(CreateExerciseCommand command )
+        public async Task<IActionResult> CreateExercise(CreateExerciseCommand command)
         {
             string data = Request.Headers["Authorization"].ToString().Split(" ")[1];
             _tokenService.ValidateToken(data);
-            var token = _tokenService.GetToken(data);
+            JwtSecurityToken? token = _tokenService.GetToken(data);
             command.Token = token;
-            
-            var result = await _mediator.Send(command);
+
+            CustomResponse<int> result = await _mediator.Send(command);
+
             return result.ToResponse();
         }
 
@@ -46,16 +66,17 @@ namespace RestWebservice_RemoteCompiling.Controllers
         {
             string data = Request.Headers["Authorization"].ToString().Split(" ")[1];
             _tokenService.ValidateToken(data);
-            var token = _tokenService.GetToken(data);
+            JwtSecurityToken? token = _tokenService.GetToken(data);
 
-            var command = new DeleteExerciseCommand()
-                          {
-                              Id = id,
-                              Token = token
-                          };
+            DeleteExerciseCommand command = new DeleteExerciseCommand
+                                            {
+                                                Id = id,
+                                                Token = token
+                                            };
 
-            var result = await _mediator.Send(command);
-            return result.ToResponse();   
+            CustomResponse<bool> result = await _mediator.Send(command);
+
+            return result.ToResponse();
         }
 
         [HttpPut("{id}")]
@@ -63,13 +84,14 @@ namespace RestWebservice_RemoteCompiling.Controllers
         {
             string data = Request.Headers["Authorization"].ToString().Split(" ")[1];
             _tokenService.ValidateToken(data);
-            var token = _tokenService.GetToken(data);
+            JwtSecurityToken? token = _tokenService.GetToken(data);
 
             command.Id = id;
             command.Token = token;
 
-            var result = await _mediator.Send(command);
-            return result.ToResponse();   
+            CustomResponse<bool> result = await _mediator.Send(command);
+
+            return result.ToResponse();
         }
 
         [HttpPut("{id}/student/{student_exercice_id}")]
@@ -77,26 +99,28 @@ namespace RestWebservice_RemoteCompiling.Controllers
         {
             string data = Request.Headers["Authorization"].ToString().Split(" ")[1];
             _tokenService.ValidateToken(data);
-            var token = _tokenService.GetToken(data);
+            JwtSecurityToken? token = _tokenService.GetToken(data);
 
             command.Id = id;
             command.Student_exercice_id = student_exercice_id;
             command.Token = token;
 
-            var response = await _mediator.Send(command);
+            CustomResponse<bool> response = await _mediator.Send(command);
+
             return response.ToResponse();
         }
         [HttpPost("handin/{id}")]
-        public async Task<IActionResult> HandInExercise([FromRoute] int id, HandinCommand command)
+        public async Task<IActionResult> HandInExercise([FromRoute] int id, HandInCommand command)
         {
             string data = Request.Headers["Authorization"].ToString().Split(" ")[1];
             _tokenService.ValidateToken(data);
-            var token = _tokenService.GetToken(data);
+            JwtSecurityToken? token = _tokenService.GetToken(data);
 
-            command.Id = id;
+            command.ExerciseId = id;
             command.Token = token;
-            
-            var response = await _mediator.Send(command);
+
+            CustomResponse<bool> response = await _mediator.Send(command);
+
             return response.ToResponse();
         }
     }
