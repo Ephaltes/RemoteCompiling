@@ -55,7 +55,10 @@ namespace RestWebservice_RemoteCompiling
             services.AddSingleton<IUserRepository, UserRepository>();
             services.AddSingleton<ISessionRepository, SessionRepository>();
             services.AddTransient<ITokenService, TokenService>();
-
+            services.AddTransient<IExerciseRepository, ExerciseRepository>();
+            services.AddTransient<IExerciseGradeRepository, ExerciseGradeRepository>();
+            
+            
             string connectionString = Configuration.GetConnectionString("Database");
             services.AddDbContext<RemoteCompileDbContext>(options => options
                                                               .UseLazyLoadingProxies()

@@ -28,7 +28,7 @@ namespace RestWebservice_RemoteCompiling.Handlers
 
         public async Task<CustomResponse<int>> Handle(CreateExerciseCommand request, CancellationToken cancellationToken)
         {
-            string ldapIdent =request.Token.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
+            string ldapIdent =request.Token.Claims.First(x => x.Type == ClaimTypes.Sid).Value;
             var ldapUser = _userRepository.GetUserByLdapUid(ldapIdent);
             if (ldapUser is null)
             {

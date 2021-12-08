@@ -1,6 +1,6 @@
 ﻿namespace RestWebservice_RemoteCompiling.Entities
 {
-    public class Code
+    public class CodeEntity
     {
         public string Language
         {

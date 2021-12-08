@@ -28,7 +28,7 @@ namespace RestWebservice_RemoteCompiling.Handlers
         public async Task<CustomResponse<bool>> Handle(HandinCommand request, CancellationToken cancellationToken)
         {
             var exercise = _exerciseRepository.Get(request.Id);
-            var user = _userRepository.GetUserByLdapUid(request.Token.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value);
+            var user = _userRepository.GetUserByLdapUid(request.Token.Claims.First(x => x.Type == ClaimTypes.Sid).Value);
 
             foreach (var files in request.Files)
             {

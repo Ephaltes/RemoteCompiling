@@ -29,7 +29,7 @@ namespace RestWebservice_RemoteCompiling.Repositories
 
         public User? GetUserByLdapUid(string ldapUid)
         {
-            return _context.Users.FirstOrDefault(x => x.LdapUid == ldapUid.ToLower());
+            return _context.Users.FirstOrDefault(x => x.LdapUid.ToLower() == ldapUid.ToLower());
         }
     }
 }

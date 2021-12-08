@@ -18,7 +18,7 @@ namespace RestWebservice_RemoteCompiling.Entities
             set;
         }
         
-        public Code Code
+        public CodeEntity CodeEntity
         {
             get;
             set;

@@ -40,7 +40,7 @@ namespace RestWebservice_RemoteCompiling.Handlers
                                 FileNodeType = item.Type,
                                 Checkpoint = new Checkpoint()
                                              {
-                                                 Code = item.Code.Value,
+                                                 Code = item.CodeEntity.Value,
                                                  Created = DateTime.Now,
                                                  Stdin = ""
                                              },

@@ -35,13 +35,13 @@ namespace RestWebservice_RemoteCompiling.Database
             set;
         }
         
-        public User User
+        public virtual User User
         {
             get;
             set;
         }
         
-        public Exercise Exercise
+        public virtual Exercise Exercise
         {
             get;
             set;

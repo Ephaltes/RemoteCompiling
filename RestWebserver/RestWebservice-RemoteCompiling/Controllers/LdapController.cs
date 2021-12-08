@@ -37,12 +37,12 @@ namespace RestWebservice_RemoteCompiling.Controllers
         
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> AmILoggedIn()
+        public  async Task<IActionResult> AmILoggedIn()
         {
             string data = Request.Headers["Authorization"].ToString().Split(" ")[1];
-            _tokenService.ValidateToken(data);
+            var returnVal = _tokenService.ValidateToken(data);
 
-            return null;
+            return CustomResponse.Success(returnVal).ToResponse();
         }
     }
 }
