@@ -40,8 +40,5 @@ namespace RestWebservice_RemoteCompiling.Repositories
         {
             return _context.Exercises.ToList();
         }
-        
-        
-        
     }
 }
