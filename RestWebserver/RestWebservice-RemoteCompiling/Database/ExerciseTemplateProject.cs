@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 
 namespace RestWebservice_RemoteCompiling.Database
 {
-    public class ExerciseFile
+    public class ExerciseTemplateProject
     {
         public int Id
         {
@@ -18,31 +17,19 @@ namespace RestWebservice_RemoteCompiling.Database
             set;
         }
 
-        public string FileName
+        public string ProjectName
         {
             get;
             set;
         }
 
-        public virtual Checkpoint Checkpoint
+        public virtual List<ExerciseTemplateFiles> Files
         {
             get;
             set;
-        }
-
-        public ProjectType ProjectType
-        {
-            get;
-            set;
-        }
+        } = new();
         
-        public virtual User? User
-        {
-            get;
-            set;
-        }
-        [JsonIgnore]
-        public virtual ExerciseGrade? ExerciseGrade
+        public ProjectType ProjectType
         {
             get;
             set;

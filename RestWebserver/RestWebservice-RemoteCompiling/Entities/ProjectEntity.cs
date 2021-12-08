@@ -4,21 +4,31 @@ using RestWebservice_RemoteCompiling.Database;
 
 namespace RestWebservice_RemoteCompiling.Entities
 {
-    public class Files
+    public class ProjectEntity
     {
-        public string Name
+        public int Id
+        {
+            get;
+            set;
+        }
+        public string ProjectName
+        {
+            get;
+            set;
+        }
+        public string stdin
         {
             get;
             set;
         }
 
-        public FileNodeType Type
+        public List<FileEntity> Files
         {
             get;
             set;
-        }
+        } = new();
         
-        public CodeEntity CodeEntity
+        public ProjectType ProjectType
         {
             get;
             set;

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -29,29 +31,38 @@ namespace RestWebservice_RemoteCompiling.Handlers
             
             current.Name = request.Name ?? current.Name;
             current.Description = request.Description ?? current.Description;
-            if (request.Files.Count > 0)
+
+            var tempFileList = new List<ExerciseTemplateFiles>();
+            foreach (var item in request.TemplateProject.Files)
             {
-                current.Files.Clear();
-                foreach (var item in request.Files)
-                {
-                    var x = new ExerciseFile()
-                            {
-                                FileName = item.Name,
-                                FileNodeType = item.Type,
-                                Checkpoint = new Checkpoint()
-                                             {
-                                                 Code = item.CodeEntity.Value,
-                                                 Created = DateTime.Now,
-                                                 Stdin = ""
-                                             },
-                                LastModified = DateTime.Now,
-                                User = null,
-                                Exercise = current
-                            };
-                    current.Files.Add(x);
-                }
+                var y = new ExerciseTemplateFiles()
+                        {
+                            FileName = item.FileName,
+                            LastModified = DateTime.Now,
+                           
+                        };
+
+                var a = item.Checkpoints.Last();
+                
+                y.Checkpoints.Add(new Checkpoint()
+                                  {
+                                      Code = a.Code,
+                                      Created = DateTime.Now,
+                                  });
+                
+                tempFileList.Add(y);
             }
+            
+            current.Template = new ExerciseTemplateProject()
+                               {
+                                    ProjectName = request.TemplateProject.ProjectName,
+                                    Files = tempFileList,
+                                    LastModified = DateTime.Now,
+                                    ProjectType = request.TemplateProject.ProjectType
+                               };
+            
             _exerciseRepository.Update(current);
+            
             return CustomResponse.Success(true);
         }
     }

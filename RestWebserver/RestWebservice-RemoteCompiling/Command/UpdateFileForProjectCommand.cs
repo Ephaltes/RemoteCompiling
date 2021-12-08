@@ -2,7 +2,7 @@
 
 namespace RestWebservice_RemoteCompiling.Command
 {
-    public class AddCheckpointForFileCommand  : BaseCommand<int>
+    public class UpdateFileForProjectCommand  : BaseCommand<bool>
     {
         public int FileId
         {
@@ -10,7 +10,13 @@ namespace RestWebservice_RemoteCompiling.Command
             set;
         }
 
-        public Checkpoint Checkpoint
+        public string FileName
+        {
+            get;
+            set;
+        }
+
+        public int ProjectId
         {
             get;
             set;

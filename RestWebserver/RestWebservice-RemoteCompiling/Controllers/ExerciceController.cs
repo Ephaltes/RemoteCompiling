@@ -34,7 +34,7 @@ namespace RestWebservice_RemoteCompiling.Controllers
         [HttpGet]
         public async Task<IActionResult> GetExercices()
         {
-            CustomResponse<List<Exercise>> response = await _mediator.Send(new GetExercisesQuery());
+            CustomResponse<List<ExerciseEntity>> response = await _mediator.Send(new GetExercisesQuery());
 
             return response.ToResponse();
         }
@@ -43,7 +43,7 @@ namespace RestWebservice_RemoteCompiling.Controllers
         public async Task<IActionResult> GetExercices(int id)
         {
             GetExerciseQuery query = new GetExerciseQuery() { Id = id };
-            CustomResponse<Exercise> response = await _mediator.Send(query);
+            CustomResponse<ExerciseEntity> response = await _mediator.Send(query);
 
             return response.ToResponse();
         }
@@ -109,14 +109,14 @@ namespace RestWebservice_RemoteCompiling.Controllers
 
             return response.ToResponse();
         }
-        [HttpPost("handin/{id}")]
-        public async Task<IActionResult> HandInExercise([FromRoute] int id, HandInCommand command)
+        [HttpPost("handin/{ExerciseId}")]
+        public async Task<IActionResult> HandInExercise([FromRoute] int ExerciseId, HandInCommand command)
         {
             string data = Request.Headers["Authorization"].ToString().Split(" ")[1];
             _tokenService.ValidateToken(data);
             JwtSecurityToken? token = _tokenService.GetToken(data);
 
-            command.ExerciseId = id;
+            command.ExerciseId = ExerciseId;
             command.Token = token;
 
             CustomResponse<bool> response = await _mediator.Send(command);

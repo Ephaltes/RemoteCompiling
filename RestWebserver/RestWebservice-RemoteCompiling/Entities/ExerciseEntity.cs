@@ -5,7 +5,7 @@ using RestWebservice_RemoteCompiling.Database;
 
 namespace RestWebservice_RemoteCompiling.Entities
 {
-    public class Exercise
+    public class ExerciseEntity
     {
         public int Id
         {
@@ -42,8 +42,16 @@ namespace RestWebservice_RemoteCompiling.Entities
             set;
         }
         
-        public List<Files> Files { get; set; } 
+        public virtual ExerciseTemplateProject Template
+        {
+            get;
+            set;
+        }
         
-        public List<Students> Students { get; set; }
+        public virtual List<ExerciseGrade> HandIns
+        {
+            get;
+            set;
+        } = new List<ExerciseGrade>();
     }
 }

@@ -6,7 +6,7 @@ namespace RestWebservice_RemoteCompiling.Command
 {
     public class UpdateExerciseCommand : BaseCommand<bool>
     {
-        public int Id
+        internal int Id
         {
             get;
             set;
@@ -23,10 +23,10 @@ namespace RestWebservice_RemoteCompiling.Command
             set;
         }
 
-        public List<Files> Files
+        public ProjectEntity TemplateProject
         {
             get;
             set;
-        } = new List<Files>();
+        }
     }
 }

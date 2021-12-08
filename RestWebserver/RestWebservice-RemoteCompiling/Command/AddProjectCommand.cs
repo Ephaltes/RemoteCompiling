@@ -2,8 +2,8 @@
 
 namespace RestWebservice_RemoteCompiling.Command
 {
-    public class AddFileForUserCommand  : BaseCommand<bool>
+    public class AddProjectCommand : BaseCommand<int>
     {
-       public Files File { get; set; }
+        public ProjectEntity Project { get; set; }
     }
 }

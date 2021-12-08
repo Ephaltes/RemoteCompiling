@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 using MediatR;
 
+using Microsoft.AspNetCore.Mvc.TagHelpers;
+
 using RestWebservice_RemoteCompiling.Command;
 using RestWebservice_RemoteCompiling.Database;
 using RestWebservice_RemoteCompiling.Entities;
@@ -13,7 +15,7 @@ using RestWebservice_RemoteCompiling.Repositories;
 
 namespace RestWebservice_RemoteCompiling.Handlers
 {
-    public class UpdateFileForUserHandler : IRequestHandler<UpdateFileForUserCommand, CustomResponse<bool>>
+    public class UpdateFileForUserHandler : IRequestHandler<UpdateFileForProjectCommand, CustomResponse<bool>>
     {
         private readonly IExerciseRepository _exerciseRepository;
         private readonly IUserRepository _userRepository;
@@ -23,22 +25,27 @@ namespace RestWebservice_RemoteCompiling.Handlers
             _exerciseRepository = exerciseRepository;
         }
 
-        public async Task<CustomResponse<bool>> Handle(UpdateFileForUserCommand request, CancellationToken cancellationToken)
+        public async Task<CustomResponse<bool>> Handle(UpdateFileForProjectCommand request, CancellationToken cancellationToken)
         {
             string ldapIdent = request.Token.Claims.First(x => x.Type == ClaimTypes.Sid).Value;
             User? ldapUser = _userRepository.GetUserByLdapUid(ldapIdent);
 
-            var file = ldapUser.Files.FirstOrDefault(x => x.Id == request.FileId);
-            
-            if (file is null)
-            {
-                return CustomResponse.Error<bool>(404, "File not found");
-            }
 
-            file.FileName = request.FileName;
-            
+            foreach (var item in ldapUser.Projects)
+            {
+                if (item.Id == request.ProjectId)
+                {
+                    foreach (var file in item.Files)
+                    {
+                        if (file.Id == request.FileId)
+                        {
+                            file.FileName = request.FileName;
+                            break;
+                        }
+                    }
+                }
+            }
             _userRepository.UpdateUser(ldapUser);
-            
             return CustomResponse.Success(true);
         }
     }

@@ -12,6 +12,7 @@ namespace RestWebservice_RemoteCompiling.Repositories
 
         public ExerciseGrade? Get(string studentId, int exerciseId);
 
-        public List<ExerciseGrade> Get(int exerciseId);
+        public ExerciseGrade Get(int exerciseGradeId);
+        public int Update(ExerciseGrade exerciseGrade);
     }
 }

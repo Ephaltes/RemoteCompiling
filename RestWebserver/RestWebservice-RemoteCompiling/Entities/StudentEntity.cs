@@ -2,7 +2,7 @@
 
 namespace RestWebservice_RemoteCompiling.Entities
 {
-    public class Students
+    public class StudentEntity
     {
         public string Id
         {
@@ -35,10 +35,10 @@ namespace RestWebservice_RemoteCompiling.Entities
             set;
         }
 
-        public List<Files> Files
+        public List<ProjectEntity> Projects
         {
             get;
             set;
-        }
+        } = new List<ProjectEntity>();
     }
 }

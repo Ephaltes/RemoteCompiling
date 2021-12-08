@@ -8,7 +8,7 @@ using RestWebservice_RemoteCompiling.Entities;
 
 namespace RestWebservice_RemoteCompiling.Query
 {
-    public class GetExerciseQuery : IRequest<CustomResponse<Exercise>>
+    public class GetExerciseQuery : IRequest<CustomResponse<ExerciseEntity>>
     {
         [FromRoute]
         public int Id { get; set; }

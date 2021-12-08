@@ -40,10 +40,16 @@ namespace RestWebservice_RemoteCompiling.Database
             set;
         }
         
-        public virtual List<ExerciseFile> Files
+        public virtual ExerciseTemplateProject Template
         {
             get;
             set;
-        } = new List<ExerciseFile>();
+        }
+        
+        public virtual List<ExerciseGrade> HandIns
+        {
+            get;
+            set;
+        } = new List<ExerciseGrade>();
     }
 }

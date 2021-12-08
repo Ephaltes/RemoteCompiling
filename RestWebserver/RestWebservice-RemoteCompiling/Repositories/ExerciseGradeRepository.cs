@@ -18,7 +18,11 @@ namespace RestWebservice_RemoteCompiling.Repositories
             _context.ExerciseGrades.Add(exerciseGrade);
             return _context.SaveChanges();
         }
-        
+        public int Update(ExerciseGrade exerciseGrade)
+        {
+            _context.ExerciseGrades.Update(exerciseGrade);
+            return _context.SaveChanges();
+        }
         public List<ExerciseGrade> Get(string studentId)
         {
             return _context.ExerciseGrades.Where(x=> x.UserToGrade.LdapUid == studentId).ToList();
@@ -29,9 +33,9 @@ namespace RestWebservice_RemoteCompiling.Repositories
             return _context.ExerciseGrades.FirstOrDefault(x => x.Exercise.Id == exerciseId && x.UserToGrade.LdapUid == studentId);
         }
         
-        public List<ExerciseGrade> Get(int exerciseId)
+        public ExerciseGrade Get(int exerciseGradeId)
         {
-            return _context.ExerciseGrades.Where(x => x.Exercise.Id == exerciseId).ToList();
+            return _context.ExerciseGrades.First(x => x.Exercise.Id == exerciseGradeId);
         }
         
     }

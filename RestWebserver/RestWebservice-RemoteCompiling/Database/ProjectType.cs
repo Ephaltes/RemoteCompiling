@@ -1,6 +1,6 @@
 ﻿namespace RestWebservice_RemoteCompiling.Database
 {
-    public enum FileNodeType
+    public enum ProjectType
     {
         Csharp,
         Cpp,

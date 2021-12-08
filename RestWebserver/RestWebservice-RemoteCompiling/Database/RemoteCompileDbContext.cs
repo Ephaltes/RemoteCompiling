@@ -9,7 +9,7 @@ namespace RestWebservice_RemoteCompiling.Database
         {
             Database.EnsureCreated();
             NpgsqlConnection.GlobalTypeMapper.MapEnum<UserRole>();
-            NpgsqlConnection.GlobalTypeMapper.MapEnum<FileNodeType>();
+            NpgsqlConnection.GlobalTypeMapper.MapEnum<ProjectType>();
         }
         
         public DbSet<User> Users { get; set; }
@@ -23,7 +23,7 @@ namespace RestWebservice_RemoteCompiling.Database
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.HasPostgresEnum<UserRole>();
-            builder.HasPostgresEnum<FileNodeType>();
+            builder.HasPostgresEnum<ProjectType>();
         }
     }
 }

@@ -16,16 +16,23 @@ namespace RestWebservice_RemoteCompiling.Handlers
         private readonly IUserRepository _userRepository;
         private readonly IExerciseGradeRepository _exerciseGradeRepository;
 
+        public GradeExerciseHandler(IExerciseRepository exerciseRepository, IUserRepository userRepository, IExerciseGradeRepository exerciseGradeRepository)
+        {
+            _exerciseRepository = exerciseRepository;
+            _userRepository = userRepository;
+            _exerciseGradeRepository = exerciseGradeRepository;
+        }
+
         public async Task<CustomResponse<bool>> Handle(GradeExerciseCommand request, CancellationToken cancellationToken)
         {
-            var obj = new Database.ExerciseGrade();
+            var obj = _exerciseGradeRepository.Get(request.Id);
             obj.Feedback = request.Feedback;
             obj.Grade = request.Grading;
             obj.IsGraded = request.Graded;
             obj.UserToGrade = _userRepository.GetUserByLdapUid(request.Student_exercice_id) ?? throw new Exception("user not found");
             obj.Exercise = _exerciseRepository.Get(request.Id) ?? throw new Exception("Exercise not found");
 
-            _exerciseGradeRepository.Add(obj);
+            _exerciseGradeRepository.Update(obj);
 
             return CustomResponse.Success(true);
         }

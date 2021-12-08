@@ -15,7 +15,8 @@ namespace RestWebservice_RemoteCompiling.Repositories
         public int Add(Exercise exercise)
         {
             _context.Exercises.Add(exercise);
-            return _context.SaveChanges();
+            _context.SaveChanges();
+            return exercise.Id;
         }
         
         public void Update(Exercise exercise)

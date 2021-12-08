@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace RestWebservice_RemoteCompiling.Database
+using RestWebservice_RemoteCompiling.Database;
+
+namespace RestWebservice_RemoteCompiling.Entities
 {
-    public class File
+    public class FileEntity
     {
         public int Id
         {
@@ -23,17 +25,12 @@ namespace RestWebservice_RemoteCompiling.Database
             set;
         }
 
-        public virtual ICollection<Checkpoint> Checkpoints
+        public virtual ICollection<CheckPointEntity> Checkpoints
         {
             get;
             set;
-        } = new List<Checkpoint>();
-        
-        
-        public virtual Exercise Exercise
-        {
-            get;
-            set;
-        }
+        } = new List<CheckPointEntity>();
+
+
     }
 }

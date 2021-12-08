@@ -1,36 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace RestWebservice_RemoteCompiling.Database
 {
-    public class File
+    public class Project
     {
         public int Id
         {
             get;
             set;
         }
-
-        public DateTime LastModified
+        public string ProjectName
         {
             get;
             set;
-        } = DateTime.Now;
-
-        public string FileName
+        }
+        public string stdin
         {
             get;
             set;
         }
 
-        public virtual ICollection<Checkpoint> Checkpoints
+        public virtual List<File> Files
         {
             get;
             set;
-        } = new List<Checkpoint>();
-        
-        
-        public virtual Exercise Exercise
+        } = new();
+        public ProjectType ProjectType
         {
             get;
             set;

@@ -12,26 +12,34 @@ using RestWebservice_RemoteCompiling.Repositories;
 
 namespace RestWebservice_RemoteCompiling.Handlers
 {
-    public class RemoveFileForUserHandler : IRequestHandler<RemoveFileForUserCommand, CustomResponse<bool>>
+    public class RemoveFileForProjectHandler : IRequestHandler<RemoveFileForProjectCommand, CustomResponse<bool>>
     {
         private readonly IExerciseRepository _exerciseRepository;
         private readonly IUserRepository _userRepository;
-        public RemoveFileForUserHandler(IUserRepository userRepository, IExerciseRepository exerciseRepository)
+        public RemoveFileForProjectHandler(IUserRepository userRepository, IExerciseRepository exerciseRepository)
         {
             _userRepository = userRepository;
             _exerciseRepository = exerciseRepository;
         }
 
-        public async Task<CustomResponse<bool>> Handle(RemoveFileForUserCommand request, CancellationToken cancellationToken)
+        public async Task<CustomResponse<bool>> Handle(RemoveFileForProjectCommand request, CancellationToken cancellationToken)
         {
             string ldapIdent = request.Token.Claims.First(x => x.Type == ClaimTypes.Sid).Value;
             User? ldapUser = _userRepository.GetUserByLdapUid(ldapIdent);
 
-            File? fileToDelete = ldapUser.Files.FirstOrDefault(x => x.Id == request.FileId);
-
+            Project projectInWhichToDelete = ldapUser.Projects.FirstOrDefault(x => x.Id == request.ProjectId);
+            var fileToDelete = projectInWhichToDelete.Files.FirstOrDefault(x => x.Id == request.FileId);
+                
             if (fileToDelete is not null)
             {
-                ldapUser.Files.Remove(fileToDelete);
+                foreach (var item in ldapUser.Projects)
+                {
+                    if (item.Id == request.ProjectId)
+                    {
+                        item.Files.Remove(fileToDelete);
+                        break;
+                    }
+                }
                 _userRepository.UpdateUser(ldapUser);
             }
 

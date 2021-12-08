@@ -16,7 +16,12 @@ namespace RestWebservice_RemoteCompiling.Database
         public UserRole UserRole { get; set; }
         public string Email { get; set; }
         public string Name { get; set; }
-        public virtual ICollection<File> Files { get; set; }
+
+        public virtual ICollection<Project> Projects
+        {
+            get;
+            set;
+        } = new List<Project>();
     }
 
     public enum UserRole

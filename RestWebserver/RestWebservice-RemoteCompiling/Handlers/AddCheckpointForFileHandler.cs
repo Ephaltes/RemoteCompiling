@@ -13,7 +13,7 @@ using RestWebservice_RemoteCompiling.Repositories;
 
 namespace RestWebservice_RemoteCompiling.Handlers
 {
-    public class AddCheckpointForFileHandler : IRequestHandler<AddCheckpointForFileCommand, CustomResponse<bool>>
+    public class AddCheckpointForFileHandler : IRequestHandler<AddCheckpointForFileCommand, CustomResponse<int>>
     {
         private readonly IExerciseRepository _exerciseRepository;
         private readonly IUserRepository _userRepository;
@@ -22,25 +22,30 @@ namespace RestWebservice_RemoteCompiling.Handlers
             _userRepository = userRepository;
             _exerciseRepository = exerciseRepository;
         }
-        public async Task<CustomResponse<bool>> Handle(AddCheckpointForFileCommand request, CancellationToken cancellationToken)
+        public async Task<CustomResponse<int>> Handle(AddCheckpointForFileCommand request, CancellationToken cancellationToken)
         {
             string ldapIdent = request.Token.Claims.First(x => x.Type == ClaimTypes.Sid).Value;
             User? ldapUser = _userRepository.GetUserByLdapUid(ldapIdent);
 
-            if (!ldapUser.Files.Any(x => x.Id == request.FileId))
-                return CustomResponse.Error<bool>(404, "File not found");
+            if (!ldapUser.Projects.Any(x => x.Id == request.FileId))
+                return CustomResponse.Error<int>(404, "File not found");
 
+            foreach (Project ldapUserProject in ldapUser.Projects)
+            {
+                ldapUserProject.Files.ForEach(x =>
+                                              {
 
-            foreach (File file in ldapUser.Files)
-                if (file.Id == request.FileId)
-                {
-                    file.LastModified = DateTime.Now;
-                    file.Checkpoints.Add(request.Checkpoint);
-                }
-
+                                                  if (x.Id == request.FileId)
+                                                  {
+                                                      x.LastModified = DateTime.Now;
+                                                      x.Checkpoints.Add(request.Checkpoint);
+                                                  }
+                                              });
+            }
+            
             _userRepository.UpdateUser(ldapUser);
 
-            return CustomResponse.Success(true);
+            return CustomResponse.Success(request.Checkpoint.Id);
         }
     }
 }

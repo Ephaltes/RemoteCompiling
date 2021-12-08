@@ -10,7 +10,6 @@ namespace RestWebservice_RemoteCompiling.Database
     {
         public int Id { get; set; }
         public string Code { get; set; }
-        public string Stdin { get; set; }
         public DateTime Created { get; set; } = DateTime.Now;
     }
 }

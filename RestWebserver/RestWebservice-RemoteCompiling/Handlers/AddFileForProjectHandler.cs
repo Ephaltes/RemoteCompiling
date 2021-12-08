@@ -14,17 +14,17 @@ using RestWebservice_RemoteCompiling.Repositories;
 
 namespace RestWebservice_RemoteCompiling.Handlers
 {
-    public class AddFileForUserHandler : IRequestHandler<AddFileForUserCommand,CustomResponse<bool>>
+    public class AddFileForProjectHandler : IRequestHandler<AddFileForProjectCommand,CustomResponse<int>>
     {
         private readonly IUserRepository _userRepository;
         private readonly IExerciseRepository _exerciseRepository;
-        public AddFileForUserHandler(IUserRepository userRepository, IExerciseRepository exerciseRepository)
+        public AddFileForProjectHandler(IUserRepository userRepository, IExerciseRepository exerciseRepository)
         {
             _userRepository = userRepository;
             _exerciseRepository = exerciseRepository;
         }
 
-        public async Task<CustomResponse<bool>> Handle(AddFileForUserCommand request, CancellationToken cancellationToken)
+        public async Task<CustomResponse<int>> Handle(AddFileForProjectCommand request, CancellationToken cancellationToken)
         {
             string ldapIdent = request.Token.Claims.First(x => x.Type == ClaimTypes.Sid).Value;
             var ldapUser = _userRepository.GetUserByLdapUid(ldapIdent);
@@ -35,20 +35,25 @@ namespace RestWebservice_RemoteCompiling.Handlers
                                           {
                                               new Checkpoint()
                                               {
-                                                  Code = request.File.CodeEntity.Value,
+                                                  Code = request.File.Checkpoints.Last().Code,
                                               }
                                           },
-                            Exercise = null,
-                            FileName = request.File.Name,
-                            FileNodeType = request.File.Type
+                            FileName = request.File.FileName,
                         };
 
             var user = _userRepository.GetUserByLdapUid(ldapUser.LdapUid);
-            user.Files.Add(file);
-            
-            _userRepository.UpdateUser(user);
+            foreach (var x in user.Projects)
+            {
+                if (x.Id == request.ProjectId)
+                {
+                    x.Files.Add(file);
+                    break;
+                }
+            }
 
-            return CustomResponse.Success(true);
+            _userRepository.UpdateUser(user);
+            
+            return CustomResponse.Success(file.Id);
         }
     }
 }
