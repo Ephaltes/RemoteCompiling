@@ -3,43 +3,43 @@ using System.Collections.Generic;
 
 namespace RestWebservice_RemoteCompiling.Database
 {
-    public class File
+    public class Exercise
     {
         public int Id
         {
             get;
             set;
         }
-
-        public DateTime LastModified
-        {
-            get;
-            set;
-        }
-
-        public string FileName
-        {
-            get;
-            set;
-        }
-
-        public virtual ICollection<Checkpoint> Checkpoints
-        {
-            get;
-            set;
-        }
-
-        public FileNodeType FileNodeType
+        public string Name
         {
             get;
             set;
         }
         
-        public virtual Exercise Exercise
+        public virtual User Author
         {
             get;
             set;
         }
         
+        public string Description
+        {
+            get;
+            set;
+        }
+        
+        public string TaskDefinition
+        {
+            get;
+            set;
+        }
+        
+        public DateTime DueDate
+        {
+            get;
+            set;
+        }
+        
+        public virtual List<ExerciseFile> Files { get; set; }
     }
 }

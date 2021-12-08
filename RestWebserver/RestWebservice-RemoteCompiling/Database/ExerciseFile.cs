@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace RestWebservice_RemoteCompiling.Database
 {
-    public class File
+    public class ExerciseFile
     {
         public int Id
         {
@@ -23,7 +23,7 @@ namespace RestWebservice_RemoteCompiling.Database
             set;
         }
 
-        public virtual ICollection<Checkpoint> Checkpoints
+        public virtual Checkpoint Checkpoint
         {
             get;
             set;
@@ -35,11 +35,16 @@ namespace RestWebservice_RemoteCompiling.Database
             set;
         }
         
-        public virtual Exercise Exercise
+        public User User
         {
             get;
             set;
         }
         
+        public Exercise Exercise
+        {
+            get;
+            set;
+        }
     }
 }

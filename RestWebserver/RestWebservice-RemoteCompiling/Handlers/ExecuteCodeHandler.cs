@@ -8,6 +8,8 @@ using RestWebservice_RemoteCompiling.Entities;
 using RestWebservice_RemoteCompiling.Extensions;
 using RestWebservice_RemoteCompiling.Helpers;
 using RestWebservice_RemoteCompiling.JsonObjClasses;
+using RestWebservice_RemoteCompiling.JsonObjClasses.Piston;
+
 using Serilog;
 
 namespace RestWebservice_RemoteCompiling.Handlers

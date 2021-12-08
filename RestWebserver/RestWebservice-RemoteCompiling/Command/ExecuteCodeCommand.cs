@@ -2,6 +2,7 @@
 using MediatR;
 using RestWebservice_RemoteCompiling.Entities;
 using RestWebservice_RemoteCompiling.JsonObjClasses;
+using RestWebservice_RemoteCompiling.JsonObjClasses.Piston;
 
 namespace RestWebservice_RemoteCompiling.Command
 {

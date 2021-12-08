@@ -1,4 +1,4 @@
-﻿namespace RestWebservice_RemoteCompiling.JsonObjClasses
+﻿namespace RestWebservice_RemoteCompiling.JsonObjClasses.Piston
 {
     public class PistonCompileAndRun
     {
