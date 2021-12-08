@@ -44,6 +44,7 @@
 
   <ItemGroup>
     <Compile Remove="UnitTests\**" />
+    <Compile Remove="Repositories\IExerciceRepository.cs" />
   </ItemGroup>
 
   <ItemGroup>
