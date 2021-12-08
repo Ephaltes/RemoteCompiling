@@ -42,6 +42,7 @@ namespace RestWebservice_RemoteCompiling.Helpers
             {
                 new Claim(ClaimTypes.Name, user.Name),
                 new Claim(ClaimTypes.Role, user.UserRole.ToString()),
+                new Claim(ClaimTypes.Sid,user.LdapUid),
                 new Claim(ClaimTypes.NameIdentifier, nameIdentifierGuid.ToString("N"))
             };
 
