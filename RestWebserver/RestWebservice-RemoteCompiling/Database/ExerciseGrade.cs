@@ -11,6 +11,5 @@ namespace RestWebservice_RemoteCompiling.Database
         public int Grade { get; set; }
         public bool IsGraded { get; set; }
         public string Feedback { get; set; }
-        
     }
 }
