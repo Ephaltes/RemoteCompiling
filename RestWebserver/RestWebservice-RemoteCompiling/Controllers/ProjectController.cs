@@ -46,7 +46,7 @@ namespace RestWebservice_RemoteCompiling.Controllers
             return response.ToResponse();
         }
 
-        [HttpDelete("update")]
+        [HttpPut("update")]
         public async Task<IActionResult> UpdateProject(UpdateProjectCommand command)
         {
             command.Token = GetTokenFromAuthorization();

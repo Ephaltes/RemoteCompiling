@@ -23,10 +23,9 @@ namespace RestWebservice_RemoteCompiling.Handlers
         {
             string ldapIdent = request.Token.Claims.First(x => x.Type == ClaimTypes.Sid).Value;
             User? ldapUser = _userRepository.GetUserByLdapUid(ldapIdent);
+            
 
-            if (!ldapUser.Projects.Any(x => x.Id == request.FileId))
-                return CustomResponse.Error<int>(404, "File not found");
-
+            bool flag = false;
             foreach (Project ldapUserProject in ldapUser.Projects)
             {
                 ldapUserProject.Files.ForEach(x =>
@@ -35,10 +34,16 @@ namespace RestWebservice_RemoteCompiling.Handlers
                                                   {
                                                       x.LastModified = DateTime.Now;
                                                       x.Checkpoints.Add(request.Checkpoint);
+                                                      flag = true;
+                                                      return;
                                                   }
                                               });
             }
 
+            if (!flag)
+            {
+                return CustomResponse.Error<int>(404, "File not found");
+            }
             _userRepository.UpdateUser(ldapUser);
 
             return CustomResponse.Success(request.Checkpoint.Id);
