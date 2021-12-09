@@ -20,12 +20,13 @@ namespace RestWebservice_RemoteCompiling.Controllers
     [ApiController]
     [EnableCors("AllAllowedPolicy")]
     [Authorize]
-    public class ExerciceController : Controller
+    public class ExerciceController : BaseController
     {
         private readonly IMediator _mediator;
         private readonly ITokenService _tokenService;
 
         public ExerciceController(IMediator mediator, ITokenService tokenService)
+            : base(tokenService)
         {
             _mediator = mediator;
             _tokenService = tokenService;
@@ -48,76 +49,40 @@ namespace RestWebservice_RemoteCompiling.Controllers
             return response.ToResponse();
         }
 
-        [HttpPost("")]
+        [HttpPost]
         public async Task<IActionResult> CreateExercise(CreateExerciseCommand command)
         {
-            string data = Request.Headers["Authorization"].ToString().Split(" ")[1];
-            _tokenService.ValidateToken(data);
-            JwtSecurityToken? token = _tokenService.GetToken(data);
-            command.Token = token;
+            command.Token = GetTokenFromAuthorization();
 
             CustomResponse<int> result = await _mediator.Send(command);
 
             return result.ToResponse();
         }
 
-        [HttpDelete("{id})")]
-        public async Task<IActionResult> DeleteExercise([FromRoute] int id)
+        [HttpDelete]
+        public async Task<IActionResult> DeleteExercise(DeleteExerciseCommand command)
         {
-            string data = Request.Headers["Authorization"].ToString().Split(" ")[1];
-            _tokenService.ValidateToken(data);
-            JwtSecurityToken? token = _tokenService.GetToken(data);
-
-            DeleteExerciseCommand command = new DeleteExerciseCommand
-                                            {
-                                                Id = id,
-                                                Token = token
-                                            };
+            command.Token =  GetTokenFromAuthorization();
 
             CustomResponse<bool> result = await _mediator.Send(command);
 
             return result.ToResponse();
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateExercise([FromRoute] int id, UpdateExerciseCommand command)
+        [HttpPut]
+        public async Task<IActionResult> UpdateExercise(UpdateExerciseCommand command)
         {
-            string data = Request.Headers["Authorization"].ToString().Split(" ")[1];
-            _tokenService.ValidateToken(data);
-            JwtSecurityToken? token = _tokenService.GetToken(data);
-
-            command.Id = id;
-            command.Token = token;
+            command.Token = GetTokenFromAuthorization();
 
             CustomResponse<bool> result = await _mediator.Send(command);
 
             return result.ToResponse();
         }
 
-        [HttpPut("{id}/student/{student_exercice_id}")]
-        public async Task<IActionResult> GradeExercise([FromRoute] int id, [FromRoute] string student_exercice_id, GradeExerciseCommand command)
+        [HttpPost("handin")]
+        public async Task<IActionResult> HandInExercise( HandInCommand command)
         {
-            string data = Request.Headers["Authorization"].ToString().Split(" ")[1];
-            _tokenService.ValidateToken(data);
-            JwtSecurityToken? token = _tokenService.GetToken(data);
-
-            command.Id = id;
-            command.Student_exercice_id = student_exercice_id;
-            command.Token = token;
-
-            CustomResponse<bool> response = await _mediator.Send(command);
-
-            return response.ToResponse();
-        }
-        [HttpPost("handin/{ExerciseId}")]
-        public async Task<IActionResult> HandInExercise([FromRoute] int ExerciseId, HandInCommand command)
-        {
-            string data = Request.Headers["Authorization"].ToString().Split(" ")[1];
-            _tokenService.ValidateToken(data);
-            JwtSecurityToken? token = _tokenService.GetToken(data);
-
-            command.ExerciseId = ExerciseId;
-            command.Token = token;
+            command.Token = GetTokenFromAuthorization();
 
             CustomResponse<bool> response = await _mediator.Send(command);
 

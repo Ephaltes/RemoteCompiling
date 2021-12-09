@@ -2,13 +2,13 @@
 {
     public class GradeExerciseCommand : BaseCommand<bool>
     {
-        public int Id
+        public int ExerciseId
         {
             get;
             set;
         }
 
-        public string Student_exercice_id
+        public string StudentId
         {
             get;
             set;

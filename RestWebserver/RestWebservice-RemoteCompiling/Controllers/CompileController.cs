@@ -31,6 +31,11 @@ namespace RestWebservice_RemoteCompiling.Controllers
             _mediator = mediator;
         }
 
+        /// <summary>
+        /// Test Comment
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> ExecuteCodeWithVersion([FromBody] ExecuteCodeCommand command)
         {

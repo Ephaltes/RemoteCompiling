@@ -31,20 +31,15 @@ namespace RestWebservice_RemoteCompiling.Handlers
             User? ldapUser = _userRepository.GetUserByLdapUid(ldapIdent);
 
 
-            foreach (var item in ldapUser.Projects)
+            foreach (var item in ldapUser.Projects.Where(x=> x.Id == request.ProjectId))
             {
-                if (item.Id == request.ProjectId)
+                foreach (File file in item.Files.Where(file => file.Id == request.FileId))
                 {
-                    foreach (var file in item.Files)
-                    {
-                        if (file.Id == request.FileId)
-                        {
-                            file.FileName = request.FileName;
-                            break;
-                        }
-                    }
+                    file.FileName = request.FileName;
+                    break;
                 }
             }
+            
             _userRepository.UpdateUser(ldapUser);
             return CustomResponse.Success(true);
         }

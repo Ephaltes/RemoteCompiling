@@ -7,7 +7,7 @@ namespace RestWebservice_RemoteCompiling.Command
     {
        public FileEntity File { get; set; }
        
-       internal int ProjectId 
+       public int ProjectId 
        {
            get;
            set;

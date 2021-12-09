@@ -25,12 +25,12 @@ namespace RestWebservice_RemoteCompiling.Handlers
 
         public async Task<CustomResponse<bool>> Handle(GradeExerciseCommand request, CancellationToken cancellationToken)
         {
-            var obj = _exerciseGradeRepository.Get(request.Id);
+            var obj = _exerciseGradeRepository.Get(request.ExerciseId);
             obj.Feedback = request.Feedback;
             obj.Grade = request.Grading;
             obj.IsGraded = request.Graded;
-            obj.UserToGrade = _userRepository.GetUserByLdapUid(request.Student_exercice_id) ?? throw new Exception("user not found");
-            obj.Exercise = _exerciseRepository.Get(request.Id) ?? throw new Exception("Exercise not found");
+            obj.UserToGrade = _userRepository.GetUserByLdapUid(request.StudentId) ?? throw new Exception("user not found");
+            obj.Exercise = _exerciseRepository.Get(request.ExerciseId) ?? throw new Exception("Exercise not found");
 
             _exerciseGradeRepository.Update(obj);
 

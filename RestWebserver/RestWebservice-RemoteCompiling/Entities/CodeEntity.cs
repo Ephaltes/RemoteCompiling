@@ -2,11 +2,6 @@
 {
     public class CodeEntity
     {
-        public string Language
-        {
-            get;
-            set;
-        }
         public string Uri
         {
             get;

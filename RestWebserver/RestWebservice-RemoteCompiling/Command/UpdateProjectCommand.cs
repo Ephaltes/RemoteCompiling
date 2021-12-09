@@ -1,32 +1,36 @@
-﻿using System.Collections.Generic;
+﻿using MediatR;
 
+using Microsoft.AspNetCore.Mvc;
+
+using RestWebservice_RemoteCompiling.Database;
 using RestWebservice_RemoteCompiling.Entities;
 
 namespace RestWebservice_RemoteCompiling.Command
 {
-    public class UpdateExerciseCommand : BaseCommand<bool>
+    public class UpdateProjectCommand : BaseCommand<bool>
     {
-        public int Id
+        public int ProjectId
         {
             get;
             set;
         }
-        public string? Name
+        
+        public string? ProjectName
         {
             get;
             set;
         }
-
-        public string? Description
+        public string? StdIn
         {
             get;
             set;
         }
-
-        public ProjectEntity TemplateProject
+        
+        public ProjectType? ProjectType
         {
             get;
             set;
         }
+        
     }
 }

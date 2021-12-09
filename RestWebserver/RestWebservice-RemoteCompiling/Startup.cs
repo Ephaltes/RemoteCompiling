@@ -1,3 +1,4 @@
+using System.IO;
 using System.Text;
 
 using FluentValidation;
@@ -65,6 +66,7 @@ namespace RestWebservice_RemoteCompiling
                                                               .UseNpgsql(connectionString)
                 , ServiceLifetime.Singleton);
 
+            
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                               {
