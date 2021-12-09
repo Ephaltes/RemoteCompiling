@@ -9,7 +9,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestWebService-RemoteCompil
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestWebservice-StaticCodeAnalysis", "RestWebservice-StaticCodeAnalysis\RestWebservice-StaticCodeAnalysis.csproj", "{307E7D39-67D2-4373-A260-74AFB9C19F0C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestWebservice-StaticCodeAnalysis.DTOs", "RestWebservice-StaticCodeAnalysis.DTOs\RestWebservice-StaticCodeAnalysis.DTOs.csproj", "{6D226074-67A9-432B-934C-01BB7A9C3F09}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestWebservice-StaticCodeAnalysis.DTOs", "RestWebservice-StaticCodeAnalysis.DTOs\RestWebservice-StaticCodeAnalysis.DTOs.csproj", "{6D226074-67A9-432B-934C-01BB7A9C3F09}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestWebService-StaticCodeAnalysis.Services", "RestWebService-StaticCodeAnalysis.Services\RestWebService-StaticCodeAnalysis.Services.csproj", "{822F4A70-B603-43CD-9FBD-19F9A5029D95}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestWebService-StaticCodeAnalysis.Services.Interfaces", "RestWebService-StaticCodeAnalysis.Services.Interfaces\RestWebService-StaticCodeAnalysis.Services.Interfaces.csproj", "{AEA1FFAA-76A8-49EA-A9FB-868458CF2569}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestWebService-StaticCodeAnalysis.Entities", "RestWebService-StaticCodeAnalysis.Entities\RestWebService-StaticCodeAnalysis.Entities.csproj", "{B83D8008-0442-4A7E-9530-B3EC5E21EF2C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +39,18 @@ Global
 		{6D226074-67A9-432B-934C-01BB7A9C3F09}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D226074-67A9-432B-934C-01BB7A9C3F09}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D226074-67A9-432B-934C-01BB7A9C3F09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{822F4A70-B603-43CD-9FBD-19F9A5029D95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{822F4A70-B603-43CD-9FBD-19F9A5029D95}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{822F4A70-B603-43CD-9FBD-19F9A5029D95}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{822F4A70-B603-43CD-9FBD-19F9A5029D95}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AEA1FFAA-76A8-49EA-A9FB-868458CF2569}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEA1FFAA-76A8-49EA-A9FB-868458CF2569}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEA1FFAA-76A8-49EA-A9FB-868458CF2569}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEA1FFAA-76A8-49EA-A9FB-868458CF2569}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B83D8008-0442-4A7E-9530-B3EC5E21EF2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B83D8008-0442-4A7E-9530-B3EC5E21EF2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B83D8008-0442-4A7E-9530-B3EC5E21EF2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B83D8008-0442-4A7E-9530-B3EC5E21EF2C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

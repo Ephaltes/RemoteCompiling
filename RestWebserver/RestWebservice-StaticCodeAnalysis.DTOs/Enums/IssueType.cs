@@ -18,12 +18,12 @@ namespace RestWebservice_StaticCodeAnalysis.DTOs.Enums
         /// <summary>
         /// Enum BugsEnum for Bugs
         /// </summary>
-        [EnumMember(Value = "Bugs")]
-        Bugs = 1,
+        [EnumMember(Value = "Bug")]
+        Bug = 1,
         /// <summary>
         /// Enum VulnerabilitiesEnum for Vulnerabilities
         /// </summary>
-        [EnumMember(Value = "Vulnerabilities")]
-        Vulnerabilities = 2
+        [EnumMember(Value = "Vulnerability")]
+        Vulnerability = 2
     }
 }
