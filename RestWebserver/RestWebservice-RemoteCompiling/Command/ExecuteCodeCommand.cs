@@ -10,6 +10,6 @@ namespace RestWebservice_RemoteCompiling.Command
     {
         public string Language { get; set; }
         public string Version { get; set; }
-        public JsonObjClasses.Code Code { get; set; }
+        public Code Code { get; set; }
     }
 }

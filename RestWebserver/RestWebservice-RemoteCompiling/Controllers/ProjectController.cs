@@ -13,7 +13,7 @@ using RestWebservice_RemoteCompiling.Helpers;
 
 namespace RestWebservice_RemoteCompiling.Controllers
 {
-    [Microsoft.AspNetCore.Components.Route("Api/Project")]
+    [Microsoft.AspNetCore.Components.Route("api/project")]
     [ApiController]
     [EnableCors("AllAllowedPolicy")]
     [Authorize]
@@ -26,34 +26,34 @@ namespace RestWebservice_RemoteCompiling.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost("Add")]
+        [HttpPost("add")]
         public async Task<IActionResult> AddProjectForUser(AddProjectCommand command)
         {
             command.Token = GetTokenFromAuthorization();
-            
+
             CustomResponse<int> result = await _mediator.Send(command);
 
             return result.ToResponse();
         }
-        
-        [HttpDelete("Delete")]
+
+        [HttpDelete("delete")]
         public async Task<IActionResult> DeleteProject(DeleteProjectCommand command)
         {
             command.Token = GetTokenFromAuthorization();
-            
+
             CustomResponse<bool> response = await _mediator.Send(command);
+
             return response.ToResponse();
         }
-        
-        [HttpDelete("Update")]
+
+        [HttpDelete("update")]
         public async Task<IActionResult> UpdateProject(UpdateProjectCommand command)
         {
             command.Token = GetTokenFromAuthorization();
-            
+
             CustomResponse<bool> response = await _mediator.Send(command);
+
             return response.ToResponse();
         }
-        
-        
     }
 }

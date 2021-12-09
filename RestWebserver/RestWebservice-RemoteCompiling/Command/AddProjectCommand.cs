@@ -4,6 +4,10 @@ namespace RestWebservice_RemoteCompiling.Command
 {
     public class AddProjectCommand : BaseCommand<int>
     {
-        public ProjectEntity Project { get; set; }
+        public ProjectEntity Project
+        {
+            get;
+            set;
+        }
     }
 }

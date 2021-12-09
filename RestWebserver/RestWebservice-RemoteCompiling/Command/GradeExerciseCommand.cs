@@ -13,7 +13,7 @@
             get;
             set;
         }
-        
+
         public bool Graded
         {
             get;

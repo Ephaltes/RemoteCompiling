@@ -9,12 +9,14 @@ namespace RestWebservice_RemoteCompiling.Database
             get;
             set;
         }
+
         public string ProjectName
         {
             get;
             set;
         }
-        public string stdin
+
+        public string StdIn
         {
             get;
             set;
@@ -24,8 +26,8 @@ namespace RestWebservice_RemoteCompiling.Database
         {
             get;
             set;
-        } = new();
-        
+        } = new List<ExerciseFile>();
+
         public ProjectType ProjectType
         {
             get;

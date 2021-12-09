@@ -16,53 +16,50 @@ namespace RestWebservice_RemoteCompiling.Handlers
     public class UpdateExerciseHandler : IRequestHandler<UpdateExerciseCommand, CustomResponse<bool>>
     {
         private readonly IExerciseRepository _exerciseRepository;
-        private readonly IUserRepository _userRepository;
 
-        public UpdateExerciseHandler(IExerciseRepository exerciseRepository, IUserRepository userRepository)
+        public UpdateExerciseHandler(IExerciseRepository exerciseRepository)
         {
             _exerciseRepository = exerciseRepository;
-            _userRepository = userRepository;
         }
 
 
         public async Task<CustomResponse<bool>> Handle(UpdateExerciseCommand request, CancellationToken cancellationToken)
         {
-            var current = _exerciseRepository.Get(request.Id);
-            
+            Exercise current = _exerciseRepository.Get(request.Id);
+
             current.Name = request.Name ?? current.Name;
             current.Description = request.Description ?? current.Description;
 
-            var tempFileList = new List<ExerciseTemplateFiles>();
-            foreach (var item in request.TemplateProject.Files)
+            List<ExerciseTemplateFiles> tempFileList = new List<ExerciseTemplateFiles>();
+            foreach (FileEntity item in request.TemplateProject.Files)
             {
-                var y = new ExerciseTemplateFiles()
-                        {
-                            FileName = item.FileName,
-                            LastModified = DateTime.Now,
-                           
-                        };
+                ExerciseTemplateFiles y = new ExerciseTemplateFiles
+                                          {
+                                              FileName = item.FileName,
+                                              LastModified = DateTime.Now
+                                          };
 
-                var a = item.Checkpoints.Last();
-                
-                y.Checkpoints.Add(new Checkpoint()
+                CheckPointEntity a = item.Checkpoints.Last();
+
+                y.Checkpoints.Add(new Checkpoint
                                   {
                                       Code = a.Code,
-                                      Created = DateTime.Now,
+                                      Created = DateTime.Now
                                   });
-                
+
                 tempFileList.Add(y);
             }
-            
-            current.Template = new ExerciseTemplateProject()
+
+            current.Template = new ExerciseTemplateProject
                                {
-                                    ProjectName = request.TemplateProject.ProjectName,
-                                    Files = tempFileList,
-                                    LastModified = DateTime.Now,
-                                    ProjectType = request.TemplateProject.ProjectType
+                                   ProjectName = request.TemplateProject.ProjectName,
+                                   Files = tempFileList,
+                                   LastModified = DateTime.Now,
+                                   ProjectType = request.TemplateProject.ProjectType
                                };
-            
+
             _exerciseRepository.Update(current);
-            
+
             return CustomResponse.Success(true);
         }
     }

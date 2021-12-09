@@ -13,7 +13,7 @@ using RestWebservice_RemoteCompiling.Helpers;
 
 namespace RestWebservice_RemoteCompiling.Controllers
 {
-    [Route("Api/File")]
+    [Route("api/file")]
     [ApiController]
     [EnableCors("AllAllowedPolicy")]
     [Authorize]
@@ -25,48 +25,47 @@ namespace RestWebservice_RemoteCompiling.Controllers
         {
             _mediator = mediator;
         }
-        [HttpPost("Add")]
+        [HttpPost("add")]
         public async Task<IActionResult> AddFileForProject(AddFileForProjectCommand command)
         {
             command.Token = GetTokenFromAuthorization();
-            
+
             CustomResponse<int> result = await _mediator.Send(command);
 
             return result.ToResponse();
         }
-        
-      
 
-        [HttpPost("AddCheckPoint")]
+
+        [HttpPost("addCheckPoint")]
         public async Task<IActionResult> AddCheckpointForFile(AddCheckpointForFileCommand command)
         {
             command.Token = GetTokenFromAuthorization();
-            
+
             CustomResponse<int> result = await _mediator.Send(command);
 
             return result.ToResponse();
         }
 
 
-        [HttpPut("Update")]
+        [HttpPut("update")]
         public async Task<IActionResult> UpdateFileForUser(UpdateFileForProjectCommand command)
         {
             command.Token = GetTokenFromAuthorization();
-            
+
             CustomResponse<bool> result = await _mediator.Send(command);
 
             return result.ToResponse();
         }
 
 
-        [HttpDelete("Remove")]
+        [HttpDelete("remove")]
         public async Task<IActionResult> RemoveFileForProject(RemoveFileForProjectCommand command)
         {
             command.Token = GetTokenFromAuthorization();
-            
+
             CustomResponse<bool> response = await _mediator.Send(command);
+
             return response.ToResponse();
         }
-
     }
 }

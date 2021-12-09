@@ -14,7 +14,7 @@ namespace RestWebservice_RemoteCompiling.Database
             get;
             set;
         }
-        public string stdin
+        public string StdIn
         {
             get;
             set;

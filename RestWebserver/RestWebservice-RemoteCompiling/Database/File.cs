@@ -28,8 +28,8 @@ namespace RestWebservice_RemoteCompiling.Database
             get;
             set;
         } = new List<Checkpoint>();
-        
-        
+
+
         public virtual Exercise Exercise
         {
             get;

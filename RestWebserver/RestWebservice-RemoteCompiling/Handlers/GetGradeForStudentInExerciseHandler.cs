@@ -23,7 +23,7 @@ namespace RestWebservice_RemoteCompiling.Handlers
             ExerciseGrade? exerciseGrade = _exerciseGradeRepository.Get(request.StudentId, request.ExerciseId);
 
             if (exerciseGrade is null)
-                return CustomResponse.Error<ExerciseGrade>(404,"No grade found for this student in this exercise");
+                return CustomResponse.Error<ExerciseGrade>(404, "No grade found for this student in this exercise");
 
             return CustomResponse.Success(exerciseGrade);
         }

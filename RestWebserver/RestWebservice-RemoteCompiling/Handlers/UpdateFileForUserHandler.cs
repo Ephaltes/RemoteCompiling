@@ -1,12 +1,9 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 
 using MediatR;
-
-using Microsoft.AspNetCore.Mvc.TagHelpers;
 
 using RestWebservice_RemoteCompiling.Command;
 using RestWebservice_RemoteCompiling.Database;
@@ -17,12 +14,10 @@ namespace RestWebservice_RemoteCompiling.Handlers
 {
     public class UpdateFileForUserHandler : IRequestHandler<UpdateFileForProjectCommand, CustomResponse<bool>>
     {
-        private readonly IExerciseRepository _exerciseRepository;
         private readonly IUserRepository _userRepository;
-        public UpdateFileForUserHandler(IUserRepository userRepository, IExerciseRepository exerciseRepository)
+        public UpdateFileForUserHandler(IUserRepository userRepository)
         {
             _userRepository = userRepository;
-            _exerciseRepository = exerciseRepository;
         }
 
         public async Task<CustomResponse<bool>> Handle(UpdateFileForProjectCommand request, CancellationToken cancellationToken)
@@ -31,16 +26,18 @@ namespace RestWebservice_RemoteCompiling.Handlers
             User? ldapUser = _userRepository.GetUserByLdapUid(ldapIdent);
 
 
-            foreach (var item in ldapUser.Projects.Where(x=> x.Id == request.ProjectId))
+            foreach (Project item in ldapUser.Projects.Where(x => x.Id == request.ProjectId))
             {
                 foreach (File file in item.Files.Where(file => file.Id == request.FileId))
                 {
                     file.FileName = request.FileName;
+
                     break;
                 }
             }
-            
+
             _userRepository.UpdateUser(ldapUser);
+
             return CustomResponse.Success(true);
         }
     }

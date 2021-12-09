@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using RestWebservice_RemoteCompiling.Database;
-
 namespace RestWebservice_RemoteCompiling.Entities
 {
     public class FileEntity
@@ -30,7 +28,5 @@ namespace RestWebservice_RemoteCompiling.Entities
             get;
             set;
         } = new List<CheckPointEntity>();
-
-
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace RestWebservice_RemoteCompiling.Database
@@ -35,12 +34,13 @@ namespace RestWebservice_RemoteCompiling.Database
             get;
             set;
         }
-        
+
         public virtual User? User
         {
             get;
             set;
         }
+
         [JsonIgnore]
         public virtual ExerciseGrade? ExerciseGrade
         {

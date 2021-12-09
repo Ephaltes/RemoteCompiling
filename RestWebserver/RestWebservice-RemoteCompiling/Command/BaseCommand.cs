@@ -2,8 +2,6 @@
 
 using MediatR;
 
-using Newtonsoft.Json;
-
 using RestWebservice_RemoteCompiling.Entities;
 
 namespace RestWebservice_RemoteCompiling.Command

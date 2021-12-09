@@ -1,12 +1,4 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Cryptography;
-
-using MediatR;
-
-using RestWebservice_RemoteCompiling.Entities;
-using RestWebservice_RemoteCompiling.JsonObjClasses.Piston;
-
-namespace RestWebservice_RemoteCompiling.Command
+﻿namespace RestWebservice_RemoteCompiling.Command
 {
     public class CreateExerciseCommand : BaseCommand<int>
     {
@@ -27,6 +19,5 @@ namespace RestWebservice_RemoteCompiling.Command
             get;
             set;
         }
-
     }
 }

@@ -14,15 +14,13 @@ namespace RestWebservice_RemoteCompiling.Handlers
 {
     public class HandInExerciseHandler : IRequestHandler<HandInCommand, CustomResponse<bool>>
     {
-        private readonly IExerciseGradeRepository _exerciseGradeRepository;
         private readonly IExerciseRepository _exerciseRepository;
         private readonly IUserRepository _userRepository;
 
-        public HandInExerciseHandler(IExerciseRepository exerciseRepository, IUserRepository userRepository, IExerciseGradeRepository exerciseGradeRepository)
+        public HandInExerciseHandler(IExerciseRepository exerciseRepository, IUserRepository userRepository)
         {
             _exerciseRepository = exerciseRepository;
             _userRepository = userRepository;
-            _exerciseGradeRepository = exerciseGradeRepository;
         }
 
         public async Task<CustomResponse<bool>> Handle(HandInCommand request, CancellationToken cancellationToken)
@@ -40,7 +38,7 @@ namespace RestWebservice_RemoteCompiling.Handlers
                                    UserToGrade = user
                                };
 
-            foreach (var item in user.Projects)
+            foreach (Project item in user.Projects)
             {
                 if (item.Id != request.ProjectId)
                 {
@@ -49,12 +47,12 @@ namespace RestWebservice_RemoteCompiling.Handlers
 
                 ExerciseProject? y = new ExerciseProject
                                      {
-                                         stdin = item.stdin,
+                                         StdIn = item.StdIn,
                                          ProjectName = item.ProjectName,
                                          ProjectType = item.ProjectType
                                      };
 
-                foreach (var z in item.Files)
+                foreach (File z in item.Files)
                 {
                     y.Files.Add(new ExerciseFile
                                 {
@@ -65,6 +63,7 @@ namespace RestWebservice_RemoteCompiling.Handlers
                                     LastModified = z.LastModified
                                 });
                 }
+
                 x.Project = y;
             }
 

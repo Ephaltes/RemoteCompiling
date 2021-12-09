@@ -1,10 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Data;
-using System.IO;
 
 namespace RestWebservice_RemoteCompiling.Database
 {
@@ -12,10 +8,29 @@ namespace RestWebservice_RemoteCompiling.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public string LdapUid { get; set; }
-        public UserRole UserRole { get; set; }
-        public string Email { get; set; }
-        public string Name { get; set; }
+        public string LdapUid
+        {
+            get;
+            set;
+        }
+
+        public UserRole UserRole
+        {
+            get;
+            set;
+        }
+
+        public string Email
+        {
+            get;
+            set;
+        }
+
+        public string Name
+        {
+            get;
+            set;
+        }
 
         public virtual ICollection<Project> Projects
         {

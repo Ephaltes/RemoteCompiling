@@ -6,8 +6,7 @@ using RestWebservice_RemoteCompiling.Entities;
 
 namespace RestWebservice_RemoteCompiling.Query
 {
-    public class GetExercisesQuery : IRequest<CustomResponse<List<Entities.ExerciseEntity>>>
+    public class GetExercisesQuery : IRequest<CustomResponse<List<ExerciseEntity>>>
     {
-        
     }
 }

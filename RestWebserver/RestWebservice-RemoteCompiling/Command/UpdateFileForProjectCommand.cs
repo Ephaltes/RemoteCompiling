@@ -1,8 +1,6 @@
-﻿using RestWebservice_RemoteCompiling.Database;
-
-namespace RestWebservice_RemoteCompiling.Command
+﻿namespace RestWebservice_RemoteCompiling.Command
 {
-    public class UpdateFileForProjectCommand  : BaseCommand<bool>
+    public class UpdateFileForProjectCommand : BaseCommand<bool>
     {
         public int FileId
         {

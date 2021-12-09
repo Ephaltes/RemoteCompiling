@@ -15,12 +15,10 @@ namespace RestWebservice_RemoteCompiling.Handlers
 {
     public class AddCheckpointForFileHandler : IRequestHandler<AddCheckpointForFileCommand, CustomResponse<int>>
     {
-        private readonly IExerciseRepository _exerciseRepository;
         private readonly IUserRepository _userRepository;
-        public AddCheckpointForFileHandler(IUserRepository userRepository, IExerciseRepository exerciseRepository)
+        public AddCheckpointForFileHandler(IUserRepository userRepository)
         {
             _userRepository = userRepository;
-            _exerciseRepository = exerciseRepository;
         }
         public async Task<CustomResponse<int>> Handle(AddCheckpointForFileCommand request, CancellationToken cancellationToken)
         {
@@ -34,7 +32,6 @@ namespace RestWebservice_RemoteCompiling.Handlers
             {
                 ldapUserProject.Files.ForEach(x =>
                                               {
-
                                                   if (x.Id == request.FileId)
                                                   {
                                                       x.LastModified = DateTime.Now;
@@ -42,7 +39,7 @@ namespace RestWebservice_RemoteCompiling.Handlers
                                                   }
                                               });
             }
-            
+
             _userRepository.UpdateUser(ldapUser);
 
             return CustomResponse.Success(request.Checkpoint.Id);

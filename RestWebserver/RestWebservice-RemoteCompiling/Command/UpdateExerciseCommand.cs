@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-using RestWebservice_RemoteCompiling.Entities;
+﻿using RestWebservice_RemoteCompiling.Entities;
 
 namespace RestWebservice_RemoteCompiling.Command
 {
@@ -11,6 +9,7 @@ namespace RestWebservice_RemoteCompiling.Command
             get;
             set;
         }
+
         public string? Name
         {
             get;

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-using MediatR;
+﻿using MediatR;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,6 +9,10 @@ namespace RestWebservice_RemoteCompiling.Query
     public class GetExerciseQuery : IRequest<CustomResponse<ExerciseEntity>>
     {
         [FromRoute]
-        public int Id { get; set; }
+        public int Id
+        {
+            get;
+            set;
+        }
     }
 }

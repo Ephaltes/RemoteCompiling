@@ -12,19 +12,17 @@ namespace RestWebservice_RemoteCompiling.Handlers
     public class DeleteExerciseHandler : IRequestHandler<DeleteExerciseCommand, CustomResponse<bool>>
     {
         private readonly IExerciseRepository _exerciseRepository;
-        private readonly IUserRepository _userRepository;
 
-        public DeleteExerciseHandler(IUserRepository userRepository, IExerciseRepository exerciseRepository)
+        public DeleteExerciseHandler( IExerciseRepository exerciseRepository)
         {
-            _userRepository = userRepository;
             _exerciseRepository = exerciseRepository;
         }
 
         public async Task<CustomResponse<bool>> Handle(DeleteExerciseCommand request, CancellationToken cancellationToken)
         {
-             _exerciseRepository.Delete(request.Id);
+            _exerciseRepository.Delete(request.Id);
 
-             return CustomResponse.Success(true);
+            return CustomResponse.Success(true);
         }
     }
 }

@@ -14,12 +14,10 @@ namespace RestWebservice_RemoteCompiling.Handlers
 {
     public class RemoveFileForProjectHandler : IRequestHandler<RemoveFileForProjectCommand, CustomResponse<bool>>
     {
-        private readonly IExerciseRepository _exerciseRepository;
         private readonly IUserRepository _userRepository;
-        public RemoveFileForProjectHandler(IUserRepository userRepository, IExerciseRepository exerciseRepository)
+        public RemoveFileForProjectHandler(IUserRepository userRepository)
         {
             _userRepository = userRepository;
-            _exerciseRepository = exerciseRepository;
         }
 
         public async Task<CustomResponse<bool>> Handle(RemoveFileForProjectCommand request, CancellationToken cancellationToken)
@@ -28,18 +26,20 @@ namespace RestWebservice_RemoteCompiling.Handlers
             User? ldapUser = _userRepository.GetUserByLdapUid(ldapIdent);
 
             Project projectInWhichToDelete = ldapUser.Projects.FirstOrDefault(x => x.Id == request.ProjectId);
-            var fileToDelete = projectInWhichToDelete.Files.FirstOrDefault(x => x.Id == request.FileId);
-                
+            File? fileToDelete = projectInWhichToDelete.Files.FirstOrDefault(x => x.Id == request.FileId);
+
             if (fileToDelete is not null)
             {
-                foreach (var item in ldapUser.Projects)
+                foreach (Project item in ldapUser.Projects)
                 {
                     if (item.Id == request.ProjectId)
                     {
                         item.Files.Remove(fileToDelete);
+
                         break;
                     }
                 }
+
                 _userRepository.UpdateUser(ldapUser);
             }
 

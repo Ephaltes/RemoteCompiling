@@ -1,13 +1,9 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Threading.Tasks;
-
-using MediatR;
+﻿using MediatR;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
-using RestWebservice_RemoteCompiling.Command;
 using RestWebservice_RemoteCompiling.Database;
 using RestWebservice_RemoteCompiling.Entities;
 using RestWebservice_RemoteCompiling.Extensions;
@@ -16,7 +12,7 @@ using RestWebservice_RemoteCompiling.Repositories;
 
 namespace RestWebservice_RemoteCompiling.Controllers
 {
-    [Route("Api/User")]
+    [Route("api/user")]
     [ApiController]
     [EnableCors("AllAllowedPolicy")]
     [Authorize]

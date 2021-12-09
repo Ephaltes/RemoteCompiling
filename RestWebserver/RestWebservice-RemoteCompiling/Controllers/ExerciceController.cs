@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
 
 using MediatR;
@@ -16,7 +15,7 @@ using RestWebservice_RemoteCompiling.Query;
 
 namespace RestWebservice_RemoteCompiling.Controllers
 {
-    [Route("Api/exercises")]
+    [Route("api/exercises")]
     [ApiController]
     [EnableCors("AllAllowedPolicy")]
     [Authorize]
@@ -39,11 +38,12 @@ namespace RestWebservice_RemoteCompiling.Controllers
 
             return response.ToResponse();
         }
-        
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetExercices(int id)
         {
-            GetExerciseQuery query = new GetExerciseQuery() { Id = id };
+            GetExerciseQuery query = new GetExerciseQuery
+                                     { Id = id };
             CustomResponse<ExerciseEntity> response = await _mediator.Send(query);
 
             return response.ToResponse();
@@ -62,7 +62,7 @@ namespace RestWebservice_RemoteCompiling.Controllers
         [HttpDelete]
         public async Task<IActionResult> DeleteExercise(DeleteExerciseCommand command)
         {
-            command.Token =  GetTokenFromAuthorization();
+            command.Token = GetTokenFromAuthorization();
 
             CustomResponse<bool> result = await _mediator.Send(command);
 
@@ -80,7 +80,7 @@ namespace RestWebservice_RemoteCompiling.Controllers
         }
 
         [HttpPost("handin")]
-        public async Task<IActionResult> HandInExercise( HandInCommand command)
+        public async Task<IActionResult> HandInExercise(HandInCommand command)
         {
             command.Token = GetTokenFromAuthorization();
 

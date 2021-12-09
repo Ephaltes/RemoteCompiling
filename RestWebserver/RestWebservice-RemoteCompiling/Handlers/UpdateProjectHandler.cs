@@ -11,14 +11,12 @@ namespace RestWebservice_RemoteCompiling.Handlers
 {
     public class UpdateProjectHandler : BaseHandler<UpdateProjectCommand, CustomResponse<bool>>
     {
-        private readonly IExerciseRepository _exerciseRepository;
         private readonly IUserRepository _userRepository;
 
-        public UpdateProjectHandler(IUserRepository userRepository, IExerciseRepository exerciseRepository)
+        public UpdateProjectHandler(IUserRepository userRepository)
             : base(userRepository)
         {
             _userRepository = userRepository;
-            _exerciseRepository = exerciseRepository;
         }
         public override async Task<CustomResponse<bool>> Handle(UpdateProjectCommand request, CancellationToken cancellationToken)
         {
@@ -33,7 +31,7 @@ namespace RestWebservice_RemoteCompiling.Handlers
                 project.ProjectType = request.ProjectType.Value;
 
             if (request.StdIn is not null)
-                project.stdin = request.StdIn;
+                project.StdIn = request.StdIn;
 
             _userRepository.UpdateUser(user);
 

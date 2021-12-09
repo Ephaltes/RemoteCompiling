@@ -1,9 +1,4 @@
-﻿using MediatR;
-
-using Microsoft.AspNetCore.Mvc;
-
-using RestWebservice_RemoteCompiling.Database;
-using RestWebservice_RemoteCompiling.Entities;
+﻿using RestWebservice_RemoteCompiling.Database;
 
 namespace RestWebservice_RemoteCompiling.Command
 {
@@ -14,23 +9,23 @@ namespace RestWebservice_RemoteCompiling.Command
             get;
             set;
         }
-        
+
         public string? ProjectName
         {
             get;
             set;
         }
+
         public string? StdIn
         {
             get;
             set;
         }
-        
+
         public ProjectType? ProjectType
         {
             get;
             set;
         }
-        
     }
 }

@@ -15,7 +15,7 @@ using RestWebservice_RemoteCompiling.Query;
 
 namespace RestWebservice_RemoteCompiling.Controllers
 {
-    [Route("Api/Grade")]
+    [Route("api/grade")]
     [ApiController]
     [EnableCors("AllAllowedPolicy")]
     [Authorize]
@@ -37,9 +37,9 @@ namespace RestWebservice_RemoteCompiling.Controllers
 
             return response.ToResponse();
         }
-        
+
         [HttpPut("gradeExercise")]
-        public async Task<IActionResult> GradeExercise( GradeExerciseCommand command)
+        public async Task<IActionResult> GradeExercise(GradeExerciseCommand command)
         {
             command.Token = GetTokenFromAuthorization();
 

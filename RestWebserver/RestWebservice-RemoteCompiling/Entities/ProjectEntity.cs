@@ -11,12 +11,14 @@ namespace RestWebservice_RemoteCompiling.Entities
             get;
             set;
         }
+
         public string ProjectName
         {
             get;
             set;
         }
-        public string stdin
+
+        public string StdIn
         {
             get;
             set;
@@ -26,8 +28,8 @@ namespace RestWebservice_RemoteCompiling.Entities
         {
             get;
             set;
-        } = new();
-        
+        } = new List<FileEntity>();
+
         public ProjectType ProjectType
         {
             get;

@@ -14,7 +14,6 @@ namespace RestWebservice_RemoteCompiling.Entities
         {
             get;
             set;
-            
         }
 
         public int Grade

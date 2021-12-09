@@ -27,8 +27,8 @@ namespace RestWebservice_RemoteCompiling.Database
         {
             get;
             set;
-        } = new();
-        
+        } = new List<ExerciseTemplateFiles>();
+
         public ProjectType ProjectType
         {
             get;
