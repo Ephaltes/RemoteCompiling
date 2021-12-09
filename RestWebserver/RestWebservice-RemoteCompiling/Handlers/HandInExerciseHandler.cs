@@ -3,8 +3,6 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 
-using MediatR;
-
 using RestWebservice_RemoteCompiling.Command;
 using RestWebservice_RemoteCompiling.Database;
 using RestWebservice_RemoteCompiling.Entities;
@@ -12,18 +10,19 @@ using RestWebservice_RemoteCompiling.Repositories;
 
 namespace RestWebservice_RemoteCompiling.Handlers
 {
-    public class HandInExerciseHandler : IRequestHandler<HandInCommand, CustomResponse<bool>>
+    public class HandInExerciseHandler : BaseHandler<HandInCommand, CustomResponse<bool>>
     {
         private readonly IExerciseRepository _exerciseRepository;
         private readonly IUserRepository _userRepository;
 
         public HandInExerciseHandler(IExerciseRepository exerciseRepository, IUserRepository userRepository)
+            : base(userRepository)
         {
             _exerciseRepository = exerciseRepository;
             _userRepository = userRepository;
         }
 
-        public async Task<CustomResponse<bool>> Handle(HandInCommand request, CancellationToken cancellationToken)
+        public override async Task<CustomResponse<bool>> Handle(HandInCommand request, CancellationToken cancellationToken)
         {
             Exercise exercise = _exerciseRepository.Get(request.ExerciseId);
             User? user = _userRepository.GetUserByLdapUid(request.Token.Claims.First(x => x.Type == ClaimTypes.Sid).Value);

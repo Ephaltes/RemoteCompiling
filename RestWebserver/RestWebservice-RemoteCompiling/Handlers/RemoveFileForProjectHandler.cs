@@ -3,8 +3,6 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 
-using MediatR;
-
 using RestWebservice_RemoteCompiling.Command;
 using RestWebservice_RemoteCompiling.Database;
 using RestWebservice_RemoteCompiling.Entities;
@@ -12,15 +10,16 @@ using RestWebservice_RemoteCompiling.Repositories;
 
 namespace RestWebservice_RemoteCompiling.Handlers
 {
-    public class RemoveFileForProjectHandler : IRequestHandler<RemoveFileForProjectCommand, CustomResponse<bool>>
+    public class RemoveFileForProjectHandler : BaseHandler<RemoveFileForProjectCommand, CustomResponse<bool>>
     {
         private readonly IUserRepository _userRepository;
         public RemoveFileForProjectHandler(IUserRepository userRepository)
+            : base(userRepository)
         {
             _userRepository = userRepository;
         }
 
-        public async Task<CustomResponse<bool>> Handle(RemoveFileForProjectCommand request, CancellationToken cancellationToken)
+        public override async Task<CustomResponse<bool>> Handle(RemoveFileForProjectCommand request, CancellationToken cancellationToken)
         {
             string ldapIdent = request.Token.Claims.First(x => x.Type == ClaimTypes.Sid).Value;
             User? ldapUser = _userRepository.GetUserByLdapUid(ldapIdent);

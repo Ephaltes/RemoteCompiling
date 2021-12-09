@@ -4,8 +4,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-using MediatR;
-
 using RestWebservice_RemoteCompiling.Command;
 using RestWebservice_RemoteCompiling.Database;
 using RestWebservice_RemoteCompiling.Entities;
@@ -13,17 +11,18 @@ using RestWebservice_RemoteCompiling.Repositories;
 
 namespace RestWebservice_RemoteCompiling.Handlers
 {
-    public class UpdateExerciseHandler : IRequestHandler<UpdateExerciseCommand, CustomResponse<bool>>
+    public class UpdateExerciseHandler : BaseHandler<UpdateExerciseCommand, CustomResponse<bool>>
     {
         private readonly IExerciseRepository _exerciseRepository;
 
-        public UpdateExerciseHandler(IExerciseRepository exerciseRepository)
+        public UpdateExerciseHandler(IExerciseRepository exerciseRepository, IUserRepository userRepository)
+            : base(userRepository)
         {
             _exerciseRepository = exerciseRepository;
         }
 
 
-        public async Task<CustomResponse<bool>> Handle(UpdateExerciseCommand request, CancellationToken cancellationToken)
+        public override async Task<CustomResponse<bool>> Handle(UpdateExerciseCommand request, CancellationToken cancellationToken)
         {
             Exercise current = _exerciseRepository.Get(request.Id);
 
