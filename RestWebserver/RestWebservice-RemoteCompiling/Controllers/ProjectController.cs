@@ -13,7 +13,7 @@ using RestWebservice_RemoteCompiling.Helpers;
 
 namespace RestWebservice_RemoteCompiling.Controllers
 {
-    [Microsoft.AspNetCore.Components.Route("api/project")]
+    [Route("/api/project")]
     [ApiController]
     [EnableCors("AllAllowedPolicy")]
     [Authorize]

@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿using System.Linq;
+using System.Security.Claims;
+
+using MediatR;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
@@ -32,5 +35,13 @@ namespace RestWebservice_RemoteCompiling.Controllers
         {
             return CustomResponse.Success(_userRepository.GetUserByLdapUid(ldapIdent)).ToResponse();
         }
+        
+        [HttpGet("getMySelf")]
+        public IActionResult GetMyself()
+        {
+            var token = GetTokenFromAuthorization();
+            return CustomResponse.Success(_userRepository.GetUserByLdapUid(token.Claims.First(x => x.Type == ClaimTypes.Sid).Value)).ToResponse();
+        }
+        
     }
 }
