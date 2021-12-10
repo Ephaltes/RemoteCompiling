@@ -1,7 +1,12 @@
-﻿namespace RestWebService_StaticCodeAnalysis.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace RestWebService_StaticCodeAnalysis.Services.Entities
 {
     public class TextLocation
     {
+        [Key]
+        public int Id { get; set; }
+
         public int? StartLine { get; set; }
 
         public int? EndLine { get; set; }

@@ -1,29 +1,31 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+
 using RestWebservice_RemoteCompiling.Command;
 using RestWebservice_RemoteCompiling.Database;
 using RestWebservice_RemoteCompiling.Entities;
 using RestWebservice_RemoteCompiling.Helpers;
 using RestWebservice_RemoteCompiling.Repositories;
+
 using Serilog;
 
 namespace RestWebservice_RemoteCompiling.Handlers
 {
-    public class LoginHandler : IRequestHandler<LoginCommand, CustomResponse<string>>
+    public class LoginHandler : BaseHandler<LoginCommand, CustomResponse<string>>
     {
         private readonly ILdapHelper _ldapHelper;
-        private readonly IUserRepository _userRepository;
         private readonly ITokenService _tokenService;
+        private readonly IUserRepository _userRepository;
         public LoginHandler(ILdapHelper ldapHelper, IUserRepository userRepository, ITokenService tokenService)
+            : base(userRepository)
         {
             _ldapHelper = ldapHelper;
             _userRepository = userRepository;
             _tokenService = tokenService;
         }
 
-        public async Task<CustomResponse<string>> Handle(LoginCommand request, CancellationToken cancellationToken)
+        public override async Task<CustomResponse<string>> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
             try
             {

@@ -5,4 +5,9 @@
     <RootNamespace>RestWebService_StaticCodeAnalysis.Services.Interfaces</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\RestWebservice-StaticCodeAnalysis.DTOs\RestWebservice-StaticCodeAnalysis.DTOs.csproj" />
+    <ProjectReference Include="..\RestWebService-StaticCodeAnalysis.Entities\RestWebService-StaticCodeAnalysis.Services.Entities.csproj" />
+  </ItemGroup>
+
 </Project>

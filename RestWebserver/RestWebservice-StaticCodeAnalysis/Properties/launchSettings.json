@@ -10,7 +10,7 @@
   "profiles": {
     "RestWebservice_StaticCodeAnalysis": {
       "commandName": "Project",
-      "launchBrowser": true,
+      "launchBrowser": false,
       "launchUrl": "https://localhost:6001/swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

@@ -6,11 +6,20 @@ namespace RestWebservice_RemoteCompiling.Database
     {
         public Guid Id
         {
-            get; set;
+            get;
+            set;
         }
 
-        public DateTime Expiration { get; set; } = DateTime.Now.AddHours(1);
-        
-        public virtual User LdapUser { get; set; }
+        public DateTime Expiration
+        {
+            get;
+            set;
+        } = DateTime.Now.AddHours(1);
+
+        public virtual User LdapUser
+        {
+            get;
+            set;
+        }
     }
 }

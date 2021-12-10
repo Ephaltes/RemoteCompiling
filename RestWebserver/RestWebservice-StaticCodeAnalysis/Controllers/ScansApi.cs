@@ -4,9 +4,19 @@ using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Authorization;
 using Swashbuckle.AspNetCore.Annotations;
-using RestWebservice_StaticCodeAnalysis.Security;
 using RestWebservice_StaticCodeAnalysis.DTOs;
 using Newtonsoft.Json;
+using RestWebService_StaticCodeAnalysis.Services.Interfaces;
+using AutoMapper;
+using RestWebservice_StaticCodeAnalysis.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Threading.Tasks;
+using RestWebService_StaticCodeAnalysis.Services.Entities.Enums;
+using RestWebService_StaticCodeAnalysis.Services.Entities;
+using RestWebService_StaticCodeAnalysis.Services.Entities.Exceptions;
 
 namespace RestWebservice_StaticCodeAnalysis.Controllers
 {
@@ -16,34 +26,76 @@ namespace RestWebservice_StaticCodeAnalysis.Controllers
     [ApiController]
     public class ScansApiController : ControllerBase
     {
+        private readonly IScanService _scanService;
+
+        private readonly IJwtConfiguration _jwtConfiguration;
+
+        private readonly IMapper _mapper;
+
+        public ScansApiController(IScanService scanService, IJwtConfiguration jwtConfiguration, IMapper mapper)
+        {
+            _scanService = scanService;
+            _jwtConfiguration = jwtConfiguration;
+            _mapper = mapper;
+        }
+
+        /// <summary>
+        /// Create a code analysis job
+        /// </summary>
+        /// <param name="body">Code to perform the analysis on</param>
+        [HttpGet]
+        [Route("/token")]
+        [SwaggerOperation("GetAccessToken")]
+        [SwaggerResponse(statusCode: 200, type: typeof(string), description: "A access token to use")]
+        public virtual IActionResult GetAccessToken()
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_jwtConfiguration.Key);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Expires = DateTime.UtcNow.AddHours(1),
+                Issuer = _jwtConfiguration.Issuer,
+                Audience = _jwtConfiguration.Audience,
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            string stringToken = tokenHandler.WriteToken(token);
+            return Ok(stringToken);
+        }
+
         /// <summary>
         /// Create a code analysis job
         /// </summary>
         /// <param name="body">Code to perform the analysis on</param>
         [HttpPost]
         [Route("/scans")]
-        [Authorize(AuthenticationSchemes = BearerAuthenticationHandler.SchemeName)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [SwaggerOperation("CreateScanJob")]
         [SwaggerResponse(statusCode: 200, type: typeof(ScanJobDto), description: "A job that corresponds to the code analysis")]
         [SwaggerResponse(statusCode: 400, description: "Not supported code-language or invalid code")]
         [SwaggerResponse(statusCode: 401, description: "Token is missing or has expired")]
-        public virtual IActionResult CreateScanJob([FromBody] CodeDto body)
+        public virtual async Task<IActionResult> CreateScanJob([FromBody] CodeDto body)
         {
-            //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(200, default(ScanJob));
+            if (body.CodeLanguage != "dotnet")
+            {
+                return BadRequest("Language not supported. Only 'dotnet' is supported at the moment.");
+            }
 
-            //TODO: Uncomment the next line to return response 400 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(400);
+            var scanJob = await _scanService.CreateScanAsync(); ;
 
-            //TODO: Uncomment the next line to return response 401 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(401);
-            string exampleJson = null;
-            exampleJson = "{\n  \"id\" : 1,\n  \"status\" : \"pending\"\n}";
-
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<ScanJobDto>(exampleJson)
-            : default(ScanJobDto);            //TODO: Change the data returned
-            return new ObjectResult(example);
+            try
+            {
+                var dto = _mapper.Map<ScanJobDto>(scanJob);
+                return Ok(dto);
+            }
+            finally
+            {
+                Response.OnCompleted(async () =>
+                {
+                    await _scanService.StartScanAsync(body, scanJob);
+                });
+            }
+            
         }
 
         /// <summary>
@@ -51,24 +103,23 @@ namespace RestWebservice_StaticCodeAnalysis.Controllers
         /// </summary>
         /// <param name="scanId">Id of the scan to retrieve</param>
         [HttpDelete]
-        [Route("/scans/{scanId}")]
-        [Authorize(AuthenticationSchemes = BearerAuthenticationHandler.SchemeName)]
+        [Route("/scans/{scanId:int}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [SwaggerOperation("DeleteScanJob")]
         [SwaggerResponse(statusCode: 204, description: "Scan job was deleted")]
         [SwaggerResponse(statusCode: 401, description: "Token is missing or has expired or user is not permitted to see this scan job")]
         [SwaggerResponse(statusCode: 404, description: "Scan with this id was not found")]
-        public virtual IActionResult DeleteScanJob([FromRoute][Required] string scanId)
+        public virtual async Task<IActionResult> DeleteScanJob([FromRoute][Required] int scanId)
         {
-            //TODO: Uncomment the next line to return response 204 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(204);
-
-            //TODO: Uncomment the next line to return response 401 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(401);
-
-            //TODO: Uncomment the next line to return response 404 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(404);
-
-            throw new NotImplementedException();
+            try
+            {
+                await _scanService.DeleteScanJobAsync(scanId);
+                return NoContent();
+            }
+            catch (ScanJobNotFoundException)
+            {
+                return NotFound();
+            }
         }
 
         /// <summary>
@@ -76,24 +127,15 @@ namespace RestWebservice_StaticCodeAnalysis.Controllers
         /// </summary>
         [HttpGet]
         [Route("/scans")]
-        [Authorize(AuthenticationSchemes = BearerAuthenticationHandler.SchemeName)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [SwaggerOperation("GetAllScanJobs")]
         [SwaggerResponse(statusCode: 200, type: typeof(List<ScanJobDto>), description: "List of all scan jobs")]
         [SwaggerResponse(statusCode: 401, description: "Token is missing or has expired")]
-        public virtual IActionResult GetAllScanJobs()
+        public virtual async Task<IActionResult> GetAllScanJobs()
         {
-            //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(200, default(List<ScanJob>));
-
-            //TODO: Uncomment the next line to return response 401 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(401);
-            string exampleJson = null;
-            exampleJson = "[ {\n  \"id\" : 1,\n  \"status\" : \"pending\"\n}, {\n  \"id\" : 1,\n  \"status\" : \"pending\"\n} ]";
-
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<List<ScanJobDto>>(exampleJson)
-            : default(List<ScanJobDto>);            //TODO: Change the data returned
-            return new ObjectResult(example);
+            var jobs = await _scanService.GetAllScanJobsAsync();
+            var result = _mapper.Map<List<ScanJobDto>>(jobs);
+            return Ok(result);
         }
 
         /// <summary>
@@ -101,29 +143,25 @@ namespace RestWebservice_StaticCodeAnalysis.Controllers
         /// </summary>
         /// <param name="scanId">Id of the scan to retrieve</param>
         [HttpGet]
-        [Route("/scans/{scanId}")]
-        [Authorize(AuthenticationSchemes = BearerAuthenticationHandler.SchemeName)]
+        [Route("/scans/{scanId:int}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [SwaggerOperation("GetScanJob")]
         [SwaggerResponse(statusCode: 200, type: typeof(CodeDto), description: "Results of the scan")]
         [SwaggerResponse(statusCode: 401, description: "Token is missing or has expired or user is not permitted to see this scan job")]
         [SwaggerResponse(statusCode: 404, description: "Scan with this scanId was not found")]
-        public virtual IActionResult GetScanJob([FromRoute][Required] string scanId)
+        public virtual async Task<IActionResult> GetScanJob([FromRoute][Required] int scanId)
         {
-            //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(200, default(Code));
-
-            //TODO: Uncomment the next line to return response 401 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(401);
-
-            //TODO: Uncomment the next line to return response 404 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(404);
-            string exampleJson = null;
-            exampleJson = "{\n  \"code-language\" : \"c#\",\n  \"code\" : \"code\"\n}";
-
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<CodeDto>(exampleJson)
-            : default(CodeDto);            //TODO: Change the data returned
-            return new ObjectResult(example);
+            try
+            {
+                var job = await _scanService.GetScanJobByIdAsync(scanId);
+                var dto = _mapper.Map<ScanJobDto>(job);
+                return Ok(dto);
+            }
+            catch (ScanJobNotFoundException)
+            {
+                return NotFound();
+            }
+            
         }
 
         /// <summary>
@@ -131,33 +169,31 @@ namespace RestWebservice_StaticCodeAnalysis.Controllers
         /// </summary>
         /// <param name="scanId">Id of the scan to retrieve</param>
         [HttpGet]
-        [Route("/scans/{scanId}/results")]
-        [Authorize(AuthenticationSchemes = BearerAuthenticationHandler.SchemeName)]
+        [Route("/scans/{scanId:int}/results")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [SwaggerOperation("GetScanResults")]
         [SwaggerResponse(statusCode: 200, type: typeof(ScanDto), description: "Results of the scan")]
         [SwaggerResponse(statusCode: 401, description: "Token is missing or has expired or user is not permitted to see this scan job")]
         [SwaggerResponse(statusCode: 404, description: "Scan with this scanId was not found")]
         [SwaggerResponse(statusCode: 409, description: "Scan job does not yet have status 'available'")]
-        public virtual IActionResult GetScanResults([FromRoute][Required] string scanId)
+        public virtual async Task<IActionResult> GetScanResults([FromRoute][Required] int scanId)
         {
-            //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(200, default(Scan));
+            try
+            {
+                var job = await _scanService.GetScanJobByIdAsync(scanId);
 
-            //TODO: Uncomment the next line to return response 401 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(401);
+                if (job.Status is not ScanStatus.Available)
+                {
+                    return Conflict();
+                }
 
-            //TODO: Uncomment the next line to return response 404 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(404);
-
-            //TODO: Uncomment the next line to return response 409 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(409);
-            string exampleJson = null;
-            exampleJson = "{\n  \"total\" : 0,\n  \"issues\" : [ {\n    \"severity\" : \"minor\",\n    \"textLocation\" : {\n      \"endLine\" : 1,\n      \"endOffset\" : 1,\n      \"startOffset\" : 6,\n      \"startLine\" : 1\n    },\n    \"component\" : \"sample-project:Program.cs\",\n    \"type\" : \"CodeSmell\"\n  }, {\n    \"severity\" : \"minor\",\n    \"textLocation\" : {\n      \"endLine\" : 1,\n      \"endOffset\" : 1,\n      \"startOffset\" : 6,\n      \"startLine\" : 1\n    },\n    \"component\" : \"sample-project:Program.cs\",\n    \"type\" : \"CodeSmell\"\n  } ]\n}";
-
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<ScanDto>(exampleJson)
-            : default(ScanDto);            //TODO: Change the data returned
-            return new ObjectResult(example);
+                var dto = _mapper.Map<ScanDto>(job.Scan);
+                return Ok(dto);
+            }
+            catch (ScanJobNotFoundException)
+            {
+                return NotFound();
+            }            
         }
     }
 }

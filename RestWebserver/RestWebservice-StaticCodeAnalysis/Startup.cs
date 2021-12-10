@@ -1,16 +1,28 @@
-using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
-using RestWebservice_StaticCodeAnalysis.Security;
+
+using RestWebservice_StaticCodeAnalysis.Configuration;
+
+using RestWebService_StaticCodeAnalysis.DataAccess;
+using RestWebService_StaticCodeAnalysis.DataAccess.Interfaces;
+using RestWebService_StaticCodeAnalysis.ServiceAgents;
+using RestWebService_StaticCodeAnalysis.ServiceAgents.Interfaces;
+using RestWebService_StaticCodeAnalysis.Services;
+using RestWebService_StaticCodeAnalysis.Services.Interfaces;
+
 using System;
-using System.Collections.Generic;
-using System.IO;
+using System.Text;
 
 namespace RestWebservice_StaticCodeAnalysis
 {
@@ -40,38 +52,85 @@ namespace RestWebservice_StaticCodeAnalysis
         /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
+            // Bind configuration sections to config objects
+            var jwtConfig = new JwtConfiguration();
+            var sonarqubeConfig = new SonarqubeConfiguration();
+            Configuration.GetSection("Jwt").Bind(jwtConfig);
+            Configuration.GetSection("Sonarqube").Bind(sonarqubeConfig);
+            
+            // Add jwt for authentication
             services
-                .AddMvc(options =>
+                .AddAuthentication(options =>
                 {
-                    options.InputFormatters.RemoveType<Microsoft.AspNetCore.Mvc.Formatters.SystemTextJsonInputFormatter>();
-                    options.OutputFormatters.RemoveType<Microsoft.AspNetCore.Mvc.Formatters.SystemTextJsonOutputFormatter>();
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 })
-                .AddNewtonsoftJson(opts =>
+                .AddJwtBearer(options =>
                 {
-                    opts.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                    opts.SerializerSettings.Converters.Add(new StringEnumConverter(new CamelCaseNamingStrategy()));
-                })
-                .AddXmlSerializerFormatters();
+                    byte[] keyBytes = Encoding.UTF8.GetBytes(jwtConfig.Key);
 
-            services.AddAuthentication(BearerAuthenticationHandler.SchemeName)
-                .AddScheme<AuthenticationSchemeOptions, BearerAuthenticationHandler>(BearerAuthenticationHandler.SchemeName, null);
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = false,
+                        ValidateIssuerSigningKey = true,
+                        ValidAudience = jwtConfig.Audience,
+                        ValidIssuer = jwtConfig.Issuer,
+                        IssuerSigningKey = new SymmetricSecurityKey(keyBytes)
+                    };
+                });
 
+            services.AddAutoMapper(typeof(Startup).Assembly);
+
+            // Remove ASP.NET Core client erros
             services.AddControllers().ConfigureApiBehaviorOptions(o =>
             {
                 o.SuppressMapClientErrors = true;
             });
 
+            // Configure app to use netwonsoft json as (de)serializer
+            services
+                .AddMvc(options =>
+                {
+                    options.InputFormatters.RemoveType<SystemTextJsonInputFormatter>();
+                    options.OutputFormatters.RemoveType<SystemTextJsonOutputFormatter>();
+                })
+                .AddNewtonsoftJson(opts =>
+                {
+                    opts.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                    opts.SerializerSettings.Converters.Add(new StringEnumConverter(new CamelCaseNamingStrategy()));
+                });
+
+            // Configure EF
+            services.AddDbContext<ScannerContext>(options =>
+            {
+                options.UseInMemoryDatabase("TemporaryInMemoryStore");
+                options.UseLazyLoadingProxies();
+            });
+
+            // Configure DI
+            services.AddSingleton<IJwtConfiguration>(jwtConfig);
+            services.AddSingleton<ISonarqubeConfiguration>(sonarqubeConfig);
+
+            services.AddTransient<IScanAgent, SonarqubeAgent>();
+            services.AddTransient<IScanJobRepository, ScanJobRepository>();
+            services.AddTransient<IScanRepository, ScanRepository>();
+
+            services.AddTransient<IScanService, ScanService>();
+
+            // Add jwt to swagger as authentiation scheme
             var securityScheme = new OpenApiSecurityScheme
             {
                 Reference = new OpenApiReference
                 {
                     Type = ReferenceType.SecurityScheme,
-                    Id = BearerAuthenticationHandler.SchemeName
+                    Id = JwtBearerDefaults.AuthenticationScheme
                 },
                 Name = "Authorization",
                 Type = SecuritySchemeType.Http,
                 In = ParameterLocation.Header,
-                Scheme = BearerAuthenticationHandler.SchemeName,
+                Scheme = JwtBearerDefaults.AuthenticationScheme,
                 BearerFormat = "JWT",
                 Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
             };
@@ -97,7 +156,7 @@ namespace RestWebservice_StaticCodeAnalysis
                             Array.Empty<string>()
                         }
                     });
-                    c.AddSecurityDefinition(BearerAuthenticationHandler.SchemeName, securityScheme);
+                    c.AddSecurityDefinition(securityScheme.Scheme, securityScheme);
                 });
         }
 

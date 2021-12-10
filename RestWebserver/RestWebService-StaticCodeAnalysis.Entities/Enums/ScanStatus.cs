@@ -1,8 +1,9 @@
-﻿namespace RestWebService_StaticCodeAnalysis.Entities.Enums
+﻿namespace RestWebService_StaticCodeAnalysis.Services.Entities.Enums
 {
     public enum ScanStatus
     {
         Pending,
-        Available
+        Available,
+        Failed
     }
 }

@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Linq;
+
 using RestWebservice_RemoteCompiling.Database;
 
 namespace RestWebservice_RemoteCompiling.Repositories
 {
     public class SessionRepository : ISessionRepository
     {
-        private RemoteCompileDbContext _context;
+        private readonly RemoteCompileDbContext _context;
         public SessionRepository(RemoteCompileDbContext context)
         {
             _context = context;

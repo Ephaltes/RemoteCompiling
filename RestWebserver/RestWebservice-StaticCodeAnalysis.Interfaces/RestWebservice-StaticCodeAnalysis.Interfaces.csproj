@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace>RestWebService_StaticCodeAnalysis.Entities</RootNamespace>
+    <RootNamespace>RestWebservice_StaticCodeAnalysis.Interfaces</RootNamespace>
   </PropertyGroup>
 
 </Project>

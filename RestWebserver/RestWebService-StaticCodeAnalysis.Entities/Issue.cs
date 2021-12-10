@@ -1,17 +1,22 @@
-﻿using RestWebService_StaticCodeAnalysis.Entities.Enums;
+﻿using RestWebService_StaticCodeAnalysis.Services.Entities.Enums;
 
-namespace RestWebService_StaticCodeAnalysis.Entities
+using System.ComponentModel.DataAnnotations;
+
+namespace RestWebService_StaticCodeAnalysis.Services.Entities
 {
     public class Issue
     {
+        [Key]
+        public int Id { get; set; }
+
         public IssueType? Type { get; set; }
 
-        public IssueSeverity? Severity  { get; set; }
+        public IssueSeverity? Severity { get; set; }
 
-        public string? Component { get; set; }
+        public string Component { get; set; }
 
-        public string? Message { get; set; }
+        public string Message { get; set; }
 
-        public TextLocation TextLocation { get; set; }
+        public virtual TextLocation TextLocation { get; set; }
     }
 }

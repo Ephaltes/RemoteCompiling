@@ -19,6 +19,11 @@ namespace RestWebservice_StaticCodeAnalysis.DTOs.Enums
         /// Enum AvailableEnum for available
         /// </summary>
         [EnumMember(Value = "available")]
-        Available = 1
+        Available = 1,
+        /// <summary>
+        /// Enum AvailableEnum for failed
+        /// </summary>
+        [EnumMember(Value = "failed")]
+        Failed = 2
     }
 }

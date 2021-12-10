@@ -19,8 +19,9 @@ namespace RestWebservice_RemoteCompiling.Helpers
         private string _key;
         private string _issuer;
         private string _audience;
-        
+
         private readonly ISessionRepository _sessionRepository;
+
         public TokenService(IConfiguration configuration, ISessionRepository sessionRepository)
         {
             _configuration = configuration;
@@ -41,6 +42,7 @@ namespace RestWebservice_RemoteCompiling.Helpers
             {
                 new Claim(ClaimTypes.Name, user.Name),
                 new Claim(ClaimTypes.Role, user.UserRole.ToString()),
+                new Claim(ClaimTypes.Sid,user.LdapUid),
                 new Claim(ClaimTypes.NameIdentifier, nameIdentifierGuid.ToString("N"))
             };
 
@@ -50,11 +52,12 @@ namespace RestWebservice_RemoteCompiling.Helpers
                 expires: expireDate, signingCredentials: credentials);
 
             Session session = new Session
-                              { Id = nameIdentifierGuid, LdapUser = user };
+                              {Id = nameIdentifierGuid, LdapUser = user};
             _sessionRepository.Add(session);
 
             return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
         }
+
         public bool ValidateToken(string token)
         {
             byte[]? mySecret = Encoding.UTF8.GetBytes(_key);
@@ -72,10 +75,10 @@ namespace RestWebservice_RemoteCompiling.Helpers
                         ValidAudience = _audience,
                         IssuerSigningKey = mySecurityKey
                     }, out SecurityToken validatedToken);
-                
+
                 JwtSecurityToken? jwt = validatedToken as JwtSecurityToken;
 
-                if (jwt?.ValidTo > DateTime.UtcNow)
+                if (jwt?.ValidTo < DateTime.UtcNow)
                 {
                     _sessionRepository.DeleteExpiredSessions();
 
@@ -90,5 +93,33 @@ namespace RestWebservice_RemoteCompiling.Helpers
 
             return true;
         }
+
+        public JwtSecurityToken? GetToken(string token)
+        {
+            byte[]? mySecret = Encoding.UTF8.GetBytes(_key);
+            SymmetricSecurityKey? mySecurityKey = new SymmetricSecurityKey(mySecret);
+            JwtSecurityTokenHandler? tokenHandler = new JwtSecurityTokenHandler();
+            try
+            {
+                tokenHandler.ValidateToken(token,
+                    new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidIssuer = _issuer,
+                        ValidAudience = _audience,
+                        IssuerSigningKey = mySecurityKey
+                    }, out SecurityToken validatedToken);
+
+                JwtSecurityToken? jwt = validatedToken as JwtSecurityToken;
+                return jwt;
+            }
+            catch
+            {
+                throw new Exception("failed");
+            }
+        }
+
     }
 }
