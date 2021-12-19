@@ -29,11 +29,13 @@ import { ExercisePlatformCreateComponent } from './exercise-platform-create/exer
 import { ExercisePlatformCorrectComponent } from './exercise-platform-correct/exercise-platform-correct.component';
 import { ExercisePlatformOverviewComponent } from './exercise-platform-overview/exercise-platform-overview.component';
 import { ExerciseCodeEditorComponent } from './exercise-code-editor/exercise-code-editor.component';
-import { MatTableModule} from '@angular/material/table';
+import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { ExercisePlatformExerciseOverviewTableComponent } from './exercise-platform-exercise-overview-table/exercise-platform-exercise-overview-table.component';
 import { ExercisePlatformExerciseStudentTableComponent } from './exercise-platform-exercise-student-table/exercise-platform-exercise-student-table.component';
 import { ExercisePlatformAddNewExerciseComponent } from './exercise-platform-add-new-exercise/exercise-platform-add-new-exercise.component';
+import { LoginSiteComponent } from './login-site/login-site.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -51,18 +53,20 @@ import { ExercisePlatformAddNewExerciseComponent } from './exercise-platform-add
     ExerciseCodeEditorComponent,
     ExercisePlatformExerciseOverviewTableComponent,
     ExercisePlatformExerciseStudentTableComponent,
-    ExercisePlatformAddNewExerciseComponent
+    ExercisePlatformAddNewExerciseComponent,
+    LoginSiteComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
-    BrowserAnimationsModule, MatGridListModule, MatTreeModule, MatIconModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatCardModule, MatTableModule,MatPaginatorModule,
+    BrowserAnimationsModule, MatGridListModule, MatTreeModule, MatIconModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatCardModule, MatTableModule, MatPaginatorModule, MatCheckboxModule,
     RouterModule.forRoot([
-      { path: '', pathMatch: 'full', redirectTo: 'coding' },
+      { path: '', pathMatch: 'full', redirectTo: 'login' },
+      { path: 'login', component: LoginSiteComponent },
       { path: 'coding', component: CodingAppComponent },
       {
         path: 'platform', component: ExercisePlatformAppComponent, children: [
-          {path: '', redirectTo: 'overview', pathMatch: 'full'},
+          { path: '', redirectTo: 'overview', pathMatch: 'full' },
           { path: 'overview', component: ExercisePlatformOverviewComponent },
           { path: 'create', component: ExercisePlatformCreateComponent },
           { path: 'correct', component: ExercisePlatformCorrectComponent },
