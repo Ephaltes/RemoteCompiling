@@ -19,11 +19,19 @@ export class LoginSiteComponent implements OnInit {
   errorMessage: string;
   showError: boolean = false;
   ngOnInit(): void {
+    if (this.authService.isLoggedIn()) {
+      const isUserLecturer = localStorage.getItem("isuserlecturer");
+      if (isUserLecturer == "1")
+        this.router.navigateByUrl('platform');
+      else
+        this.router.navigateByUrl('coding');
+    }
     this.route.queryParams
       .subscribe(params => {
         if (params.error == "loginExpired") {
           this.errorMessage = "Die Session ist abgelaufen! Bitte melden Sie sich neu an!";
           this.showError = true;
+          this.authService.logout();
         }
       }
       );
@@ -33,7 +41,7 @@ export class LoginSiteComponent implements OnInit {
       return;
     const value = this.loginForm.value;
     if (value.username && value.password) {
-      this.authService.login(value.username, value.password).subscribe(() => { this.router.navigateByUrl('/platform') })
+      this.authService.login(value.username, value.password, value.isUserLecturer).subscribe(() => { this.router.navigateByUrl('/platform') })
     }
     this.validData = true;
     this.loginForm.reset();

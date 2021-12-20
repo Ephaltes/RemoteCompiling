@@ -2,7 +2,8 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import * as moment from "moment";
 import { shareReplay, tap } from "rxjs/operators";
-import * as globalVar from '../../../globals'
+import * as globalVar from '../../../globals';
+import jwt_decode from "jwt-decode";
 export interface User {
     data: "";
 };
@@ -12,23 +13,23 @@ export class AuthService {
     constructor(private http: HttpClient) {
     }
 
-    login(username: string, password: string) {
+    login(username: string, password: string, isUserLecturer: boolean) {
         return this.http.post<User>(globalVar.apiURL + '/api/ldap/login', { "username": username, "password": password })
-            // this is just the HTTP call, 
-            // we still need to handle the reception of the token
-            .pipe(tap(res => this.setSession(res)), shareReplay(1));
+            .pipe(tap(res => this.setSession(res, isUserLecturer)), shareReplay(1));
     }
-    private setSession(authResult: any) {
-        console.log(authResult)
-        const expiresAt = moment().add(authResult.expiresIn, 'second');
+    private setSession(authResult: any, isUserLecturer: boolean) {
+        const decodedToken = this.getDecodedAccessToken(authResult.data);
 
         localStorage.setItem('id_token', authResult.data);
-        localStorage.setItem("expires_at", JSON.stringify(expiresAt.valueOf()));
+        localStorage.setItem("expires_at", decodedToken.exp);
+        if (isUserLecturer)
+            localStorage.setItem("isuserlecturer", "1");
     }
 
     logout() {
         localStorage.removeItem("id_token");
         localStorage.removeItem("expires_at");
+        localStorage.removeItem("isuserlecturer");
     }
 
     public isLoggedIn() {
@@ -42,6 +43,14 @@ export class AuthService {
     getExpiration() {
         const expiration = localStorage.getItem("expires_at");
         const expiresAt = JSON.parse(expiration);
-        return moment(expiresAt);
+        return moment.unix(expiresAt);
+    }
+    getDecodedAccessToken(token: string): any {
+        try {
+            return jwt_decode(token);
+        }
+        catch (Error) {
+            return null;
+        }
     }
 }
