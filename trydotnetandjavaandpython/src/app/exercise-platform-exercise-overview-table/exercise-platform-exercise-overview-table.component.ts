@@ -7,6 +7,7 @@ import { CodeEditorComponent, CodeModel } from '@ngstack/code-editor';
 import { ExerciseNode } from '../exercise-module/exercise-node';
 import { ExercisePlatformAddNewExerciseComponent } from '../exercise-platform-add-new-exercise/exercise-platform-add-new-exercise.component';
 import { FileNode, FileNodeType } from '../file-module/file-node';
+import { ExerciseService } from '../service/exercise.service';
 
 const TEMP_DATA: ExerciseNode[] = [
   {
@@ -178,20 +179,23 @@ const TEMP_DATA: ExerciseNode[] = [
 @Component({
   selector: 'app-exercise-platform-exercise-overview-table',
   templateUrl: './exercise-platform-exercise-overview-table.component.html',
-  styleUrls: ['./exercise-platform-exercise-overview-table.component.scss']
+  styleUrls: ['./exercise-platform-exercise-overview-table.component.scss'],
+  providers: [ExerciseService]
 })
 
 export class ExercisePlatformExerciseOverviewTableComponent implements OnInit {
   @Output() itemSelectedEvent = new EventEmitter<ExerciseNode>();
+  exercises: ExerciseNode[]
   displayedColumns: string[] = ['id', 'name', 'author', 'description', 'action'];
-  dataSource = new MatTableDataSource<ExerciseNode>(TEMP_DATA);
+  dataSource = new MatTableDataSource<ExerciseNode>();
   exerciseSelected = false;
   nestedDataSource: MatTreeNestedDataSource<FileNode>
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private Dialog: MatDialog) { }
+  constructor(private Dialog: MatDialog, private ExerciseService: ExerciseService) { }
 
   ngOnInit(): void {
+    this.ExerciseService.getExercises().subscribe(res => this.dataSource.data = res.data);
   }
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;

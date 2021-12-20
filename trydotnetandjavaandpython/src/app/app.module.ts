@@ -11,7 +11,7 @@ import { MatCardModule } from '@angular/material/card';
 import { FileUploadModule } from '@iplab/ngx-file-upload';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
 import { AddNewFileComponent } from './add-new-file/add-new-file.component';
@@ -36,7 +36,7 @@ import { ExercisePlatformExerciseStudentTableComponent } from './exercise-platfo
 import { ExercisePlatformAddNewExerciseComponent } from './exercise-platform-add-new-exercise/exercise-platform-add-new-exercise.component';
 import { LoginSiteComponent } from './login-site/login-site.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-
+import { AuthInterceptor } from './interceptor/authentication-intercepter.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -78,7 +78,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     FormsModule,
     ReactiveFormsModule,
   ],
-  providers: [],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -2,12 +2,12 @@
     <div class="loginInputForm">
         <mat-card>
             <img mat-card-image src="./assets/fh_technikum_wien_logo_4c_rgb_800x504px_72dpi_2020.png" id="fhLoginLogo">
-            <form [formGroup]="loginForm" (ngSubmit)="submit()">
+            <form [formGroup]="loginForm" (ngSubmit)="login()">
                 <mat-card-content>
                     <div>
                         <mat-form-field appearance="outline" class="loginForm" [style.width.%]="100">
                             <mat-label>Username</mat-label>
-                            <input matInput formControlName="username" value="" type="username" autocomplete="off"
+                            <input matInput formControlName="username" value="" type="username"
                                 placeholder="Kennzeichen eingeben...">
                             <mat-hint *ngIf="username.invalid && (username.dirty || username.touched)"
                                 class="text-danger margin-bottom-thin my-mat-hint" style="color: red;">
@@ -20,7 +20,7 @@
                     <div>
                         <mat-form-field appearance="outline" class="loginForm" [style.width.%]="100">
                             <mat-label>Password</mat-label>
-                            <input matInput formControlName="password" value="" type="password" autocomplete="off"
+                            <input matInput formControlName="password" value="" type="password"
                                 placeholder="Passwort eingeben...">
                             <mat-hint *ngIf="password.invalid && (password.dirty || password.touched)"
                                 class="text-danger margin-bottom-thin my-mat-hint" style="color: red;">
@@ -30,13 +30,13 @@
                             </mat-hint>
                         </mat-form-field>
                     </div>
-                    <mat-checkbox color="primary" formControlName="isUserLecturer" style="float:left;">
+                    <mat-checkbox color="primary" class="loginForm" formControlName="isUserLecturer" style="float:left;">
                         Als Lektor anmelden?
                     </mat-checkbox>
                 </mat-card-content>
                 <mat-card-actions style="padding-top: 20px;">
                     <button style="width: 100%;" mat-raised-button color="primary" type="submit"
-                        [disabled]="loginForm.invalid" mat-dialog-close>Anmelden</button>
+                        [disabled]="loginForm.invalid">Anmelden</button>
                 </mat-card-actions>
             </form>
         </mat-card>
