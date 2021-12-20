@@ -2,6 +2,9 @@
     <div class="loginInputForm">
         <mat-card>
             <img mat-card-image src="./assets/fh_technikum_wien_logo_4c_rgb_800x504px_72dpi_2020.png" id="fhLoginLogo">
+            <div *ngIf="showError" style="color:red;">
+                <h4>{{errorMessage}}</h4>
+            </div>
             <form [formGroup]="loginForm" (ngSubmit)="login()">
                 <mat-card-content>
                     <div>
@@ -30,7 +33,8 @@
                             </mat-hint>
                         </mat-form-field>
                     </div>
-                    <mat-checkbox color="primary" class="loginForm" formControlName="isUserLecturer" style="float:left;">
+                    <mat-checkbox color="primary" class="loginForm" formControlName="isUserLecturer"
+                        style="float:left;">
                         Als Lektor anmelden?
                     </mat-checkbox>
                 </mat-card-content>

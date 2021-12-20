@@ -4,9 +4,7 @@ import * as moment from "moment";
 import { shareReplay, tap } from "rxjs/operators";
 import * as globalVar from '../../../globals'
 export interface User {
-    data: {
-        data: "";
-    }
+    data: "";
 };
 @Injectable()
 export class AuthService {
@@ -21,6 +19,7 @@ export class AuthService {
             .pipe(tap(res => this.setSession(res)), shareReplay(1));
     }
     private setSession(authResult: any) {
+        console.log(authResult)
         const expiresAt = moment().add(authResult.expiresIn, 'second');
 
         localStorage.setItem('id_token', authResult.data);
