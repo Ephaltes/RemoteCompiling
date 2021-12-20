@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>RestWebService_StaticCodeAnalysis.Services.Interfaces</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RestWebservice-StaticCodeAnalysis.DTOs\RestWebservice-StaticCodeAnalysis.DTOs.csproj" />
+    <ProjectReference Include="..\RestWebService-StaticCodeAnalysis.Entities\RestWebService-StaticCodeAnalysis.Services.Entities.csproj" />
+  </ItemGroup>
+
+</Project>

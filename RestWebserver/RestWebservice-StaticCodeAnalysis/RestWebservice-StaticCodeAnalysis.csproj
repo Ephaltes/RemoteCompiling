@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>RestWebservice_StaticCodeAnalysis</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.12" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.2.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RestWebService-StaticCodeAnalysis.DataAccess\RestWebService-StaticCodeAnalysis.DataAccess.csproj" />
+    <ProjectReference Include="..\RestWebservice-StaticCodeAnalysis.DTOs\RestWebservice-StaticCodeAnalysis.DTOs.csproj" />
+    <ProjectReference Include="..\RestWebService-StaticCodeAnalysis.ServiceAgents\RestWebService-StaticCodeAnalysis.ServiceAgents.csproj" />
+    <ProjectReference Include="..\RestWebService-StaticCodeAnalysis.Services\RestWebService-StaticCodeAnalysis.Services.csproj" />
+    <ProjectReference Include="..\RestWebService-StaticCodeAnalysis.Interfaces\RestWebService-StaticCodeAnalysis.Interfaces.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="appsettings.Development.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>
