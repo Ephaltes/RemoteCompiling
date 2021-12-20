@@ -1,0 +1,17 @@
+<div style="padding: 10px;">
+    <div id="logIn" *ngIf="!isLoggedin">
+        <button mat-raised-button color="primary" (click)="login()">
+            <mat-icon aria-hidden="false">login</mat-icon>
+        </button>
+    </div>
+    <div id="logOut" *ngIf="isLoggedin" style="color:white">
+        <h4>
+            <mat-icon aria-hidden="false" style="vertical-align: bottom;
+            font-size: 22px !important;">account_circle</mat-icon>Hans Peter
+        </h4>
+        <button mat-raised-button color="warn" (click)="logout()">
+            <mat-icon aria-hidden="false">logout</mat-icon>
+        </button>
+
+    </div>
+</div>

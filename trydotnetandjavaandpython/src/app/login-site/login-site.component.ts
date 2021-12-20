@@ -41,7 +41,12 @@ export class LoginSiteComponent implements OnInit {
       return;
     const value = this.loginForm.value;
     if (value.username && value.password) {
-      this.authService.login(value.username, value.password, value.isUserLecturer).subscribe(() => { this.router.navigateByUrl('/platform') })
+      this.authService.login(value.username, value.password, value.isUserLecturer).subscribe(() => {
+        if (value.isUserLecturer)
+          this.router.navigateByUrl('/platform')
+        else
+          this.router.navigateByUrl('/coding')
+      })
     }
     this.validData = true;
     this.loginForm.reset();
