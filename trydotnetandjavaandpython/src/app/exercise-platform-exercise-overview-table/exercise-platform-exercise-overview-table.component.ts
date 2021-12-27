@@ -219,6 +219,7 @@ export class ExercisePlatformExerciseOverviewTableComponent implements OnInit {
     dialogRef.afterClosed().subscribe(() => { dialogRef.componentInstance.validData ? this.refreshData() : false; })
   }
   editExercise(row: ExerciseNode) {
+    console.log(row);
     const dialogRef = this.Dialog.open(ExercisePlatformEditExerciseComponent, { data: row });
     dialogRef.afterClosed().subscribe(() => { dialogRef.componentInstance.validData ? this.refreshData() : false })
   }
