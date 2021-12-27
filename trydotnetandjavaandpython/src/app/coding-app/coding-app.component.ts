@@ -44,14 +44,6 @@ export class CodingAppComponent implements OnInit, OnDestroy {
     { name: 'Visual Studio Dark', value: 'vs-dark' },
     { name: 'High Contrast Dark', value: 'hc-black' },
   ];
-  langVersions = { csharp: ["5.0.201"], java: ["15.0.2"], python: ["3.9.1"], gcc: ["10.2.0"] };
-  selectedLanguageVersion: string[] = []
-  selectedCSharpVersion = "";
-  selectedJavaVersion = "";
-  selectedPythonVersion = "";
-  selectedCVersion = "";
-  selectedCppVersion = "";
-  selectedVersion = "";
   selectedModel: CodeModel = null;
   selectedTheme = 'vs-dark';
   readOnly = false;
@@ -109,14 +101,6 @@ export class CodingAppComponent implements OnInit, OnDestroy {
       `c`,
       this.domSanitizer.bypassSecurityTrustResourceUrl(`./assets/c.svg`)
     );
-    languages.forEach((language, idx) => {
-      this.selectedLanguageVersion[idx] = language.version
-    });
-    this.selectedCSharpVersion = this.langVersions.csharp[0];
-    this.selectedJavaVersion = this.langVersions.java[0];
-    this.selectedPythonVersion = this.langVersions.python[0];
-    this.selectedCVersion = this.langVersions.gcc[0];
-    this.selectedCppVersion = this.langVersions.gcc[0];
     this.runFiles = [];
     this.fileUploadControl.acceptFiles(".cs/,.java/,.py/,.c/,.cpp/")
     this.fileUploadControl.valueChanges.subscribe(item => this.dragDropToList(item[item.length - 1]));
@@ -249,32 +233,9 @@ export class CodingAppComponent implements OnInit, OnDestroy {
   }
   runCode() {
     this.runFiles = [];
-    if (this.selectedModel.language == 'csharp') {
-      this.selectedVersion = this.selectedCSharpVersion;
-      this.nestedDataSource.data.filter(item => item.type == FileNodeType.csharp ? this.runFiles.push(new FileCode(item.code.uri, item.code.value)) : false);
-    }
-    if (this.selectedModel.language == 'java') {
-      this.selectedVersion = this.selectedJavaVersion;
-      this.nestedDataSource.data.filter(item => item.type == FileNodeType.java ? this.runFiles.push(new FileCode(item.code.uri, item.code.value)) : false);
-    }
-    if (this.selectedModel.language == 'python') {
-      this.selectedVersion = this.selectedPythonVersion;
-      this.runFiles.push(new FileCode(this.selectedModel.uri, this.selectedModel.value));
-    }
-
-    if (this.selectedModel.language == 'cpp') {
-      this.selectedVersion = this.selectedCppVersion;
-      this.nestedDataSource.data.filter(item => item.type == FileNodeType.cpp ? this.runFiles.push(new FileCode(item.code.uri, item.code.value)) : false);
-    }
-
-    if (this.selectedModel.language == 'c') {
-      this.selectedVersion = this.selectedCVersion;
-      this.nestedDataSource.data.filter(item => item.type == FileNodeType.c ? this.runFiles.push(new FileCode(item.code.uri, item.code.value)) : false);
-    }
-
     this.isLoading = true;
     this.output = "Loading...";
-    this.compileService.compile(this.selectedVersion, this.selectedModel, this.runFiles).subscribe((item => { this.isLoading = false; item.data.run.stderr.length > 0 ? this.output = item.data.run.stderr : this.output = item.data.run.stdout }))
+    this.compileService.compile(this.selectedModel, this.runFiles).subscribe((item => { this.isLoading = false; item.data.run.stderr.length > 0 ? this.output = item.data.run.stderr : this.output = item.data.run.stdout }))
 
   }
   openNewFolderDialog() {
