@@ -15,7 +15,7 @@ namespace RestWebservice_RemoteCompiling.Database
         {
             get;
             set;
-        }
+        } = DateTime.Now;
 
         public string ProjectName
         {

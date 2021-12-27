@@ -36,7 +36,8 @@ namespace RestWebservice_RemoteCompiling.Handlers
             exercise.Name = request.Name;
             exercise.Author = ldapUser;
             exercise.TaskDefinition = request.TaskDefinition;
-
+            exercise.Template = request.template;
+            exercise.Template.ProjectName = exercise.Name + " Project";
             return CustomResponse.Success(_exerciseRepository.Add(exercise));
         }
     }
