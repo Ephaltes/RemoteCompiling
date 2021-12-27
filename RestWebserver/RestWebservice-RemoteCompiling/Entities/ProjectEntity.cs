@@ -22,7 +22,7 @@ namespace RestWebservice_RemoteCompiling.Entities
         {
             get;
             set;
-        }
+        } = "";
 
         public List<FileEntity> Files
         {
