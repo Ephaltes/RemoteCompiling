@@ -1,8 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FileNodeType } from '../file-module/file-node';
-import { forbiddenEndingValidator, forbiddenNameValidator } from '../forbidden-name.directive';
 import { ExerciseService } from '../service/exercise.service';
 
 @Component({

@@ -6,6 +6,7 @@ import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { CodeEditorComponent, CodeModel } from '@ngstack/code-editor';
 import { ExerciseNode } from '../exercise-module/exercise-node';
 import { ExercisePlatformAddNewExerciseComponent } from '../exercise-platform-add-new-exercise/exercise-platform-add-new-exercise.component';
+import { ExercisePlatformEditExerciseComponent } from '../exercise-platform-edit-exercise/exercise-platform-edit-exercise.component';
 import { FileNode, FileNodeType } from '../file-module/file-node';
 import { ExerciseService } from '../service/exercise.service';
 
@@ -215,11 +216,11 @@ export class ExercisePlatformExerciseOverviewTableComponent implements OnInit {
   }
   createNewExercise() {
     const dialogRef = this.Dialog.open(ExercisePlatformAddNewExerciseComponent);
-    var result = false;
-    dialogRef.afterClosed().subscribe(res => { result = dialogRef.componentInstance.validData ? true : false; if (result) this.refreshData(); })
+    dialogRef.afterClosed().subscribe(() => { dialogRef.componentInstance.validData ? this.refreshData() : false; })
   }
   editExercise(row: ExerciseNode) {
-    console.log(row.id);
+    const dialogRef = this.Dialog.open(ExercisePlatformEditExerciseComponent, { data: row });
+    dialogRef.afterClosed().subscribe(() => { dialogRef.componentInstance.validData ? this.refreshData() : false })
   }
   deleteExercise(row: ExerciseNode) {
     this.ExerciseService.deleteExercises(row.id).subscribe(res => this.refreshData());

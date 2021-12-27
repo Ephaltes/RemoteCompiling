@@ -21,4 +21,8 @@ export class ExerciseService {
         return this.http.delete(globalVar.apiURL + "/api/exercises", { body: { id: id } })
             .pipe(shareReplay(1));
     }
+    public putExercises(exercise: ExerciseNode) {
+        return this.http.put(globalVar.apiURL + "/api/exercises", { exercise })
+            .pipe(shareReplay(1));
+    }
 }

@@ -38,6 +38,7 @@ import { LoginSiteComponent } from './login-site/login-site.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { AuthInterceptor } from './interceptor/authentication-intercepter.service';
 import { LoggedInUserComponent } from './logged-in-user/logged-in-user.component';
+import { ExercisePlatformEditExerciseComponent } from './exercise-platform-edit-exercise/exercise-platform-edit-exercise.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -56,7 +57,8 @@ import { LoggedInUserComponent } from './logged-in-user/logged-in-user.component
     ExercisePlatformExerciseStudentTableComponent,
     ExercisePlatformAddNewExerciseComponent,
     LoginSiteComponent,
-    LoggedInUserComponent
+    LoggedInUserComponent,
+    ExercisePlatformEditExerciseComponent
   ],
   imports: [
     BrowserModule,

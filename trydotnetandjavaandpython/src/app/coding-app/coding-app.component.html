@@ -58,7 +58,7 @@
     <button mat-stroked-button color="accent" (click)="openNewFolderDialog()"> + Add new project</button>
   </mat-grid-tile>
   <!--File Tree-->
-  <mat-grid-tile [colspan]="2" [rowspan]="15">
+  <mat-grid-tile [colspan]="2" [rowspan]="12">
 
     <!--File items-->
     <mat-tree [dataSource]="nestedDataSource" [treeControl]="nestedTreeControl" class="file-tree">
@@ -178,5 +178,7 @@
       {{output}}
     </div>
   </mat-grid-tile>
-
+  <mat-grid-tile [colspan]="2" [rowspan]="3">
+    <app-logged-in-user style="width: 100%;height: 100%;"></app-logged-in-user>
+  </mat-grid-tile>
 </mat-grid-list>

@@ -275,7 +275,7 @@ export class CodingAppComponent implements OnInit, OnDestroy {
   }
   openNewFileDialog(node:FileNode) {
     const dialogRef = this.Dialog.open(AddNewFileComponent, { data: this.database.fileNamesForFolders(node.name) });
-    dialogRef.afterClosed().subscribe(result => { dialogRef.componentInstance.validData ? this.addNewFile(node.name,dialogRef.componentInstance.emittingData) : false })
+    dialogRef.afterClosed().subscribe(() => { dialogRef.componentInstance.validData ? this.addNewFile(node.name,dialogRef.componentInstance.emittingData) : false })
   }
   addNewFolder(data:any){
     this.database.addFolder(data.name);
