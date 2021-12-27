@@ -195,6 +195,9 @@ export class ExercisePlatformExerciseOverviewTableComponent implements OnInit {
   constructor(private Dialog: MatDialog, private ExerciseService: ExerciseService) { }
 
   ngOnInit(): void {
+    this.refreshData();
+  }
+  refreshData(): void {
     this.ExerciseService.getExercises().subscribe(res => this.dataSource.data = res.data);
   }
   ngAfterViewInit(): void {
@@ -212,12 +215,13 @@ export class ExercisePlatformExerciseOverviewTableComponent implements OnInit {
   }
   createNewExercise() {
     const dialogRef = this.Dialog.open(ExercisePlatformAddNewExerciseComponent);
-    dialogRef.afterClosed().subscribe(result => { dialogRef.componentInstance.validData ? true : false })
+    var result = false;
+    dialogRef.afterClosed().subscribe(res => { result = dialogRef.componentInstance.validData ? true : false; if (result) this.refreshData(); })
   }
   editExercise(row: ExerciseNode) {
     console.log(row.id);
   }
   deleteExercise(row: ExerciseNode) {
-    console.log(row.id);
+    this.ExerciseService.deleteExercises(row.id).subscribe(res => this.refreshData());
   }
 }

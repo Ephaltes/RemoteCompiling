@@ -7,7 +7,7 @@
     <div id="logOut" *ngIf="isLoggedin" style="color:white">
         <h4>
             <mat-icon aria-hidden="false" style="vertical-align: bottom;
-            font-size: 22px !important;">account_circle</mat-icon>Hans Peter
+            font-size: 22px !important;">account_circle</mat-icon>{{userDisplayName}}
         </h4>
         <button mat-raised-button color="warn" (click)="logout()">
             <mat-icon aria-hidden="false">logout</mat-icon>

@@ -12,9 +12,11 @@ export class LoggedInUserComponent implements OnInit {
 
   constructor(private router: Router, private authService: AuthService) { }
   isLoggedin = false;
+  userDisplayName = "";
   ngOnInit(): void {
     if (this.authService.isLoggedIn()) this.isLoggedin = true
     else this.isLoggedin = false;
+    this.userDisplayName = this.authService.getUserName();
   }
   login() {
     this.router.navigateByUrl('/login');
