@@ -22,7 +22,7 @@ export class ExerciseService {
             .pipe(shareReplay(1));
     }
     public putExercises(exercise: ExerciseNode) {
-        return this.http.put(globalVar.apiURL + "/api/exercises", { exercise })
+        return this.http.put(globalVar.apiURL + "/api/exercises",  exercise )
             .pipe(shareReplay(1));
     }
 }

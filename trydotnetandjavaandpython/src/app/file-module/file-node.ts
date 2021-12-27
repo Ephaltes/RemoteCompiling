@@ -10,15 +10,17 @@ export enum FileNodeType {
 }
 
 export class FileNode {
+    id?: number;
+    lastModified?: Date;
     children?: FileNode[];
     name: string;
     type: FileNodeType;
 
     code?: CodeModel;
 
-    constructor(name:string, type:FileNodeType, code:string,){
-        this.name=name;
-        this.type=type;
-        this.code={language:type,value:code,uri:name};
+    constructor(name: string, type: FileNodeType, code: string,) {
+        this.name = name;
+        this.type = type;
+        this.code = { language: type, value: code, uri: name };
     }
 }
