@@ -1,4 +1,6 @@
-﻿namespace RestWebservice_RemoteCompiling.Command
+﻿using RestWebservice_RemoteCompiling.Database;
+
+namespace RestWebservice_RemoteCompiling.Command
 {
     public class CreateExerciseCommand : BaseCommand<int>
     {
@@ -19,5 +21,11 @@
             get;
             set;
         }
+
+        internal ExerciseTemplateProject template
+        {
+            get;
+            set;
+        } = new ExerciseTemplateProject();
     }
 }
