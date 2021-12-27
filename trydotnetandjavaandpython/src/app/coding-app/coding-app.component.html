@@ -108,54 +108,7 @@
   <!--Actionbar-->
   <mat-grid-tile [colspan]="10" [rowspan]="1">
     <div class="wrap margin">
-      <div>
-        <mat-form-field appearance="fill" [style.height.px]="45" class="selectVersionActionBar">
-          <mat-label>Version</mat-label>
-          <!--C-Sharp Version List-->
-          <ng-container *ngIf="selectedModel.language=='csharp'">
-            <mat-select [(value)]="selectedCSharpVersion">
-              <mat-option *ngFor="let version of langVersions.csharp" [value]="version">
-                {{version}}
-              </mat-option>
-            </mat-select>
-          </ng-container>
-          <!--Java Version List-->
-          <ng-container *ngIf="selectedModel.language=='java'">
-            <mat-select [(value)]="selectedJavaVersion">
-              <mat-option *ngFor="let version of langVersions.java" [value]="version">
-                {{version}}
-              </mat-option>
-            </mat-select>
-          </ng-container>
-          <!--Python Version List-->
-          <ng-container *ngIf="selectedModel.language=='python'">
-            <mat-select [(value)]="selectedPythonVersion">
-              <mat-option *ngFor="let version of langVersions.python" [value]="version">
-                {{version}}
-              </mat-option>
-            </mat-select>
-          </ng-container>
-
-          <!--c++ Version List-->
-          <ng-container *ngIf="selectedModel.language=='cpp'">
-            <mat-select [(value)]="selectedCppVersion">
-              <mat-option *ngFor="let version of langVersions.gcc" [value]="version">
-                {{version}} gcc
-              </mat-option>
-            </mat-select>
-          </ng-container>
-
-          <!--c Version List-->
-          <ng-container *ngIf="selectedModel.language=='c'">
-            <mat-select [(value)]="selectedCVersion">
-              <mat-option *ngFor="let version of langVersions.gcc" [value]="version">
-                {{version}} gcc
-              </mat-option>
-            </mat-select>
-          </ng-container>
-
-        </mat-form-field>
-      </div>
+      
       <div class="runActionBar">
         <button mat-raised-button color="primary" [disabled]="isLoading" (click)="runCode()">Run</button>
       </div>

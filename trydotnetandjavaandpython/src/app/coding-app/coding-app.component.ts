@@ -19,17 +19,17 @@ import { languages } from '../code-meta/codeLanguageMeta';
 import * as JSZip from 'jszip';
 import { FolderOptionDialogComponent } from '../folder-option-dialog/folder-option-dialog.component';
 import { AddNewFolderComponent } from '../add-new-folder/add-new-folder.component';
+import { UserProjectService } from '../service/userproject.service';
 
 @Component({
   selector: 'app-coding-app',
   templateUrl: './coding-app.component.html',
   styleUrls: ['./coding-app.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  providers: [FileDatabase, CompileService]
+  providers: [FileDatabase, CompileService, UserProjectService]
 })
 export class CodingAppComponent implements OnInit, OnDestroy {
   private toasterSerivce: ToasterService;
-  subscription: Subscription;
   saveSource = interval(60000);
   newFile = "Test.cs"
   newType = FileNodeType.csharp;
@@ -70,13 +70,21 @@ export class CodingAppComponent implements OnInit, OnDestroy {
       enabled: false,
     },
   };
-  constructor(private database: FileDatabase, private editorService: CodeEditorService, private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer, private compileService: CompileService, private Dialog: MatDialog, private ToasterService: ToasterService) {
+  constructor(private database: FileDatabase, private userProjectService: UserProjectService, private editorService: CodeEditorService, private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer, private compileService: CompileService, private Dialog: MatDialog, private ToasterService: ToasterService) {
     this.nestedTreeControl = new NestedTreeControl<FileNode>(this._getChildren);
     this.nestedDataSource = new MatTreeNestedDataSource();
 
-    database.dataChange.subscribe(
-      (data) => { (this.nestedDataSource.data = data); }
-    );
+    var projects: FileNode[];
+    this.userProjectService.getProjects().subscribe(res => {
+      projects = this.userProjectService.convertBEtoFEEntity(res);
+      this.nestedDataSource.data = projects;
+      if (projects.length > 0) {
+        this.nestedTreeControl.expand(this.nestedDataSource.data[0]);
+        if (projects[0].children.length > 0)
+          this.selectNode(this.nestedDataSource.data[0].children[0]);
+      }
+    });
+
     this.isLoading$ = editorService.loadingTypings.pipe(debounceTime(300));
     this.matIconRegistry.addSvgIcon(
       `csharp`,
@@ -154,7 +162,7 @@ export class CodingAppComponent implements OnInit, OnDestroy {
             this.Dialog.open(ErrorDialogComponent, { data: { message: "File extension is not supported, please only use .cs,.java,.py,.c,.cpp files!" } })
             this.fileUploadControl.removeFile(file);
           }
-          this.database.addFile(folderName,file.name, fileType, fileReader.result.toString());
+          this.database.addFile(folderName, file.name, fileType, fileReader.result.toString());
           this.fileUploadControl.removeFile(file);
           this.refreshTree();
           return;
@@ -273,19 +281,19 @@ export class CodingAppComponent implements OnInit, OnDestroy {
     const dialogRef = this.Dialog.open(AddNewFolderComponent, { data: this.database.fileNames() });
     dialogRef.afterClosed().subscribe(result => { dialogRef.componentInstance.validData ? this.addNewFolder(dialogRef.componentInstance.emittingData) : false })
   }
-  openNewFileDialog(node:FileNode) {
+  openNewFileDialog(node: FileNode) {
     const dialogRef = this.Dialog.open(AddNewFileComponent, { data: this.database.fileNamesForFolders(node.name) });
-    dialogRef.afterClosed().subscribe(() => { dialogRef.componentInstance.validData ? this.addNewFile(node.name,dialogRef.componentInstance.emittingData) : false })
+    dialogRef.afterClosed().subscribe(() => { dialogRef.componentInstance.validData ? this.addNewFile(node.name, dialogRef.componentInstance.emittingData) : false })
   }
-  addNewFolder(data:any){
+  addNewFolder(data: any) {
     this.database.addFolder(data.name);
     this.refreshTree();
   }
-  addNewFile(folderName:string,data: any) {
-    this.database.addFile(folderName,data.name, data.language, data.code);
+  addNewFile(folderName: string, data: any) {
+    this.database.addFile(folderName, data.name, data.language, data.code);
     this.refreshTree();
   }
-  
+
   ngOnInit() {
     var toast: Toast = {
       type: 'success',
@@ -293,12 +301,11 @@ export class CodingAppComponent implements OnInit, OnDestroy {
       showCloseButton: false
     };
     this.saveSource.subscribe(val => { this.database.save(), this.toasterSerivce.pop(toast) });
-    this.nestedTreeControl.expand(this.nestedDataSource.data[0]);
-    this.selectNode(this.nestedDataSource.data[0].children[0]);
+    //this.nestedTreeControl.expand(this.nestedDataSource.data[0]);
+    // this.selectNode(this.nestedDataSource.data[0].children[0]);
   }
   ngOnDestroy() {
     this.database.save();
-    this.subscription.unsubscribe();
   }
 
 }

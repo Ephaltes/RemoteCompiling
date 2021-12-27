@@ -11,7 +11,6 @@ export enum FileNodeType {
 
 export class FileNode {
     id?: number;
-    lastModified?: Date;
     children?: FileNode[];
     name: string;
     type: FileNodeType;
