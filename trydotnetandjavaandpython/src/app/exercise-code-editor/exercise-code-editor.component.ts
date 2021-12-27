@@ -6,6 +6,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { CodeModel } from '@ngstack/code-editor';
 import { debounceTime } from 'rxjs/operators';
 import { StudentNode } from '../exercise-module/student-node';
+import { CheckPoint } from '../file-module/checkpoint';
 import { FileNode, FileNodeType } from '../file-module/file-node';
 
 @Component({
@@ -83,11 +84,11 @@ export class ExerciseCodeEditorComponent implements OnInit {
   }
   removeNode(node: FileNode) {
   }
-  private _getChildren = (node: FileNode) => node.children;
-  hasNestedChild(_: number, nodeData: FileNode): boolean {
-    return nodeData.type === FileNodeType.folder;
+  private _getChildren = (node: CheckPoint) => node.children;
+  hasNestedChild(_: number, nodeData: CheckPoint): boolean {
+    return nodeData.projectType === FileNodeType.folder;
   }
-  isNodeSelected(node: FileNode): boolean {
+  isNodeSelected(node: CheckPoint): boolean {
     return (
       node &&
       node.code &&
@@ -96,7 +97,7 @@ export class ExerciseCodeEditorComponent implements OnInit {
     );
   }
 
-  selectNode(node: FileNode) {
+  selectNode(node: CheckPoint) {
     this.selectedModel = node.code;
   }
   saveExercise() {

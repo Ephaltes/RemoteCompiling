@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { FileNode, FileNodeType } from './file-node';
-
+/*
 const FILES_DATA: FileNode[] = [
   {
-    name: 'HelloWorldAngular',
-    type: FileNodeType.folder,
+    projectName: 'HelloWorldAngular',
+    projectType: FileNodeType.folder,
     children: [{
-      name: 'HelloWorldCSharp.cs',
-      type: FileNodeType.csharp,
+      projectName: 'HelloWorldCSharp.cs',
+      projectType: FileNodeType.csharp,
       code: {
         language: 'csharp',
         uri: 'HelloWorldCSharp.cs',
@@ -28,8 +28,8 @@ const FILES_DATA: FileNode[] = [
       }
     },
     {
-      name: 'HelloAngular.cs',
-      type: FileNodeType.csharp,
+      projectName: 'HelloAngular.cs',
+      projectType: FileNodeType.csharp,
       code: {
         language: 'csharp',
         uri: 'HelloAngular.cs',
@@ -47,11 +47,11 @@ const FILES_DATA: FileNode[] = [
     }]
   },
   {
-    name: 'HelloWorldJava',
-    type: FileNodeType.folder,
+    projectName: 'HelloWorldJava',
+    projectType: FileNodeType.folder,
     children: [{
-      name: 'HelloWorldJava.java',
-      type: FileNodeType.java,
+      projectName: 'HelloWorldJava.java',
+      projectType: FileNodeType.java,
       code: {
         language: 'java',
         uri: 'HelloWorldJava.java',
@@ -68,11 +68,11 @@ const FILES_DATA: FileNode[] = [
     }]
   },
   {
-    name: 'HelloWorldPython',
-    type: FileNodeType.folder,
+    projectName: 'HelloWorldPython',
+    projectType: FileNodeType.folder,
     children: [{
-      name: 'HelloWorldPython.py',
-      type: FileNodeType.python,
+      projectName: 'HelloWorldPython.py',
+      projectType: FileNodeType.python,
       code: {
         language: 'python',
         uri: 'HelloWorldPython.py',
@@ -83,11 +83,11 @@ const FILES_DATA: FileNode[] = [
     }]
   },
   {
-    name: 'HelloWorldC',
-    type: FileNodeType.folder,
+    projectName: 'HelloWorldC',
+    projectType: FileNodeType.folder,
     children: [{
-      name: 'HelloWorldCpp.cpp',
-      type: FileNodeType.cpp,
+      projectName: 'HelloWorldCpp.cpp',
+      projectType: FileNodeType.cpp,
       code: {
         language: 'cpp',
         uri: 'HelloWorldCpp.cpp',
@@ -101,8 +101,8 @@ const FILES_DATA: FileNode[] = [
       }
     },
     {
-      name: 'HelloWorldC.c',
-      type: FileNodeType.c,
+      projectName: 'HelloWorldC.c',
+      projectType: FileNodeType.c,
       code: {
         language: 'c',
         uri: 'HelloWorldC.c',
@@ -132,16 +132,16 @@ export class FileDatabase {
   getAllFolders(): FileNode[] {
     var list: FileNode[] = [];
     this.data.forEach(element => {
-      if (element.type === FileNodeType.folder)
+      if (element.projectType === FileNodeType.folder)
         list.push(element)
     });
     return list;
   }
   addFolder(name: string) {
-    this.dataChange.next(this.dataChange.getValue().concat({ name: name, type: FileNodeType.folder, children:[] }));
+    this.dataChange.next(this.dataChange.getValue().concat({ projectName: name, projectType: FileNodeType.folder, children:[] }));
   }
   addFile(folderName: string, name: string, language: FileNodeType, code: string) {
-    this.dataChange.getValue().find(folder => folder.name == folderName).children.push({ name: name, type: language, code: { language: language, uri: name, value: code } })
+    this.dataChange.getValue().find(folder => folder.projectName == folderName).children.push({ projectName: name, projectType: language, code: { language: language, uri: name, value: code } })
     this.dataChange.next(this.dataChange.getValue());
     console.log(this.dataChange.getValue());
   }
@@ -157,7 +157,7 @@ export class FileDatabase {
         dataRemoveArray.splice(index, 1);
         break;
       }
-      if (item.type === FileNodeType.folder) {
+      if (item.projectType === FileNodeType.folder) {
         for (let indexchild = 0; indexchild < item.children.length; indexchild++) {
           let child = item.children[indexchild];
           if (child === file) {
@@ -173,7 +173,7 @@ export class FileDatabase {
   fileNames(): string[] {
     var list = new Array();
     this.data.forEach(element => {
-      list.push(element.name.toLowerCase());
+      list.push(element.projectName.toLowerCase());
     });
     console.log(list);
     return list;
@@ -181,9 +181,9 @@ export class FileDatabase {
   fileNamesForFolders(folderName: string): string[] {
     var list = new Array();
     this.data.forEach((element) => {
-      if (element.name == folderName) {
+      if (element.projectName == folderName) {
         element.children.forEach(file => {
-          list.push(this.fileEndingRemover(file.name.toLowerCase()));
+          list.push(this.fileEndingRemover(file.projectName.toLowerCase()));
         });
       }
     });
@@ -193,9 +193,9 @@ export class FileDatabase {
   fileNamesForFoldersWithExt(folderName: string): string[] {
     var list = new Array();
     this.data.forEach((element) => {
-      if (element.name == folderName) {
+      if (element.projectName == folderName) {
         element.children.forEach(file => {
-          list.push(file.name.toLowerCase());
+          list.push(file.projectName.toLowerCase());
         });
       }
     });
@@ -220,3 +220,4 @@ export class FileDatabase {
     this.dataChange.next(data);
   }
 }
+*/

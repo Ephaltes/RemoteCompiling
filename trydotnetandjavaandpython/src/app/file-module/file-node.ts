@@ -1,4 +1,4 @@
-import { CodeModel } from '@ngstack/code-editor/public_api';
+import { FileEntity } from './file-entity';
 
 export enum FileNodeType {
     csharp = 'csharp',
@@ -10,17 +10,9 @@ export enum FileNodeType {
 }
 
 export class FileNode {
-    id?: number;
-    lastModified?: Date;
-    children?: FileNode[];
-    name: string;
-    type: FileNodeType;
-
-    code?: CodeModel;
-
-    constructor(name: string, type: FileNodeType, code: string,) {
-        this.name = name;
-        this.type = type;
-        this.code = { language: type, value: code, uri: name };
-    }
+    id: number;
+    projectName: string;
+    stdIn?: string;
+    files?: FileEntity[];
+    projectType: FileNodeType;
 }

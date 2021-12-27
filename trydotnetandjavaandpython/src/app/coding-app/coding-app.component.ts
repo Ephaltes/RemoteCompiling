@@ -5,7 +5,6 @@ import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { CodeEditorService, CodeModel } from '@ngstack/code-editor';
 import { interval, Observable, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { FileDatabase } from '../file-module/file-database';
 import { FileNode, FileNodeType } from '../file-module/file-node';
 import { DomSanitizer } from "@angular/platform-browser";
 import { CompileService } from '../service/compile.service';
@@ -25,7 +24,7 @@ import { AddNewFolderComponent } from '../add-new-folder/add-new-folder.componen
   templateUrl: './coding-app.component.html',
   styleUrls: ['./coding-app.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  providers: [FileDatabase, CompileService]
+  providers: [CompileService]
 })
 export class CodingAppComponent implements OnInit, OnDestroy {
   private toasterSerivce: ToasterService;
@@ -70,7 +69,7 @@ export class CodingAppComponent implements OnInit, OnDestroy {
       enabled: false,
     },
   };
-  constructor(private database: FileDatabase, private editorService: CodeEditorService, private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer, private compileService: CompileService, private Dialog: MatDialog, private ToasterService: ToasterService) {
+  constructor(private editorService: CodeEditorService, private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer, private compileService: CompileService, private Dialog: MatDialog, private ToasterService: ToasterService) {
     this.nestedTreeControl = new NestedTreeControl<FileNode>(this._getChildren);
     this.nestedDataSource = new MatTreeNestedDataSource();
 
