@@ -6,12 +6,18 @@ import { ExerciseNode } from '../exercise-module/exercise-node';
 export interface ResponseBody {
     data: ExerciseNode[];
 };
+export interface ResponseBodySingle {
+    data: ExerciseNode;
+};
 @Injectable()
 export class ExerciseService {
 
     constructor(private http: HttpClient) { }
     public getExercises() {
         return this.http.get<ResponseBody>(globalVar.apiURL + "/api/exercises");
+    }
+    public getExercisesById(projectId: number) {
+        return this.http.get<ResponseBodySingle>(globalVar.apiURL + "/api/exercises/" + projectId);
     }
     public postExercises(name: string, description: string) {
         return this.http.post(globalVar.apiURL + "/api/exercises", { name: name, description: description, taskDefinition: "" })
@@ -22,7 +28,7 @@ export class ExerciseService {
             .pipe(shareReplay(1));
     }
     public putExercises(exercise: ExerciseNode) {
-        return this.http.put(globalVar.apiURL + "/api/exercises",  exercise )
+        return this.http.put(globalVar.apiURL + "/api/exercises", exercise)
             .pipe(shareReplay(1));
     }
 }

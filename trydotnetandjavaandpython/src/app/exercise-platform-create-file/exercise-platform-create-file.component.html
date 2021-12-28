@@ -1,0 +1,37 @@
+<div class="container-fluid" id="contentWrapper">
+    <mat-card id="createFileCard">
+        <mat-card-header>
+            <mat-card-title>Add new file ...</mat-card-title>
+        </mat-card-header>
+        <form [formGroup]="newFileForm" (ngSubmit)="submit()">
+            <mat-card-content>
+
+                <mat-form-field appearance="outline" [style.width.%]="100" style="padding-right: 2%;"
+                    class="newFileForm">
+                    <mat-label>File name</mat-label>
+                    <input matInput formControlName="name" value="" autocomplete="off" placeholder="HelloWorld">
+                    <mat-hint *ngIf="name.invalid && (name.dirty || name.touched)"
+                        class="text-danger margin-bottom-thin my-mat-hint">
+                        <div *ngIf="name.errors!['required']">
+                            Filename is required
+                        </div>
+                        <div *ngIf="name.errors!['minlength']">
+                            Filename must be at least 3 characters long.
+                        </div>
+                        <div *ngIf="name.errors!['fileNameExists']">
+                            Filename is already in use!
+                        </div>
+                        <div *ngIf="name.errors!['fileNameEnding']">
+                            File extension is not needed!
+                        </div>
+                    </mat-hint>
+                </mat-form-field>
+
+            </mat-card-content>
+            <mat-card-actions style="padding: 20px;">
+                <button style="float: left;" mat-raised-button color="primary" type="submit"
+                    [disabled]="newFileForm.invalid" mat-dialog-close>Submit</button>
+            </mat-card-actions>
+        </form>
+    </mat-card>
+</div>

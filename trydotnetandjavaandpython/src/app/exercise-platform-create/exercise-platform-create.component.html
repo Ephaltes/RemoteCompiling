@@ -2,6 +2,6 @@
 <app-exercise-platform-exercise-overview-table (itemSelectedEvent)="openCodingApp($event)"></app-exercise-platform-exercise-overview-table>
 </ng-container>
 <ng-container *ngIf="exerciseSelected">
-    <app-exercise-code-editor (finishedWorkingEvent)="backFromCodingApp($event)" [currentEditor]="selectedItem.files">
+    <app-exercise-code-editor (finishedWorkingEvent)="backFromCodingApp($event)" [currentExercise]="selectedItem" [currentEditor]="selectedItem.files">
     </app-exercise-code-editor>
 </ng-container>

@@ -3,13 +3,13 @@ import { Injectable } from "@angular/core";
 import * as globalVar from '../../../globals'
 import { FileNode, FileNodeType } from "../file-module/file-node";
 export interface CheckPoint {
-    id: number;
+    id?: number;
     code: string;
-    created: Date;
+    created?: Date;
 }
 export interface FileEntity {
-    id: number;
-    lastModified: Date;
+    id?: number;
+    lastModified?: Date;
     fileName: string;
     checkpoints: CheckPoint[]
 }

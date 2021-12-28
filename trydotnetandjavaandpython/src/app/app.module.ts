@@ -39,6 +39,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { AuthInterceptor } from './interceptor/authentication-intercepter.service';
 import { LoggedInUserComponent } from './logged-in-user/logged-in-user.component';
 import { ExercisePlatformEditExerciseComponent } from './exercise-platform-edit-exercise/exercise-platform-edit-exercise.component';
+import { ExercisePlatformCreateFileComponent } from './exercise-platform-create-file/exercise-platform-create-file.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -58,7 +59,8 @@ import { ExercisePlatformEditExerciseComponent } from './exercise-platform-edit-
     ExercisePlatformAddNewExerciseComponent,
     LoginSiteComponent,
     LoggedInUserComponent,
-    ExercisePlatformEditExerciseComponent
+    ExercisePlatformEditExerciseComponent,
+    ExercisePlatformCreateFileComponent
   ],
   imports: [
     BrowserModule,
