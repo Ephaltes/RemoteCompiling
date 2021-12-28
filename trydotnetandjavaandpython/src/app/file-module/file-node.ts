@@ -10,7 +10,8 @@ export enum FileNodeType {
 }
 
 export class FileNode {
-    id?: number;
+    projectid?: number;
+    fileId?: number;
     children?: FileNode[];
     name: string;
     type: FileNodeType;

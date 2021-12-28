@@ -64,7 +64,7 @@ export class UserProjectService {
             projects.forEach(pj => {
                 var newFileNode = new FileNode(pj.projectName, FileNodeType.folder, "")
                 newFileNode.children = [];
-                newFileNode.id = pj.id;
+                newFileNode.projectid = pj.id;
                 var fileType: FileNodeType;
                 switch (pj.projectType) {
                     case 0:
@@ -93,7 +93,7 @@ export class UserProjectService {
                     pj.files.forEach(pjFile => {
                         var checkpoint = pjFile.checkpoints.reduce((r, o) => r.created < o.created ? r : o);
                         var childFile = new FileNode(pjFile.fileName, fileType, checkpoint.code);
-                        childFile.id = pjFile.id;
+                        childFile.fileId = pjFile.id;
                         newFileNode.children.push(childFile);
                     });
                 }

@@ -229,8 +229,10 @@ export class CodingAppComponent implements OnInit, OnDestroy {
     if (this.isNodeSelected(node)) {
       this.selectedModel = { uri: "", language: "", value: "" };
     }
-    this.database.remove(node);
-    this.refreshTree();
+    this.userProjectService.deleteProject(node.projectid).subscribe(() => {
+      this.refreshData()
+      this.refreshTree();
+    })
   }
   onEditorLoaded() {
     console.log('Online Editor loaded!');
