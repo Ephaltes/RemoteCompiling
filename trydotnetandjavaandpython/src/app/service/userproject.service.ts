@@ -48,24 +48,7 @@ export class UserProjectService {
     public deleteFileFromProject(projectId: number, fileId: number) {
         return this.http.delete(globalVar.apiURL + "/api/file/remove", { body: { projectId: projectId, fileId: fileId } })
     }
-    private convertFileTypeToNumber(fileType: FileNodeType): number {
-        switch (fileType) {
-            case FileNodeType.csharp:
-                return 0;
-            case FileNodeType.cpp:
-                return 1;
-            case FileNodeType.java:
-                return 2;
-            case FileNodeType.folder:
-                return 3;
-            case FileNodeType.folder:
-                return 4;
-            case FileNodeType.python:
-                return 5;
-            default:
-                return 0;
-        }
-    }
+    
     public convertBEtoFEEntity(user: User): FileNode[] {
         var projectsConverted: FileNode[] = [];
         const projects = user.data.projects;

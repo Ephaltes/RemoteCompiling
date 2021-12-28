@@ -29,7 +29,7 @@ export class ExercisePlatformAddNewExerciseComponent implements OnInit {
     if (!this.newExerciseForm.valid) {
       return;
     }
-    this.apiService.postExercises(value.name, value.description).subscribe(res => { this.validData = true; this.newExerciseForm.reset(); });
+    this.apiService.postExercises(value.name, value.description, value.type).subscribe(res => { this.validData = true; this.newExerciseForm.reset(); });
   }
   get name() {
     return this.newExerciseForm.get('name')!;

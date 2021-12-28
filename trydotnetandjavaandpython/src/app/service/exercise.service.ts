@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { shareReplay } from 'rxjs/operators';
 import * as globalVar from '../../../globals'
 import { ExerciseNode } from '../exercise-module/exercise-node';
+import { FileNodeType } from '../file-module/file-node';
 export interface ResponseBody {
     data: ExerciseNode[];
 };
@@ -19,8 +20,8 @@ export class ExerciseService {
     public getExercisesById(projectId: number) {
         return this.http.get<ResponseBodySingle>(globalVar.apiURL + "/api/exercises/" + projectId);
     }
-    public postExercises(name: string, description: string) {
-        return this.http.post(globalVar.apiURL + "/api/exercises", { name: name, description: description, taskDefinition: "" })
+    public postExercises(name: string, description: string, projectType: FileNodeType) {
+        return this.http.post(globalVar.apiURL + "/api/exercises", { name: name, description: description, taskDefinition: "", projectType: this.convertFileTypeToNumber(projectType) })
             .pipe(shareReplay(1));
     }
     public deleteExercises(id: number) {
@@ -30,5 +31,23 @@ export class ExerciseService {
     public putExercises(exercise: ExerciseNode) {
         return this.http.put(globalVar.apiURL + "/api/exercises", exercise)
             .pipe(shareReplay(1));
+    }
+    private convertFileTypeToNumber(fileType: FileNodeType): number {
+        switch (fileType) {
+            case FileNodeType.csharp:
+                return 0;
+            case FileNodeType.cpp:
+                return 1;
+            case FileNodeType.java:
+                return 2;
+            case FileNodeType.folder:
+                return 3;
+            case FileNodeType.folder:
+                return 4;
+            case FileNodeType.python:
+                return 5;
+            default:
+                return 0;
+        }
     }
 }
