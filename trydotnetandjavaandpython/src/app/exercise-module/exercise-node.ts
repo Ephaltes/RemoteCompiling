@@ -7,7 +7,7 @@ export class ExerciseNode {
     name: string;
     author: string;
     description: string;
-    taskDefiniton?: string;
+    taskDefinition?: string;
     dueData?: Date;
     template?: UserProject;
     files?: FileNode[];

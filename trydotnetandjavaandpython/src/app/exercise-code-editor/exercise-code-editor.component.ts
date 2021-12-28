@@ -20,6 +20,7 @@ import { UserProject } from '../service/userproject.service';
   providers: [ExerciseService]
 })
 export class ExerciseCodeEditorComponent implements OnInit {
+  taskDefinition: string = ""
   private _currentEditor: FileNode[]
   @Input() set currentEditor(value: FileNode[]) {
     this._currentEditor = value;
@@ -38,6 +39,7 @@ export class ExerciseCodeEditorComponent implements OnInit {
   private _currentExercise: ExerciseNode
   @Input() set currentExercise(value: ExerciseNode) {
     this._currentExercise = value;
+    this.taskDefinition = value.taskDefinition;
   }
   get currentExercise(): ExerciseNode {
     return this._currentExercise;
@@ -112,7 +114,7 @@ export class ExerciseCodeEditorComponent implements OnInit {
     this.selectedModel = node.code;
   }
   saveExercise() {
-    this.finishedWorkingEvent.emit(false);
+    this.exerciseService.putExercises(this.convertFEtoBEEntity(this.currentExercise)).subscribe(() => this.finishedWorkingEvent.emit(false));
   }
   backToParent() {
     this.finishedWorkingEvent.emit(false);
@@ -122,7 +124,12 @@ export class ExerciseCodeEditorComponent implements OnInit {
     dialogRef.afterClosed().subscribe(() => { dialogRef.componentInstance.validData ? this.refreshData() : false })
   }
   refreshData() {
-    this.currentEditor = this.convertBEtoFEEntity(this.currentExercise.template);
+    this.exerciseService.getExercisesById(this.currentExercise.id).subscribe(res => {
+      this.currentExercise = res.data;
+      this.currentExercise.files = this.convertBEtoFEEntity(this.currentExercise.template);
+      this.currentEditor = this.currentExercise.files;
+    });
+
   }
   public convertBEtoFEEntity(template: UserProject): FileNode[] {
     var projectsConverted: FileNode[] = [];
@@ -159,5 +166,16 @@ export class ExerciseCodeEditorComponent implements OnInit {
       }
     }
     return projectsConverted;
+  }
+  public convertFEtoBEEntity(exercise: ExerciseNode): ExerciseNode {
+    exercise.taskDefinition = this.taskDefinition;
+    if (exercise.files != undefined) {
+      if (exercise.files.length > 0) {
+        exercise.files.forEach(file => {
+          exercise.template.files.find(c => c.id == file.fileId).checkpoints[0].code = file.code.value;
+        });
+      }
+    }
+    return exercise;
   }
 }

@@ -35,7 +35,6 @@ export class ExercisePlatformCreateFileComponent implements OnInit {
     }
     const value = this.newFileForm.value;
     var fileNameEnding = "";
-    console.log(this.project)
     switch (this.project.template.projectType) {
       case 0:
         fileNameEnding = ".cs"
