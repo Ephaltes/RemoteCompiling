@@ -16,7 +16,7 @@ export class ExercisePlatformAddNewExerciseComponent implements OnInit {
     { name: 'C#', value: FileNodeType.csharp },
     { name: 'Java', value: FileNodeType.java },
     { name: 'Python', value: FileNodeType.python },
-    { name: 'C', value: FileNodeType.c},
+    { name: 'C', value: FileNodeType.c },
     { name: 'C++', value: FileNodeType.cpp },
   ];
   newExerciseForm: FormGroup;
@@ -39,7 +39,7 @@ export class ExercisePlatformAddNewExerciseComponent implements OnInit {
     if (!this.newExerciseForm.valid) {
       return;
     }
-    this.apiService.postExercises(value.name, value.description, value.language).subscribe(res => { this.validData = true; this.newExerciseForm.reset(); });
+    this.apiService.postExercises(value.name, value.description, value.language).subscribe(() => { this.validData = true; this.newExerciseForm.reset(); });
   }
   get name() {
     return this.newExerciseForm.get('name')!;

@@ -96,6 +96,11 @@ export class ExerciseCodeEditorComponent implements OnInit {
         this.selectNode(this.nestedDataSource.data[0])
   }
   removeNode(node: FileNode) {
+    if (confirm("Are you sure to delete " + node.name + "?")) {
+      this.currentExercise.files = this.currentExercise.files.filter(c => c.fileId != node.fileId);
+      this.currentExercise.template.files = this.currentExercise.template.files.filter(c => c.id != node.fileId);
+      this.exerciseService.putExercises(this.convertFEtoBEEntity(this.currentExercise)).subscribe(() => this.refreshData());
+    }
   }
   private _getChildren = (node: FileNode) => node.children;
   hasNestedChild(_: number, nodeData: FileNode): boolean {
@@ -128,6 +133,11 @@ export class ExerciseCodeEditorComponent implements OnInit {
       this.currentExercise = res.data;
       this.currentExercise.files = this.convertBEtoFEEntity(this.currentExercise.template);
       this.currentEditor = this.currentExercise.files;
+      if (this.nestedDataSource.data.length > 1)
+        this.selectNode(this.nestedDataSource.data[this.nestedDataSource.data.length - 1])
+      else
+        this.selectedModel = { uri: "", value: "", language: "" }
+          ;
     });
 
   }
