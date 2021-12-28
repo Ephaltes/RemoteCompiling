@@ -1,4 +1,5 @@
 ﻿using RestWebservice_RemoteCompiling.Database;
+using RestWebservice_RemoteCompiling.Entities;
 
 namespace RestWebservice_RemoteCompiling.Command
 {
@@ -22,6 +23,11 @@ namespace RestWebservice_RemoteCompiling.Command
             set;
         }
 
+        public ProjectType TemplateProjectType
+        {
+            get;
+            set;
+        }
         internal ExerciseTemplateProject template
         {
             get;
