@@ -30,7 +30,8 @@ namespace RestWebservice_RemoteCompiling.Handlers
             Project project = new Project
                               {
                                   ProjectName = request.Project.ProjectName,
-                                  StdIn = request.Project.StdIn
+                                  StdIn = request.Project.StdIn,
+                                  ProjectType = request.Project.ProjectType
                               };
             foreach (FileEntity projectFiles in request.Project.Files)
             {
