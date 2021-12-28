@@ -1,7 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
+
+using Microsoft.EntityFrameworkCore;
 
 using RestWebservice_RemoteCompiling.Command;
 using RestWebservice_RemoteCompiling.Database;
@@ -29,6 +32,21 @@ namespace RestWebservice_RemoteCompiling.Handlers
                                   ProjectName = request.Project.ProjectName,
                                   StdIn = request.Project.StdIn
                               };
+            foreach (FileEntity projectFiles in request.Project.Files)
+            {
+                var x = new File();
+                foreach (var VARIABLE in projectFiles.Checkpoints)
+                {
+                    x.Checkpoints.Add(new Checkpoint()
+                                      {
+                                          Code = VARIABLE.Code,
+                                          Created = VARIABLE.Created
+                                      });
+                }
+                x.FileName = projectFiles.FileName;
+                x.LastModified = DateTime.Now;
+                project.Files.Add(x);
+            }
 
             ldapUser.Projects.Add(project);
 
