@@ -133,18 +133,15 @@ export class ExerciseCodeEditorComponent implements OnInit {
           fileType = FileNodeType.csharp;
           break;
         case 1:
-          fileType = FileNodeType.cpp;
+          fileType = FileNodeType.c;
           break;
         case 2:
-          fileType = FileNodeType.java;
+          fileType = FileNodeType.cpp;
           break;
         case 3:
-          fileType = FileNodeType.folder;
+          fileType = FileNodeType.java;
           break;
         case 4:
-          fileType = FileNodeType.folder;
-          break;
-        case 5:
           fileType = FileNodeType.python;
           break;
         default:

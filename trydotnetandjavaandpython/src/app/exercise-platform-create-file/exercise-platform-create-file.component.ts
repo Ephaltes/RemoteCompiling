@@ -44,13 +44,12 @@ export class ExercisePlatformCreateFileComponent implements OnInit {
         fileNameEnding = ".c"
         break;
       case 2:
-        fileNameEnding = ".java"
+        fileNameEnding = ".c"
         break;
       case 3:
+        fileNameEnding = ".java"
         break;
       case 4:
-        break;
-      case 5:
         fileNameEnding = ".py"
         break;
       default:

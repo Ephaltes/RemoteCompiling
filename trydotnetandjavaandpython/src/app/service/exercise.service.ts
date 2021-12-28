@@ -21,7 +21,7 @@ export class ExerciseService {
         return this.http.get<ResponseBodySingle>(globalVar.apiURL + "/api/exercises/" + projectId);
     }
     public postExercises(name: string, description: string, projectType: FileNodeType) {
-        return this.http.post(globalVar.apiURL + "/api/exercises", { name: name, description: description, taskDefinition: "", projectType: this.convertFileTypeToNumber(projectType) })
+        return this.http.post(globalVar.apiURL + "/api/exercises", { name: name, description: description, taskDefinition: "", templateProjectType: this.convertFileTypeToNumber(projectType) })
             .pipe(shareReplay(1));
     }
     public deleteExercises(id: number) {
@@ -36,16 +36,14 @@ export class ExerciseService {
         switch (fileType) {
             case FileNodeType.csharp:
                 return 0;
-            case FileNodeType.cpp:
+            case FileNodeType.c:
                 return 1;
-            case FileNodeType.java:
+            case FileNodeType.cpp:
                 return 2;
-            case FileNodeType.folder:
+            case FileNodeType.java:
                 return 3;
-            case FileNodeType.folder:
-                return 4;
             case FileNodeType.python:
-                return 5;
+                return 4;
             default:
                 return 0;
         }
