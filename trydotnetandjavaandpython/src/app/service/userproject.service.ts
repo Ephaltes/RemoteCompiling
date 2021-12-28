@@ -27,6 +27,9 @@ export interface User {
         projects: UserProject[];
     }
 }
+export interface DataIdBody {
+    data: number;
+}
 @Injectable()
 export class UserProjectService {
     constructor(private http: HttpClient) { }
@@ -38,6 +41,12 @@ export class UserProjectService {
     }
     public deleteProject(projectId: number) {
         return this.http.delete(globalVar.apiURL + "/api/project/delete", { body: { projectId: projectId } })
+    }
+    public postFileToProject(projectId: number, fileName: string) {
+        return this.http.post<DataIdBody>(globalVar.apiURL + "/api/file/add", { file: { fileName: fileName, checkpoints: [{ code: "" }] }, projectId: projectId })
+    }
+    public deleteFileFromProject(projectId: number, fileId: number) {
+        return this.http.delete(globalVar.apiURL + "/api/file/remove", { body: { projectId: projectId, fileId: fileId } })
     }
     private convertFileTypeToNumber(fileType: FileNodeType): number {
         switch (fileType) {
@@ -65,6 +74,7 @@ export class UserProjectService {
                 var newFileNode = new FileNode(pj.projectName, FileNodeType.folder, "")
                 newFileNode.children = [];
                 newFileNode.projectid = pj.id;
+                newFileNode.projectType = pj.projectType;
                 var fileType: FileNodeType;
                 switch (pj.projectType) {
                     case 0:
@@ -94,6 +104,7 @@ export class UserProjectService {
                         var checkpoint = pjFile.checkpoints.reduce((r, o) => r.created < o.created ? r : o);
                         var childFile = new FileNode(pjFile.fileName, fileType, checkpoint.code);
                         childFile.fileId = pjFile.id;
+                        childFile.projectid = pj.id;
                         newFileNode.children.push(childFile);
                     });
                 }

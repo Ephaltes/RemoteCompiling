@@ -11,6 +11,7 @@ export enum FileNodeType {
 
 export class FileNode {
     projectid?: number;
+    projectType?: number;
     fileId?: number;
     children?: FileNode[];
     name: string;

@@ -110,6 +110,19 @@ export class CodingAppComponent implements OnInit, OnDestroy {
       }
     });
   }
+  refreshDataNavivagte(projectId: number, projectFileId: number) {
+    var projects: FileNode[];
+    this.userProjectService.getProjects().subscribe(res => {
+      projects = this.userProjectService.convertBEtoFEEntity(res);
+      this.nestedDataSource.data = projects;
+      if (projects.length > 0) {
+        var nestedTreeProjectValue = this.nestedDataSource.data.find(c => c.projectid == projectId);
+        this.nestedTreeControl.expand(this.nestedDataSource.data.find(c => c.projectid == projectId));
+        if (nestedTreeProjectValue.children.length > 0)
+          this.selectNode(nestedTreeProjectValue.children.find(c => c.fileId == projectFileId));
+      }
+    });
+  }
   refreshTree() {
     let _data = this.nestedDataSource.data;
     this.nestedDataSource.data = null;
@@ -229,10 +242,20 @@ export class CodingAppComponent implements OnInit, OnDestroy {
     if (this.isNodeSelected(node)) {
       this.selectedModel = { uri: "", language: "", value: "" };
     }
-    this.userProjectService.deleteProject(node.projectid).subscribe(() => {
-      this.refreshData()
-      this.refreshTree();
-    })
+    if (confirm("Are you sure to delete " + node.name + "?")) {
+      if (node.fileId == undefined) {
+        this.userProjectService.deleteProject(node.projectid).subscribe(() => {
+          this.refreshData()
+          this.refreshTree();
+        })
+      }
+      else {
+        this.userProjectService.deleteFileFromProject(node.projectid, node.fileId).subscribe(() => {
+          this.refreshData()
+          this.refreshTree();
+        })
+      }
+    }
   }
   onEditorLoaded() {
     console.log('Online Editor loaded!');
@@ -245,12 +268,12 @@ export class CodingAppComponent implements OnInit, OnDestroy {
 
   }
   openNewFolderDialog() {
-    const dialogRef = this.Dialog.open(AddNewFolderComponent, { data: this.database.fileNames() });
+    const dialogRef = this.Dialog.open(AddNewFolderComponent);
     dialogRef.afterClosed().subscribe(() => { dialogRef.componentInstance.validData ? this.refreshData() : false })
   }
   openNewFileDialog(node: FileNode) {
-    const dialogRef = this.Dialog.open(AddNewFileComponent);
-    dialogRef.afterClosed().subscribe(() => { dialogRef.componentInstance.validData ? this.addNewFile(node.name, dialogRef.componentInstance.emittingData) : false })
+    const dialogRef = this.Dialog.open(AddNewFileComponent, { data: { projectid: node.projectid, projectType: node.projectType } });
+    dialogRef.afterClosed().subscribe(() => { dialogRef.componentInstance.validData ? this.refreshDataNavivagte(dialogRef.componentInstance.emittingData.projectId, dialogRef.componentInstance.emittingData.projectFileId) : false })
   }
   addNewFolder(data: any) {
     this.database.addFolder(data.name);

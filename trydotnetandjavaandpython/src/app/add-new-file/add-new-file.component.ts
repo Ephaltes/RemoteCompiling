@@ -1,58 +1,30 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FileNodeType } from '../file-module/file-node';
 import { forbiddenEndingValidator, forbiddenNameValidator } from '../forbidden-name.directive';
+import { UserProjectService } from '../service/userproject.service';
 
 @Component({
   selector: 'app-add-new-file',
   templateUrl: './add-new-file.component.html',
-  styleUrls: ['./add-new-file.component.scss']
+  styleUrls: ['./add-new-file.component.scss'],
+  providers: [UserProjectService]
 })
 
 export class AddNewFileComponent implements OnInit {
   newFileForm: FormGroup;
-  languages = [
-    { name: 'C#', value: 'csharp' },
-    { name: 'Java', value: 'java' },
-    { name: 'Python', value: 'python' },
-    { name: 'C', value: 'c' },
-    { name: 'C++', value: 'cpp' },
-  ];
-  templates = [
-    {
-      name: 'Hello World', value: `using System;
-    namespace HelloWorld
-    {
-        class Program
-        {
-            static void Main(string[] args)
-            {
-                Console.WriteLine($"Hello, world from .NET and {Angular.name}!");
-            }
-        }
-    }` },
-  ];
-  emittingData: { name: string, language: FileNodeType, code: string }
   validData: boolean;
-  constructor(private fb: FormBuilder, @Inject(MAT_DIALOG_DATA) public fileList: string[]) {
+  emittingData: { projectId: number, projectFileId: number }
+  constructor(private fb: FormBuilder, @Inject(MAT_DIALOG_DATA) public project: any, public userProjectService: UserProjectService) {
+    this.emittingData =  { projectId: this.project.projectid, projectFileId: 0 }
     this.validData = false;
-    this.emittingData = { name: "", language: FileNodeType.csharp, code: "" };
     this.newFileForm = fb.group({
-      name: [null, {
-        validators: [
-          Validators.required,
-          Validators.minLength(3),
-          forbiddenEndingValidator()
-        ],
-        asyncValidators: [
-          forbiddenNameValidator(fileList)
-        ],
-        updateOn: 'change'
-      }],
-      language: ['', [Validators.required]],
-      template: [''],
-
+      name: [null, [
+        Validators.required,
+        Validators.minLength(3),
+        forbiddenEndingValidator()
+      ],
+      ]
     });
   }
 
@@ -64,38 +36,36 @@ export class AddNewFileComponent implements OnInit {
       return;
     }
     const value = this.newFileForm.value;
-    if (value.language == "csharp") {
-      this.emittingData.language = FileNodeType.csharp;
-      this.emittingData.name = value.name + ".cs";
+    var fileNameEnding = "";
+    switch (this.project.projectType) {
+      case 0:
+        fileNameEnding = ".cs"
+        break;
+      case 1:
+        fileNameEnding = ".c"
+        break;
+      case 2:
+        fileNameEnding = ".java"
+        break;
+      case 3:
+        break;
+      case 4:
+        break;
+      case 5:
+        fileNameEnding = ".py"
+        break;
+      default:
+        fileNameEnding = ".cs"
+        break;
     }
-    if (value.language == "java") {
-      this.emittingData.language = FileNodeType.java;
-      this.emittingData.name = value.name + ".java";
-    }
-    if (value.language == "python") {
-      this.emittingData.language = FileNodeType.python;
-      this.emittingData.name = value.name + ".py";
-    }
-    if (value.language == "c") {
-      this.emittingData.language = FileNodeType.c;
-      this.emittingData.name = value.name + ".c";
-    }
-    if (value.language == "cpp") {
-      this.emittingData.language = FileNodeType.cpp;
-      this.emittingData.name = value.name + ".cpp";
-    }
-    this.emittingData.code = value.template;
-    this.validData = true;
-    this.newFileForm.reset();
 
+    this.userProjectService.postFileToProject(this.project.projectid, value.name + fileNameEnding).subscribe(res => {
+      this.emittingData.projectFileId = res.data;
+      this.validData = true;
+      this.newFileForm.reset();
+    })
   }
   get name() {
     return this.newFileForm.get('name')!;
-  }
-  get language() {
-    return this.newFileForm.get('language')!;
-  }
-  get template() {
-    return this.newFileForm.get('template')!;
   }
 }
