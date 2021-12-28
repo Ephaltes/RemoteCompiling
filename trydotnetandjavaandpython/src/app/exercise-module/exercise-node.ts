@@ -1,4 +1,5 @@
 import { FileNode } from "../file-module/file-node";
+import { UserProject } from "../service/userproject.service";
 import { StudentNode } from "./student-node";
 
 export class ExerciseNode {
@@ -8,7 +9,7 @@ export class ExerciseNode {
     description: string;
     taskDefiniton?: string;
     dueData?: Date;
-    template?: FileNode[];
+    template?: UserProject[];
     files?: FileNode[];
     students?: StudentNode[];
 

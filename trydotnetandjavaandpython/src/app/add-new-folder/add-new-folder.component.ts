@@ -5,12 +5,13 @@ import { ExerciseNode } from '../exercise-module/exercise-node';
 import { FileNodeType } from '../file-module/file-node';
 import { forbiddenEndingValidator, forbiddenNameValidator } from '../forbidden-name.directive';
 import { ExerciseService } from '../service/exercise.service';
+import { UserProjectService } from '../service/userproject.service';
 
 @Component({
   selector: 'app-add-new-folder',
   templateUrl: './add-new-folder.component.html',
   styleUrls: ['./add-new-folder.component.scss'],
-  providers: [ExerciseService]
+  providers: [ExerciseService, UserProjectService]
 })
 
 export class AddNewFolderComponent implements OnInit {
@@ -30,25 +31,18 @@ export class AddNewFolderComponent implements OnInit {
     }` },
   ];
   exercises: ExerciseNode[] = []
-  emittingData: { name: string, language: FileNodeType }
   validData: boolean;
-  constructor(private fb: FormBuilder, @Inject(MAT_DIALOG_DATA) public fileList: string[], public exerciseService: ExerciseService) {
+  constructor(private fb: FormBuilder, public exerciseService: ExerciseService, public userProjectService: UserProjectService) {
     exerciseService.getExercises().subscribe(res => this.exercises = res.data);
     this.validData = false;
-    this.emittingData = { name: "", language: FileNodeType.folder };
     this.newFileForm = fb.group({
-      name: [null, {
-        validators: [
+      name: [null,
+        [
           Validators.required,
           Validators.minLength(3),
-          forbiddenEndingValidator()
         ],
-        asyncValidators: [
-          forbiddenNameValidator(fileList)
-        ],
-        updateOn: 'change'
-      }],
-      template: [''],
+      ],
+      template: [null, Validators.required],
 
     });
   }
@@ -61,10 +55,11 @@ export class AddNewFolderComponent implements OnInit {
       return;
     }
     const value = this.newFileForm.value;
-    this.emittingData.name = value.name;
-    // template implement as 'aufgabe'
-    this.validData = true;
-    this.newFileForm.reset();
+    console.log(value.template);
+    this.userProjectService.postProject(value.name, value.template.template.projectType, value.template.template.files).subscribe(() => {
+      this.validData = true;
+      this.newFileForm.reset();
+    })
 
   }
   get name() {

@@ -62,20 +62,12 @@ export class CodingAppComponent implements OnInit, OnDestroy {
       enabled: false,
     },
   };
+
   constructor(private database: FileDatabase, private userProjectService: UserProjectService, private editorService: CodeEditorService, private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer, private compileService: CompileService, private Dialog: MatDialog, private ToasterService: ToasterService) {
     this.nestedTreeControl = new NestedTreeControl<FileNode>(this._getChildren);
     this.nestedDataSource = new MatTreeNestedDataSource();
 
-    var projects: FileNode[];
-    this.userProjectService.getProjects().subscribe(res => {
-      projects = this.userProjectService.convertBEtoFEEntity(res);
-      this.nestedDataSource.data = projects;
-      if (projects.length > 0) {
-        this.nestedTreeControl.expand(this.nestedDataSource.data[0]);
-        if (projects[0].children.length > 0)
-          this.selectNode(this.nestedDataSource.data[0].children[0]);
-      }
-    });
+    this.refreshData();
 
     this.isLoading$ = editorService.loadingTypings.pipe(debounceTime(300));
     this.matIconRegistry.addSvgIcon(
@@ -105,6 +97,18 @@ export class CodingAppComponent implements OnInit, OnDestroy {
     this.fileUploadControl.acceptFiles(".cs/,.java/,.py/,.c/,.cpp/")
     this.fileUploadControl.valueChanges.subscribe(item => this.dragDropToList(item[item.length - 1]));
     this.toasterSerivce = ToasterService;
+  }
+  refreshData() {
+    var projects: FileNode[];
+    this.userProjectService.getProjects().subscribe(res => {
+      projects = this.userProjectService.convertBEtoFEEntity(res);
+      this.nestedDataSource.data = projects;
+      if (projects.length > 0) {
+        this.nestedTreeControl.expand(this.nestedDataSource.data[0]);
+        if (projects[0].children.length > 0)
+          this.selectNode(this.nestedDataSource.data[0].children[0]);
+      }
+    });
   }
   refreshTree() {
     let _data = this.nestedDataSource.data;
@@ -240,10 +244,10 @@ export class CodingAppComponent implements OnInit, OnDestroy {
   }
   openNewFolderDialog() {
     const dialogRef = this.Dialog.open(AddNewFolderComponent, { data: this.database.fileNames() });
-    dialogRef.afterClosed().subscribe(result => { dialogRef.componentInstance.validData ? this.addNewFolder(dialogRef.componentInstance.emittingData) : false })
+    dialogRef.afterClosed().subscribe(() => { dialogRef.componentInstance.validData ? this.refreshData() : false })
   }
   openNewFileDialog(node: FileNode) {
-    const dialogRef = this.Dialog.open(AddNewFileComponent, { data: this.database.fileNamesForFolders(node.name) });
+    const dialogRef = this.Dialog.open(AddNewFileComponent);
     dialogRef.afterClosed().subscribe(() => { dialogRef.componentInstance.validData ? this.addNewFile(node.name, dialogRef.componentInstance.emittingData) : false })
   }
   addNewFolder(data: any) {

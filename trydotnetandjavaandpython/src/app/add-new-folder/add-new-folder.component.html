@@ -13,7 +13,7 @@
                         <mat-hint *ngIf="name.invalid && (name.dirty || name.touched)"
                             class="text-danger margin-bottom-thin my-mat-hint">
                             <div *ngIf="name.errors!['required']">
-                                Project name is required
+                                Project name is required.
                             </div>
                             <div *ngIf="name.errors!['minlength']">
                                 Project name must be at least 3 characters long.
@@ -33,6 +33,12 @@
                                 {{exercise.name}} - {{exercise.author}}
                             </mat-option>
                         </mat-select>
+                        <mat-hint *ngIf="template.invalid && (template.dirty || template.touched)"
+                                class="text-danger margin-bottom-thin my-mat-hint">
+                                <div *ngIf="template.errors!['required']">
+                                    Exercise is required.
+                                </div>
+                            </mat-hint>
                     </mat-form-field>
                 </div>
             </mat-card-content>

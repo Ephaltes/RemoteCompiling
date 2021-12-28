@@ -33,6 +33,30 @@ export class UserProjectService {
     public getProjects() {
         return this.http.get<User>(globalVar.apiURL + "/api/user/getMySelf");
     }
+    public postProject(projectName: string, projectType: number, files: FileEntity[]) {
+        return this.http.post(globalVar.apiURL + "/api/project/add", { project: { projectName: projectName, files: files, projectType: projectType } })
+    }
+    public deleteProject(projectId: number) {
+        return this.http.delete(globalVar.apiURL + "/api/project/delete", { body: { projectId: projectId } })
+    }
+    private convertFileTypeToNumber(fileType: FileNodeType): number {
+        switch (fileType) {
+            case FileNodeType.csharp:
+                return 0;
+            case FileNodeType.cpp:
+                return 1;
+            case FileNodeType.java:
+                return 2;
+            case FileNodeType.folder:
+                return 3;
+            case FileNodeType.folder:
+                return 4;
+            case FileNodeType.python:
+                return 5;
+            default:
+                return 0;
+        }
+    }
     public convertBEtoFEEntity(user: User): FileNode[] {
         var projectsConverted: FileNode[] = [];
         const projects = user.data.projects;
