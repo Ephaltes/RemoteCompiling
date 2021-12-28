@@ -3,10 +3,9 @@
     public enum ProjectType
     {
         Csharp,
+        C,
         Cpp,
         Java,
-        Folder,
-        Template,
-        Python
+        Python,
     }
 }

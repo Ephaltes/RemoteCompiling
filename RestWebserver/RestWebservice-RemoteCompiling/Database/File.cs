@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using Newtonsoft.Json;
+
 namespace RestWebservice_RemoteCompiling.Database
 {
     public class File
@@ -28,12 +30,6 @@ namespace RestWebservice_RemoteCompiling.Database
             get;
             set;
         } = new List<Checkpoint>();
-
-
-        public virtual Exercise Exercise
-        {
-            get;
-            set;
-        }
+        
     }
 }
