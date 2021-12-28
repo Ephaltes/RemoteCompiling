@@ -29,7 +29,7 @@ export class AuthInterceptor implements HttpInterceptor {
                     "Bearer " + idToken)
             });
 
-            return next.handle(cloned);
+            return next.handle(cloned).pipe(catchError(x => this.handleAuthError(x)));;
         }
         else {
             return next.handle(req).pipe(catchError(x => this.handleAuthError(x)));
