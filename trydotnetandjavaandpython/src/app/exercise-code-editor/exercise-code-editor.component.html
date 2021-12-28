@@ -22,7 +22,7 @@
             </ngs-code-editor>
         </mat-grid-tile>
         <mat-grid-tile [colspan]="2" [rowspan]="1">
-            <button mat-stroked-button color="accent">+ Add new files...</button>
+            <button mat-stroked-button color="accent" (click)="openCreateExerciseFile()">+ Add new files...</button>
         </mat-grid-tile>
         <mat-grid-tile [colspan]="2" [rowspan]="13">
             <mat-tree [dataSource]="nestedDataSource" [treeControl]="nestedTreeControl" class="file-tree">

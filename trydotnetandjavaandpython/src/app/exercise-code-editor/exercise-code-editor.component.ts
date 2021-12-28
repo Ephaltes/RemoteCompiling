@@ -76,7 +76,6 @@ export class ExerciseCodeEditorComponent implements OnInit {
 
   }
   ngOnChange(changes: SimpleChanges) {
-    console.log("working?")
     if (this.nestedDataSource.data != undefined)
       if (this.nestedDataSource.data.length > 0)
         this.selectNode(this.nestedDataSource.data[0])
@@ -104,5 +103,8 @@ export class ExerciseCodeEditorComponent implements OnInit {
   }
   backToParent() {
     this.finishedWorkingEvent.emit(false);
+  }
+  openCreateExerciseFile() {
+
   }
 }

@@ -9,7 +9,7 @@ export class ExerciseNode {
     description: string;
     taskDefiniton?: string;
     dueData?: Date;
-    template?: UserProject[];
+    template?: UserProject;
     files?: FileNode[];
     students?: StudentNode[];
 

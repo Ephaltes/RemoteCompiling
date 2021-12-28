@@ -5,6 +5,7 @@ import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { CodeEditorComponent, CodeModel } from '@ngstack/code-editor';
 import { ExerciseNode } from '../exercise-module/exercise-node';
 import { FileNode, FileNodeType } from '../file-module/file-node';
+import { UserProject } from '../service/userproject.service';
 
 @Component({
   selector: 'app-exercise-platform-create',
@@ -21,13 +22,52 @@ export class ExercisePlatformCreateComponent implements OnInit {
 
   ngOnInit(): void {
   }
-  
+
   openCodingApp(row: ExerciseNode) {
     this.exerciseSelected = true;
+    row.files = this.convertBEtoFEEntity(row.template);
     this.selectedItem = row;
   }
   backFromCodingApp(status: boolean) {
     this.exerciseSelected = status;
   }
-
+  public convertBEtoFEEntity(template: UserProject): FileNode[] {
+    var projectsConverted: FileNode[] = [];
+    if (template != undefined) {
+      var fileType: FileNodeType;
+      switch (template.projectType) {
+        case 0:
+          fileType = FileNodeType.csharp;
+          break;
+        case 1:
+          fileType = FileNodeType.cpp;
+          break;
+        case 2:
+          fileType = FileNodeType.java;
+          break;
+        case 3:
+          fileType = FileNodeType.folder;
+          break;
+        case 4:
+          fileType = FileNodeType.folder;
+          break;
+        case 5:
+          fileType = FileNodeType.python;
+          break;
+        default:
+          fileType = FileNodeType.csharp;
+          break;
+      }
+      if (template.files.length > 0) {
+        template.files.forEach(pjFile => {
+          var checkpoint = pjFile.checkpoints.reduce((r, o) => r.created < o.created ? r : o);
+          var childFile = new FileNode(pjFile.fileName, fileType, checkpoint.code);
+          childFile.fileId = pjFile.id;
+          childFile.projectid = template.id;
+          projectsConverted.push(childFile);
+        });
+      }
+    }
+    return projectsConverted;
+  }
 }
