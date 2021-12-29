@@ -35,5 +35,11 @@ namespace RestWebservice_RemoteCompiling.Entities
             get;
             set;
         }
+
+        public int? ExerciseID
+        {
+            get;
+            set;
+        }
     }
 }

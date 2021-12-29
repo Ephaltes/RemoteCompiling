@@ -28,7 +28,8 @@ namespace RestWebservice_RemoteCompiling.Handlers
 
             current.Name = request.Name ?? current.Name;
             current.Description = request.Description ?? current.Description;
-
+            current.TaskDefinition = request.Taskdefinition ?? current.TaskDefinition;
+            
             List<ExerciseTemplateFiles> tempFileList = new List<ExerciseTemplateFiles>();
             foreach (FileEntity item in request.Template.Files)
             {
@@ -54,9 +55,9 @@ namespace RestWebservice_RemoteCompiling.Handlers
                                    ProjectName = request.Template.ProjectName,
                                    Files = tempFileList,
                                    LastModified = DateTime.Now,
-                                   ProjectType = request.Template.ProjectType
+                                   ProjectType = request.Template.ProjectType,
                                };
-
+            
             _exerciseRepository.Update(current);
 
             return CustomResponse.Success(true);

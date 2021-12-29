@@ -27,5 +27,11 @@ namespace RestWebservice_RemoteCompiling.Command
             get;
             set;
         }
+
+        public string? Taskdefinition
+        {
+            get;
+            set;
+        }
     }
 }

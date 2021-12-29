@@ -33,7 +33,7 @@ namespace RestWebservice_RemoteCompiling.Repositories
             _context.SaveChanges();
         }
 
-        public Exercise Get(int id)
+        public Exercise? Get(int? id)
         {
             return _context.Exercises.Find(id);
         }

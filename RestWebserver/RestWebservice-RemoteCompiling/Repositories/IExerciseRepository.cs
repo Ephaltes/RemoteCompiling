@@ -11,7 +11,7 @@ namespace RestWebservice_RemoteCompiling.Repositories
 
         public void Delete(int id);
 
-        public Exercise Get(int id);
+        public Exercise? Get(int? id);
 
         public List<Exercise> GetAll();
     }

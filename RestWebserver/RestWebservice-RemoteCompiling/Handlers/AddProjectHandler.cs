@@ -16,10 +16,12 @@ namespace RestWebservice_RemoteCompiling.Handlers
     public class AddProjectHandler : BaseHandler<AddProjectCommand, CustomResponse<int>>
     {
         private readonly IUserRepository _userRepository;
-        public AddProjectHandler(IUserRepository userRepository)
+        private readonly IExerciseRepository _exerciseRepository;
+        public AddProjectHandler(IUserRepository userRepository, IExerciseRepository exerciseRepository)
             : base(userRepository)
         {
             _userRepository = userRepository;
+            _exerciseRepository = exerciseRepository;
         }
 
         public override async Task<CustomResponse<int>> Handle(AddProjectCommand request, CancellationToken cancellationToken)
@@ -49,6 +51,19 @@ namespace RestWebservice_RemoteCompiling.Handlers
                 project.Files.Add(x);
             }
 
+            if (request.Project.ExerciseID is not null)
+            {
+               var x = _exerciseRepository.Get(request.Project.ExerciseID);
+               if (x is not null)
+               {
+                   project.ExerciseID = x.Id;
+               }
+               else
+               {
+                   throw new Exception("not allowed");
+               }
+            }
+                
             ldapUser.Projects.Add(project);
 
             _userRepository.UpdateUser(ldapUser);
