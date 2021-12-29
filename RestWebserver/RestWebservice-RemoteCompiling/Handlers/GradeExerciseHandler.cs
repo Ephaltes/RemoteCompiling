@@ -29,7 +29,7 @@ namespace RestWebservice_RemoteCompiling.Handlers
             obj.Feedback = request.Feedback ?? obj.Feedback;
             obj.Grade = request.Grading ?? obj.Grade;
             obj.Status = request.Status ?? obj.Status;
-            obj.UserToGrade = _userRepository.GetUserByLdapUid(request.StudentId) ?? throw new Exception("user not found");
+            obj.UserToGrade = await _userRepository.GetUserByLdapUid(request.StudentId) ?? throw new Exception("user not found");
             obj.Exercise = _exerciseRepository.Get(request.ExerciseId) ?? throw new Exception("Exercise not found");
 
             _exerciseGradeRepository.Update(obj);

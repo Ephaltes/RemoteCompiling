@@ -24,7 +24,7 @@ namespace RestWebservice_RemoteCompiling.Handlers
         protected User GetUserFromToken(JwtSecurityToken token)
         {
             string ldapIdent = token.Claims.First(x => x.Type == ClaimTypes.Sid).Value;
-            User? user = _userRepository.GetUserByLdapUid(ldapIdent);
+            User? user = _userRepository.GetUserByLdapUid(ldapIdent).Result;
 
             if (user is null)
                 throw new AccessViolationException("No User found");
