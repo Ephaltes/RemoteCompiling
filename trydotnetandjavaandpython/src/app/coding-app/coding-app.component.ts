@@ -5,7 +5,6 @@ import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { CodeEditorService, CodeModel } from '@ngstack/code-editor';
 import { interval, Observable, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { FileDatabase } from '../file-module/file-database';
 import { FileNode, FileNodeType } from '../file-module/file-node';
 import { DomSanitizer } from "@angular/platform-browser";
 import { CompileService } from '../service/compile.service';
@@ -15,7 +14,6 @@ import { AddNewFileComponent } from '../add-new-file/add-new-file.component';
 import { FileUploadControl, FileUploadValidators } from '@iplab/ngx-file-upload';
 import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
 import { Toast, ToasterService } from 'angular2-toaster';
-import { languages } from '../code-meta/codeLanguageMeta';
 import * as JSZip from 'jszip';
 import { FolderOptionDialogComponent } from '../folder-option-dialog/folder-option-dialog.component';
 import { AddNewFolderComponent } from '../add-new-folder/add-new-folder.component';
@@ -163,9 +161,9 @@ export class CodingAppComponent implements OnInit, OnDestroy {
               this.fileUploadControl.removeFile(file);
             }
             else {
-              this.userProjectService.postFileToProjectWithCode(project.id, file.name, fileReader.result.toString()).subscribe(() => {
+              this.userProjectService.postFileToProjectWithCode(project.id, file.name, fileReader.result.toString()).subscribe(res => {
                 this.fileUploadControl.removeFile(file);
-                this.refreshData();
+                this.refreshDataNavivagte(project.id, res.data);
                 return
               });
             }
