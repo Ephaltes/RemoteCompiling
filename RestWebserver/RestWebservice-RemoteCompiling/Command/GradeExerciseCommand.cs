@@ -16,19 +16,19 @@ namespace RestWebservice_RemoteCompiling.Command
             set;
         }
 
-        public GradingStatus Status
+        public GradingStatus? Status
         {
             get;
             set;
         }
 
-        public int Grading
+        public int? Grading
         {
             get;
             set;
         }
 
-        public string Feedback
+        public string? Feedback
         {
             get;
             set;

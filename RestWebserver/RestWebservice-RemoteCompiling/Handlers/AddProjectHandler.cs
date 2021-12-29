@@ -27,7 +27,7 @@ namespace RestWebservice_RemoteCompiling.Handlers
         public override async Task<CustomResponse<int>> Handle(AddProjectCommand request, CancellationToken cancellationToken)
         {
             string ldapIdent = request.Token.Claims.First(x => x.Type == ClaimTypes.Sid).Value;
-            User? ldapUser = _userRepository.GetUserByLdapUid(ldapIdent);
+            User? ldapUser = await _userRepository.GetUserByLdapUid(ldapIdent);
 
             Project project = new Project
                               {

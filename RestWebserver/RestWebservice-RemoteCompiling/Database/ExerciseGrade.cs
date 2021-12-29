@@ -25,7 +25,7 @@ namespace RestWebservice_RemoteCompiling.Database
             set;
         }
 
-        public int Grade
+        public int? Grade
         {
             get;
             set;
@@ -37,7 +37,7 @@ namespace RestWebservice_RemoteCompiling.Database
             set;
         }
 
-        public string Feedback
+        public string? Feedback
         {
             get;
             set;
