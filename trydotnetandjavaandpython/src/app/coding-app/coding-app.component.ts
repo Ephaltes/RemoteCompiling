@@ -27,7 +27,7 @@ import { convertFileTypeToNumber, ExerciseService } from '../service/exercise.se
   encapsulation: ViewEncapsulation.None,
   providers: [CompileService, UserProjectService, ExerciseService]
 })
-export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit  {
+export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit {
   currentTaskDefinition: string;
   currentExerciseName: string;
   currentExerciseAuthor: string;
@@ -223,7 +223,7 @@ export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit  {
   }
   handIn() {
     if (this.currentProjectId > 0 && this.currentExerciseId > 0) {
-      this.exerciseService.postExerciseHandIn(this.currentProjectId, this.currentExerciseId).subscribe();
+      this.exerciseService.putExerciseHandIn(this.currentProjectId, this.currentExerciseId).subscribe();
     }
   }
 
@@ -321,10 +321,10 @@ export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit  {
       title: 'Auto save complete',
       showCloseButton: false
     };
-    // this.saveSource.subscribe(() => { this.userProjectService.save(this.nestedDataSource.data), this.toasterSerivce.pop(toast) });
+    this.saveSource.subscribe(() => { this.userProjectService.save(this.nestedDataSource.data), this.toasterSerivce.pop(toast) });
   }
   ngOnDestroy() {
-    //this.userProjectService.save(this.nestedDataSource.data);
+    this.userProjectService.save(this.nestedDataSource.data);
   }
 
 }

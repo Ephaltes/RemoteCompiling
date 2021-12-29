@@ -48,8 +48,8 @@ export class ExerciseService {
         return this.http.put(globalVar.apiURL + "/api/exercises", exercise)
             .pipe(shareReplay(1));
     }
-    public postExerciseHandIn(projectId: number, exerciseId: number) {
-        return this.http.post(globalVar.apiURL + "/api/exercises/handin", { projectId: projectId, exerciseId: exerciseId })
+    public putExerciseHandIn(projectId: number, exerciseId: number) {
+        return this.http.put(globalVar.apiURL + "/api/exercises/handin", { projectId: projectId, exerciseId: exerciseId })
             .pipe(shareReplay(1));
     }
 }

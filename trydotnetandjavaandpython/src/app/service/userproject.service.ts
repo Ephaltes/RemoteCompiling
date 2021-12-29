@@ -56,13 +56,11 @@ export class UserProjectService {
         return this.http.delete(globalVar.apiURL + "/api/file/remove", { body: { projectId: projectId, fileId: fileId } })
     }
     public save(files: FileNode[]) {
-        const calls: Observable<Object>[] = [];
-        files.forEach(project => {
+        files.forEach(async project => {
             for (const file of project.children) {
-                this.http.post(globalVar.apiURL + "/api/file/addCheckPoint", { fileId: file.fileId, checkpoint: { code: file.code.value } }).subscribe();
+                await this.http.post(globalVar.apiURL + "/api/file/addCheckPoint", { fileId: file.fileId, checkpoint: { code: file.code.value } }).toPromise();
             }
         });
-        forkJoin(calls).subscribe();
     }
 
     public convertBEtoFEEntity(user: User): FileNode[] {
