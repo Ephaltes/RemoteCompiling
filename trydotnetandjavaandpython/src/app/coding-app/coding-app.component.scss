@@ -106,7 +106,7 @@
   transition: visibility 175ms, opacity 175ms;
 }
 .exerciseDefinition {
-  overflow-y:auto;
+  overflow-y: auto;
   -webkit-touch-callout: text; /* iOS Safari */
   -webkit-user-select: text; /* Safari */
   -khtml-user-select: text; /* Konqueror HTML */
@@ -118,4 +118,15 @@
   color: white;
   padding: 0px 15px;
   margin-top: 25px;
+}
+.openExerciseNote button {
+  z-index: 10;
+  position: absolute;
+  right: -88px;
+  top: 0px;
+  transition: 0.3s;
+}
+.openExerciseNote button:hover {
+  right: -1px;
+
 }

@@ -1,5 +1,5 @@
 import { NestedTreeControl } from '@angular/cdk/tree';
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { CodeEditorService, CodeModel } from '@ngstack/code-editor';
@@ -27,7 +27,7 @@ import { convertFileTypeToNumber, ExerciseService } from '../service/exercise.se
   encapsulation: ViewEncapsulation.None,
   providers: [CompileService, UserProjectService, ExerciseService]
 })
-export class CodingAppComponent implements OnInit, OnDestroy {
+export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit  {
   currentTaskDefinition: string;
   currentExerciseName: string;
   currentExerciseAuthor: string;
@@ -75,7 +75,6 @@ export class CodingAppComponent implements OnInit, OnDestroy {
     this.nestedDataSource = new MatTreeNestedDataSource();
 
     this.refreshData();
-
     this.isLoading$ = editorService.loadingTypings.pipe(debounceTime(300));
     this.matIconRegistry.addSvgIcon(
       `csharp`,
@@ -104,6 +103,9 @@ export class CodingAppComponent implements OnInit, OnDestroy {
     this.fileUploadControl.acceptFiles(".cs/,.java/,.py/,.c/,.cpp/")
     this.fileUploadControl.valueChanges.subscribe(item => this.dragDropToList(item[item.length - 1]));
     this.toasterSerivce = ToasterService;
+  }
+  ngAfterViewInit(): void {
+    this.toggleExercisNote();
   }
   refreshData() {
     var projects: FileNode[];
@@ -221,7 +223,7 @@ export class CodingAppComponent implements OnInit, OnDestroy {
   }
   handIn() {
     if (this.currentProjectId > 0 && this.currentExerciseId > 0) {
-      this.exerciseService.postExerciseHandIn(this.currentProjectId, this.currentExerciseId).subscribe(res => console.log(res));
+      this.exerciseService.postExerciseHandIn(this.currentProjectId, this.currentExerciseId).subscribe();
     }
   }
 
