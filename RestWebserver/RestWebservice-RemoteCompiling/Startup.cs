@@ -64,7 +64,7 @@ namespace RestWebservice_RemoteCompiling
             services.AddDbContext<RemoteCompileDbContext>(options => options
                                                               .UseLazyLoadingProxies()
                                                               .UseNpgsql(connectionString)
-                , ServiceLifetime.Transient);
+                , ServiceLifetime.Singleton);
 
             
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
