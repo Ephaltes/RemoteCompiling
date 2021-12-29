@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FileNode, FileNodeType } from '../file-module/file-node';
+import { UserProject } from '../service/userproject.service';
 
 @Component({
   selector: 'app-folder-option-dialog',
@@ -10,15 +10,15 @@ import { FileNode, FileNodeType } from '../file-module/file-node';
 })
 export class FolderOptionDialogComponent implements OnInit {
   newFileForm: FormGroup;
-  emittingData: string;
+  emittingData: UserProject;
   validData: boolean;
-  folders: FileNode[];
-  constructor(private fb: FormBuilder, @Inject(MAT_DIALOG_DATA) public folderList: FileNode[]) {
+  projects: UserProject[];
+  constructor(private fb: FormBuilder, @Inject(MAT_DIALOG_DATA) public projectList: UserProject[]) {
     this.validData = false;
-    this.emittingData="";
-    this.folders=folderList;
+    this.emittingData = null;
+    this.projects = projectList;
     this.newFileForm = fb.group({
-      folder: ['', [Validators.required]],
+      project: [undefined, [Validators.required]],
     })
   }
 
@@ -29,11 +29,11 @@ export class FolderOptionDialogComponent implements OnInit {
       return;
     }
     const value = this.newFileForm.value;
-    this.emittingData=value.folder;
+    this.emittingData = value.project;
     this.validData = true;
-    
+
   }
-  get folder() {
-    return this.newFileForm.get('folder')!;
+  get project() {
+    return this.newFileForm.get('project')!;
   }
 }

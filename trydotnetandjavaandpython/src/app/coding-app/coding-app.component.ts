@@ -20,13 +20,14 @@ import * as JSZip from 'jszip';
 import { FolderOptionDialogComponent } from '../folder-option-dialog/folder-option-dialog.component';
 import { AddNewFolderComponent } from '../add-new-folder/add-new-folder.component';
 import { UserProjectService } from '../service/userproject.service';
+import { convertFileTypeToNumber } from '../service/exercise.service';
 
 @Component({
   selector: 'app-coding-app',
   templateUrl: './coding-app.component.html',
   styleUrls: ['./coding-app.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  providers: [FileDatabase, CompileService, UserProjectService]
+  providers: [CompileService, UserProjectService]
 })
 export class CodingAppComponent implements OnInit, OnDestroy {
   private toasterSerivce: ToasterService;
@@ -63,7 +64,7 @@ export class CodingAppComponent implements OnInit, OnDestroy {
     },
   };
 
-  constructor(private database: FileDatabase, private userProjectService: UserProjectService, private editorService: CodeEditorService, private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer, private compileService: CompileService, private Dialog: MatDialog, private ToasterService: ToasterService) {
+  constructor(private userProjectService: UserProjectService, private editorService: CodeEditorService, private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer, private compileService: CompileService, private Dialog: MatDialog, private ToasterService: ToasterService) {
     this.nestedTreeControl = new NestedTreeControl<FileNode>(this._getChildren);
     this.nestedDataSource = new MatTreeNestedDataSource();
 
@@ -130,46 +131,49 @@ export class CodingAppComponent implements OnInit, OnDestroy {
   }
   dragDropToList(file: File) {
     if (file != undefined) {
-      const dialogRef = this.Dialog.open(FolderOptionDialogComponent, { data: this.database.getAllFolders() });
-      dialogRef.afterClosed().subscribe(result => {
-        var folderName = dialogRef.componentInstance.emittingData;
-        var folderList = this.database.fileNamesForFoldersWithExt(folderName);
-        var fileReader = new FileReader();
-        fileReader.readAsText(file);
-        fileReader.onload = () => {
-          if (folderList.includes(file.name.toLowerCase())) {
-            this.fileUploadControl.removeFile(file);
-            this.Dialog.open(ErrorDialogComponent, { data: { message: "Found duplicate filenames while uploading files!" } })
-            return;
-          }
-          var fileType = null
-          if (file.name.endsWith(".cs")) {
-            fileType = FileNodeType.csharp
-          }
-          if (file.name.endsWith(".java")) {
-            fileType = FileNodeType.java
-          }
-          if (file.name.endsWith(".py")) {
-            fileType = FileNodeType.python
-          }
-          if (file.name.endsWith(".c")) {
-            fileType = FileNodeType.c
-          }
-          if (file.name.endsWith(".cpp")) {
-            fileType = FileNodeType.cpp
-          }
+      this.userProjectService.getProjects().subscribe(res => {
+        const dialogRef = this.Dialog.open(FolderOptionDialogComponent, { data: res.data.projects });
+        dialogRef.afterClosed().subscribe(result => {
+          var project = dialogRef.componentInstance.emittingData;
+          var fileReader = new FileReader();
+          fileReader.readAsText(file);
+          fileReader.onload = () => {
+            var fileType = null
+            if (file.name.endsWith(".cs")) {
+              fileType = FileNodeType.csharp
+            }
+            if (file.name.endsWith(".java")) {
+              fileType = FileNodeType.java
+            }
+            if (file.name.endsWith(".py")) {
+              fileType = FileNodeType.python
+            }
+            if (file.name.endsWith(".c")) {
+              fileType = FileNodeType.c
+            }
+            if (file.name.endsWith(".cpp")) {
+              fileType = FileNodeType.cpp
+            }
 
-          if (fileType == null) {
-            this.Dialog.open(ErrorDialogComponent, { data: { message: "File extension is not supported, please only use .cs,.java,.py,.c,.cpp files!" } })
-            this.fileUploadControl.removeFile(file);
+            if (fileType == null) {
+              this.Dialog.open(ErrorDialogComponent, { data: { message: "File extension is not supported, please only use .cs,.java,.py,.c,.cpp files!" } })
+              this.fileUploadControl.removeFile(file);
+            } else if (convertFileTypeToNumber(fileType) != project.projectType) {
+              this.Dialog.open(ErrorDialogComponent, { data: { message: "File extension does not match project filetype!" } })
+              this.fileUploadControl.removeFile(file);
+            }
+            else {
+              this.userProjectService.postFileToProjectWithCode(project.id, file.name, fileReader.result.toString()).subscribe(() => {
+                this.fileUploadControl.removeFile(file);
+                this.refreshData();
+                return
+              });
+            }
           }
-          this.database.addFile(folderName, file.name, fileType, fileReader.result.toString());
           this.fileUploadControl.removeFile(file);
-          this.refreshTree();
-          return;
-        }
-        this.fileUploadControl.removeFile(file);
-      });
+        });
+      }
+      );
     }
   }
 
@@ -274,27 +278,16 @@ export class CodingAppComponent implements OnInit, OnDestroy {
     const dialogRef = this.Dialog.open(AddNewFileComponent, { data: { projectid: node.projectid, projectType: node.projectType } });
     dialogRef.afterClosed().subscribe(() => { dialogRef.componentInstance.validData ? this.refreshDataNavivagte(dialogRef.componentInstance.emittingData.projectId, dialogRef.componentInstance.emittingData.projectFileId) : false })
   }
-  addNewFolder(data: any) {
-    this.database.addFolder(data.name);
-    this.refreshTree();
-  }
-  addNewFile(folderName: string, data: any) {
-    this.database.addFile(folderName, data.name, data.language, data.code);
-    this.refreshTree();
-  }
-
   ngOnInit() {
     var toast: Toast = {
       type: 'success',
       title: 'Auto save complete',
       showCloseButton: false
     };
-    this.saveSource.subscribe(val => { this.database.save(), this.toasterSerivce.pop(toast) });
-    //this.nestedTreeControl.expand(this.nestedDataSource.data[0]);
-    // this.selectNode(this.nestedDataSource.data[0].children[0]);
+    this.saveSource.subscribe(() => { this.userProjectService.save(), this.toasterSerivce.pop(toast) });
   }
   ngOnDestroy() {
-    this.database.save();
+    this.userProjectService.save();
   }
 
 }

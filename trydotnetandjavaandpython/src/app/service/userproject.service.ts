@@ -45,10 +45,16 @@ export class UserProjectService {
     public postFileToProject(projectId: number, fileName: string) {
         return this.http.post<DataIdBody>(globalVar.apiURL + "/api/file/add", { file: { fileName: fileName, checkpoints: [{ code: "" }] }, projectId: projectId })
     }
+    public postFileToProjectWithCode(projectId: number, fileName: string, code:string) {
+        return this.http.post<DataIdBody>(globalVar.apiURL + "/api/file/add", { file: { fileName: fileName, checkpoints: [{ code: code }] }, projectId: projectId })
+    }
     public deleteFileFromProject(projectId: number, fileId: number) {
         return this.http.delete(globalVar.apiURL + "/api/file/remove", { body: { projectId: projectId, fileId: fileId } })
     }
-    
+    public save() {
+
+    }
+
     public convertBEtoFEEntity(user: User): FileNode[] {
         var projectsConverted: FileNode[] = [];
         const projects = user.data.projects;

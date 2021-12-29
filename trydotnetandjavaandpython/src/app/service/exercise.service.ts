@@ -10,6 +10,22 @@ export interface ResponseBody {
 export interface ResponseBodySingle {
     data: ExerciseNode;
 };
+export function convertFileTypeToNumber(fileType: FileNodeType): number {
+    switch (fileType) {
+        case FileNodeType.csharp:
+            return 0;
+        case FileNodeType.c:
+            return 1;
+        case FileNodeType.cpp:
+            return 2;
+        case FileNodeType.java:
+            return 3;
+        case FileNodeType.python:
+            return 4;
+        default:
+            return 0;
+    }
+}
 @Injectable()
 export class ExerciseService {
 
@@ -21,7 +37,7 @@ export class ExerciseService {
         return this.http.get<ResponseBodySingle>(globalVar.apiURL + "/api/exercises/" + projectId);
     }
     public postExercises(name: string, description: string, projectType: FileNodeType) {
-        return this.http.post(globalVar.apiURL + "/api/exercises", { name: name, description: description, taskDefinition: "", templateProjectType: this.convertFileTypeToNumber(projectType) })
+        return this.http.post(globalVar.apiURL + "/api/exercises", { name: name, description: description, taskDefinition: "", templateProjectType: convertFileTypeToNumber(projectType) })
             .pipe(shareReplay(1));
     }
     public deleteExercises(id: number) {
@@ -31,21 +47,5 @@ export class ExerciseService {
     public putExercises(exercise: ExerciseNode) {
         return this.http.put(globalVar.apiURL + "/api/exercises", exercise)
             .pipe(shareReplay(1));
-    }
-    private convertFileTypeToNumber(fileType: FileNodeType): number {
-        switch (fileType) {
-            case FileNodeType.csharp:
-                return 0;
-            case FileNodeType.c:
-                return 1;
-            case FileNodeType.cpp:
-                return 2;
-            case FileNodeType.java:
-                return 3;
-            case FileNodeType.python:
-                return 4;
-            default:
-                return 0;
-        }
     }
 }
