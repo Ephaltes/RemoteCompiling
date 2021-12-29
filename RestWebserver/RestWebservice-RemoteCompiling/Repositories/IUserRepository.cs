@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-using RestWebservice_RemoteCompiling.Database;
+﻿using RestWebservice_RemoteCompiling.Database;
 
 namespace RestWebservice_RemoteCompiling.Repositories
 {
@@ -10,6 +8,6 @@ namespace RestWebservice_RemoteCompiling.Repositories
 
         public void UpdateUser(User updateUser);
 
-        public Task<User?> GetUserByLdapUid(string ldapUid);
+        public User? GetUserByLdapUid(string ldapUid);
     }
 }
