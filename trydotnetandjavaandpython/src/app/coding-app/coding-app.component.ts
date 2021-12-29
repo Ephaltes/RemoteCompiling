@@ -33,6 +33,7 @@ export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit {
   currentExerciseAuthor: string;
   currentProjectId = 0;
   currentExerciseId = 0;
+  currentFileId = 0;
   showExerciseNotes = false;
   editorColSpan = 10;
   exerciseColSpan = 0;
@@ -211,7 +212,9 @@ export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit {
   private _getChildren = (node: FileNode) => node.children;
 
   onCodeChanged(value: any) {
-    //console.log('CODE', value);
+    console.log(this.nestedDataSource.data)
+    console.log(this.currentProjectId)
+    this.nestedDataSource.data.find(c => c.projectid == this.currentProjectId).children.find(c => c.fileId == this.currentFileId).modified = true;
   }
   isNodeSelected(node: FileNode): boolean {
     return (
@@ -240,6 +243,9 @@ export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     if (node.projectid > 0) {
       this.currentProjectId = node.projectid;
+    }
+    if (node.fileId > 0) {
+      this.currentFileId = node.fileId;
     }
   }
   downloadFile(node: FileNode) {

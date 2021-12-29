@@ -58,7 +58,8 @@ export class UserProjectService {
     public save(files: FileNode[]) {
         files.forEach(async project => {
             for (const file of project.children) {
-                await this.http.post(globalVar.apiURL + "/api/file/addCheckPoint", { fileId: file.fileId, checkpoint: { code: file.code.value } }).toPromise();
+                if (file.modified)
+                    await this.http.post(globalVar.apiURL + "/api/file/addCheckPoint", { fileId: file.fileId, checkpoint: { code: file.code.value } }).toPromise();
             }
         });
     }
