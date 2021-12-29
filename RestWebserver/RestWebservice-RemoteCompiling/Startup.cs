@@ -53,8 +53,8 @@ namespace RestWebservice_RemoteCompiling
             services.AddSingleton<IHttpHelper>(x => new HttpHelper
                                                    (Configuration.GetSection("RemoteCompilerApiLocation").Value));
             services.AddSingleton<ILdapHelper, LdapHelper>();
-            services.AddSingleton<IUserRepository, UserRepository>();
-            services.AddSingleton<ISessionRepository, SessionRepository>();
+            services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<ISessionRepository, SessionRepository>();
             services.AddTransient<ITokenService, TokenService>();
             services.AddTransient<IExerciseRepository, ExerciseRepository>();
             services.AddTransient<IExerciseGradeRepository, ExerciseGradeRepository>();
