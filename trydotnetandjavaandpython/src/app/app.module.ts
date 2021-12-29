@@ -40,6 +40,7 @@ import { AuthInterceptor } from './interceptor/authentication-intercepter.servic
 import { LoggedInUserComponent } from './logged-in-user/logged-in-user.component';
 import { ExercisePlatformEditExerciseComponent } from './exercise-platform-edit-exercise/exercise-platform-edit-exercise.component';
 import { ExercisePlatformCreateFileComponent } from './exercise-platform-create-file/exercise-platform-create-file.component';
+import { ExerciseCodeGradingEditorComponent } from './exercise-code-grading-editor/exercise-code-grading-editor.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -60,7 +61,8 @@ import { ExercisePlatformCreateFileComponent } from './exercise-platform-create-
     LoginSiteComponent,
     LoggedInUserComponent,
     ExercisePlatformEditExerciseComponent,
-    ExercisePlatformCreateFileComponent
+    ExercisePlatformCreateFileComponent,
+    ExerciseCodeGradingEditorComponent
   ],
   imports: [
     BrowserModule,

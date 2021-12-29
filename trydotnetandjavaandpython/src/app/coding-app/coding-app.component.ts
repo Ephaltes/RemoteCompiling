@@ -219,7 +219,6 @@ export class CodingAppComponent implements OnInit, OnDestroy {
     }, 100);
   }
   downloadAllFiles(node: FileNode) {
-    console.log(node)
     var zip = new JSZip();
     for (let i = 0; i < node.children?.length; i++)
       zip.file(node.children[i].name, node.children[i].code.value);

@@ -14,23 +14,32 @@ import { ExerciseService } from '../service/exercise.service';
 import { UserProject } from '../service/userproject.service';
 
 @Component({
-  selector: 'app-exercise-code-editor',
-  templateUrl: './exercise-code-editor.component.html',
-  styleUrls: ['./exercise-code-editor.component.scss'],
+  selector: 'app-exercise-code-grading-editor',
+  templateUrl: './exercise-code-grading-editor.component.html',
+  styleUrls: ['./exercise-code-grading-editor.component.scss'],
   providers: [ExerciseService]
 })
-export class ExerciseCodeEditorComponent implements OnInit {
+export class ExerciseCodeGradingEditorComponent implements OnInit {
   taskDefinition: string = ""
+  private _currentEditor: FileNode[]
+  @Input() set currentEditor(value: FileNode[]) {
+    this._currentEditor = value;
+    this.nestedDataSource.data = value;
+    if (value != undefined) {
+      if (value.length > 0) {
+        this.selectNode(this.nestedDataSource.data[0])
+      }
+    } else {
+      this.selectedModel = { uri: "", value: "", language: "" }
+    }
+  }
+  get currentEditor(): FileNode[] {
+    return this._currentEditor;
+  }
   private _currentExercise: ExerciseNode
   @Input() set currentExercise(value: ExerciseNode) {
-    value.files = this.convertBEtoFEEntity(value.template);
     this._currentExercise = value;
     this.taskDefinition = value.taskDefinition;
-    this.nestedDataSource.data = value.files;
-    if (this.nestedDataSource.data.length > 1)
-      this.selectNode(this.nestedDataSource.data[this.nestedDataSource.data.length - 1])
-    else
-      this.selectedModel = { uri: "", value: "", language: "" }
   }
   get currentExercise(): ExerciseNode {
     return this._currentExercise;
@@ -50,6 +59,7 @@ export class ExerciseCodeEditorComponent implements OnInit {
   constructor(private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer, private Dialog: MatDialog, private exerciseService: ExerciseService) {
     this.nestedTreeControl = new NestedTreeControl<FileNode>(this._getChildren);
     this.nestedDataSource = new MatTreeNestedDataSource();
+    this.nestedDataSource.data = this._currentEditor;
     this.matIconRegistry.addSvgIcon(
       `csharp`,
       this.domSanitizer.bypassSecurityTrustResourceUrl(`./assets/csharp.svg`)
@@ -115,13 +125,19 @@ export class ExerciseCodeEditorComponent implements OnInit {
     this.finishedWorkingEvent.emit(false);
   }
   openCreateExerciseFile() {
-    this.exerciseService.putExercises(this.convertFEtoBEEntity(this.currentExercise)).subscribe(() => this.refreshData());
     const dialogRef = this.Dialog.open(ExercisePlatformCreateFileComponent, { data: this.currentExercise });
     dialogRef.afterClosed().subscribe(() => { dialogRef.componentInstance.validData ? this.refreshData() : false })
   }
   refreshData() {
     this.exerciseService.getExercisesById(this.currentExercise.id).subscribe(res => {
       this.currentExercise = res.data;
+      this.currentExercise.files = this.convertBEtoFEEntity(this.currentExercise.template);
+      this.currentEditor = this.currentExercise.files;
+      if (this.nestedDataSource.data.length > 1)
+        this.selectNode(this.nestedDataSource.data[this.nestedDataSource.data.length - 1])
+      else
+        this.selectedModel = { uri: "", value: "", language: "" }
+          ;
     });
 
   }
