@@ -132,7 +132,11 @@
 
       <div class="runActionBar">
         <button mat-raised-button color="primary" [disabled]="isLoading" (click)="runCode()">Run</button>
-        <button (click)="saveButton()">Save</button>
+
+        <div style="display:inline; color:white; padding-left: 10px;">stdin
+          <mat-checkbox style="padding-left: 5px;"></mat-checkbox>
+        </div>
+        <button mat-raised-button color="primary" (click)="saveButton()" style="left: 10px;">Force Save</button>
       </div>
       <!--<mat-grid-tile [colspan]="15" [rowspan]="3"></mat-grid-tile>-->
       <div>
