@@ -1,4 +1,6 @@
-﻿namespace RestWebservice_RemoteCompiling.Command
+﻿using RestWebservice_RemoteCompiling.Entities;
+
+namespace RestWebservice_RemoteCompiling.Command
 {
     public class GradeExerciseCommand : BaseCommand<bool>
     {
@@ -14,7 +16,7 @@
             set;
         }
 
-        public bool Graded
+        public GradingStatus Status
         {
             get;
             set;

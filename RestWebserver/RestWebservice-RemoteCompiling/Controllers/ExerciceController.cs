@@ -79,7 +79,7 @@ namespace RestWebservice_RemoteCompiling.Controllers
             return result.ToResponse();
         }
 
-        [HttpPost("handin")]
+        [HttpPut("handin")]
         public async Task<IActionResult> HandInExercise(HandInCommand command)
         {
             command.Token = GetTokenFromAuthorization();

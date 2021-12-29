@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,14 +27,23 @@ namespace RestWebservice_RemoteCompiling.Handlers
         {
             Exercise exercise = _exerciseRepository.Get(request.ExerciseId);
             User? user = _userRepository.GetUserByLdapUid(request.Token.Claims.First(x => x.Type == ClaimTypes.Sid).Value);
-
+            var userAlreadyInHandIns = exercise.HandIns.Where(x => x.UserToGrade.LdapUid == user.LdapUid).ToList();
+            
+            if (userAlreadyInHandIns.Count() == 1 && userAlreadyInHandIns[0].Status != GradingStatus.NotGraded)
+            {
+                throw new Exception("currently in grading or already graded");
+            }
+            if (userAlreadyInHandIns.Count() == 1)
+            {
+                exercise.HandIns.Remove(userAlreadyInHandIns[0]);
+            }
 
             ExerciseGrade? x = new ExerciseGrade
                                {
                                    Exercise = exercise,
                                    Feedback = "",
                                    Grade = -1,
-                                   IsGraded = false,
+                                   Status =  GradingStatus.NotGraded,
                                    UserToGrade = user
                                };
 

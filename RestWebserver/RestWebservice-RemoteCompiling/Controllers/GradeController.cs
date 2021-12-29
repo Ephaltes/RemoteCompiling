@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net;
+using System.Threading.Tasks;
 
 using MediatR;
 
@@ -34,8 +35,12 @@ namespace RestWebservice_RemoteCompiling.Controllers
             GetGradeForStudentInExerciseQuery query = new GetGradeForStudentInExerciseQuery
                                                       { ExerciseId = exerciseId, StudentId = studentId, Token = GetTokenFromAuthorization() };
             CustomResponse<ExerciseGrade> response = await _mediator.Send(query);
-
-            return response.ToResponse();
+            if (response.Data.Status == GradingStatus.Graded)
+            {
+                return response.ToResponse(); 
+            }
+            
+            return NotFound();
         }
 
         [HttpPut("gradeExercise")]

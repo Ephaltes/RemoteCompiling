@@ -2,6 +2,8 @@
 
 using Npgsql;
 
+using RestWebservice_RemoteCompiling.Entities;
+
 namespace RestWebservice_RemoteCompiling.Database
 {
     public class RemoteCompileDbContext : DbContext
@@ -54,6 +56,7 @@ namespace RestWebservice_RemoteCompiling.Database
             Database.EnsureCreated();
             NpgsqlConnection.GlobalTypeMapper.MapEnum<UserRole>();
             NpgsqlConnection.GlobalTypeMapper.MapEnum<ProjectType>();
+            NpgsqlConnection.GlobalTypeMapper.MapEnum<GradingStatus>();
         }
 
         protected override void OnModelCreating(ModelBuilder builder)

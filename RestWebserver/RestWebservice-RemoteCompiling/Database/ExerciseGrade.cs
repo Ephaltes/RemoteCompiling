@@ -1,5 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 
+using RestWebservice_RemoteCompiling.Entities;
+
 namespace RestWebservice_RemoteCompiling.Database
 {
     public class ExerciseGrade
@@ -29,7 +31,7 @@ namespace RestWebservice_RemoteCompiling.Database
             set;
         }
 
-        public bool IsGraded
+        public GradingStatus Status
         {
             get;
             set;
