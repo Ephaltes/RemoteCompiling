@@ -22,7 +22,7 @@ namespace RestWebservice_RemoteCompiling.Handlers
         public override async Task<CustomResponse<bool>> Handle(UpdateFileForProjectCommand request, CancellationToken cancellationToken)
         {
             string ldapIdent = request.Token.Claims.First(x => x.Type == ClaimTypes.Sid).Value;
-            User? ldapUser = await _userRepository.GetUserByLdapUid(ldapIdent);
+            User? ldapUser = _userRepository.GetUserByLdapUid(ldapIdent);
 
 
             foreach (Project item in ldapUser.Projects.Where(x => x.Id == request.ProjectId))

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 using MediatR;
 
@@ -22,7 +20,6 @@ namespace RestWebservice_RemoteCompiling.Controllers
     public class FileController : BaseController
     {
         private readonly IMediator _mediator;
-        private readonly Random dice = new Random();
         public FileController(ITokenService tokenService, IMediator mediator)
             : base(tokenService)
         {
@@ -42,11 +39,10 @@ namespace RestWebservice_RemoteCompiling.Controllers
         [HttpPost("addCheckPoint")]
         public async Task<IActionResult> AddCheckpointForFile(AddCheckpointForFileCommand command)
         {
-            Thread.Sleep(dice.Next(50,1000));
             command.Token = GetTokenFromAuthorization();
 
             CustomResponse<int> result = await _mediator.Send(command);
-            Thread.Sleep(dice.Next(50,1000));
+
             return result.ToResponse();
         }
 
