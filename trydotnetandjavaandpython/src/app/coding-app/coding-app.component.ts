@@ -276,16 +276,19 @@ export class CodingAppComponent implements OnInit, OnDestroy {
     const dialogRef = this.Dialog.open(AddNewFileComponent, { data: { projectid: node.projectid, projectType: node.projectType } });
     dialogRef.afterClosed().subscribe(() => { dialogRef.componentInstance.validData ? this.refreshDataNavivagte(dialogRef.componentInstance.emittingData.projectId, dialogRef.componentInstance.emittingData.projectFileId) : false })
   }
+  saveButton() {
+    this.userProjectService.save(this.nestedDataSource.data);
+  }
   ngOnInit() {
     var toast: Toast = {
       type: 'success',
       title: 'Auto save complete',
       showCloseButton: false
     };
-    this.saveSource.subscribe(() => { this.userProjectService.save(), this.toasterSerivce.pop(toast) });
+    // this.saveSource.subscribe(() => { this.userProjectService.save(this.nestedDataSource.data), this.toasterSerivce.pop(toast) });
   }
   ngOnDestroy() {
-    this.userProjectService.save();
+    // this.userProjectService.save(this.nestedDataSource.data);
   }
 
 }

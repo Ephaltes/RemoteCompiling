@@ -108,9 +108,10 @@
   <!--Actionbar-->
   <mat-grid-tile [colspan]="10" [rowspan]="1">
     <div class="wrap margin">
-      
+
       <div class="runActionBar">
         <button mat-raised-button color="primary" [disabled]="isLoading" (click)="runCode()">Run</button>
+        <button (click)="saveButton()">Save</button>
       </div>
       <!--<mat-grid-tile [colspan]="15" [rowspan]="3"></mat-grid-tile>-->
       <div>

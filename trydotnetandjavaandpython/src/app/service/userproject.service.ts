@@ -1,5 +1,8 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
+import { forkJoin } from 'rxjs';
+import { delay } from "rxjs/operators";
 import * as globalVar from '../../../globals'
 import { FileNode, FileNodeType } from "../file-module/file-node";
 export interface CheckPoint {
@@ -45,14 +48,20 @@ export class UserProjectService {
     public postFileToProject(projectId: number, fileName: string) {
         return this.http.post<DataIdBody>(globalVar.apiURL + "/api/file/add", { file: { fileName: fileName, checkpoints: [{ code: "" }] }, projectId: projectId })
     }
-    public postFileToProjectWithCode(projectId: number, fileName: string, code:string) {
+    public postFileToProjectWithCode(projectId: number, fileName: string, code: string) {
         return this.http.post<DataIdBody>(globalVar.apiURL + "/api/file/add", { file: { fileName: fileName, checkpoints: [{ code: code }] }, projectId: projectId })
     }
     public deleteFileFromProject(projectId: number, fileId: number) {
         return this.http.delete(globalVar.apiURL + "/api/file/remove", { body: { projectId: projectId, fileId: fileId } })
     }
-    public save() {
-
+    public save(files: FileNode[]) {
+        const calls: Observable<Object>[] = [];
+        files.forEach(project => {
+            for (const file of project.children) {
+                this.http.post(globalVar.apiURL + "/api/file/addCheckPoint", { fileId: file.fileId, checkpoint: { code: file.code.value } }).subscribe(res => console.log(res));
+            }
+        });
+        forkJoin(calls).subscribe();
     }
 
     public convertBEtoFEEntity(user: User): FileNode[] {
@@ -87,7 +96,7 @@ export class UserProjectService {
                 }
                 if (pj.files.length > 0) {
                     pj.files.forEach(pjFile => {
-                        var checkpoint = pjFile.checkpoints.reduce((r, o) => r.created < o.created ? r : o);
+                        var checkpoint = pjFile.checkpoints.reduce((r, o) => r.created > o.created ? r : o);
                         var childFile = new FileNode(pjFile.fileName, fileType, checkpoint.code);
                         childFile.fileId = pjFile.id;
                         childFile.projectid = pj.id;
