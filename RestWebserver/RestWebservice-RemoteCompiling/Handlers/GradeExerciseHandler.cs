@@ -28,7 +28,7 @@ namespace RestWebservice_RemoteCompiling.Handlers
             ExerciseGrade obj = _exerciseGradeRepository.Get(request.ExerciseId);
             obj.Feedback = request.Feedback;
             obj.Grade = request.Grading;
-            obj.IsGraded = request.Graded;
+            obj.Status = request.Status;
             obj.UserToGrade = _userRepository.GetUserByLdapUid(request.StudentId) ?? throw new Exception("user not found");
             obj.Exercise = _exerciseRepository.Get(request.ExerciseId) ?? throw new Exception("Exercise not found");
 
