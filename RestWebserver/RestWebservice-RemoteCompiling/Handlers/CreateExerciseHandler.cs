@@ -25,7 +25,7 @@ namespace RestWebservice_RemoteCompiling.Handlers
         public override async Task<CustomResponse<int>> Handle(CreateExerciseCommand request, CancellationToken cancellationToken)
         {
             string ldapIdent = request.Token.Claims.First(x => x.Type == ClaimTypes.Sid).Value;
-            User? ldapUser = _userRepository.GetUserByLdapUid(ldapIdent);
+            User? ldapUser = await _userRepository.GetUserByLdapUid(ldapIdent);
             if (ldapUser is null)
             {
                 throw new Exception("ldapuser not found in db");
