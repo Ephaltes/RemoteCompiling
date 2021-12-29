@@ -16,6 +16,7 @@ export class FileNode {
     children?: FileNode[];
     name: string;
     type: FileNodeType;
+    exerciseId?: number;
 
     code?: CodeModel;
 

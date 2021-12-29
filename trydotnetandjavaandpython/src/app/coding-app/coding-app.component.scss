@@ -1,105 +1,121 @@
 .file-tree-container {
-    height: calc(100vh - 64px);
-    overflow: hidden;
+  height: calc(100vh - 64px);
+  overflow: hidden;
+}
+.file-tree {
+  background-color: rgba(26, 32, 53, 1);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  min-height: 0;
+  overflow: auto;
+
+  &-invisible {
+    display: none;
   }
-  .file-tree {
-    background-color: rgba(26, 32, 53, 1);
+  ul,
+  li {
+    margin-top: 0;
+    margin-bottom: 0;
+    list-style-type: none;
+  }
+
+  .mat-icon-button[disabled] {
+    display: none;
+  }
+
+  .file-node-label {
+    margin-left: 15px;
+    color: #fff;
     display: flex;
-    flex-direction: column;
-    flex: 1;
-    height: 100%;
-    max-height: 100%;
-    overflow: hidden;
-    min-height: 0;
-    overflow: auto;
-  
-    &-invisible {
-      display: none;
+    cursor: pointer;
+    user-select: none;
+
+    &__icon {
+      float: left;
     }
-    ul,
-    li {
-      margin-top: 0;
-      margin-bottom: 0;
-      list-style-type: none;
-    }
-  
-    .mat-icon-button[disabled] {
-      display: none;
-    }
-  
-    .file-node-label {
-      margin-left: 15px;
+
+    &__text {
       color: #fff;
-      display: flex;
-      cursor: pointer;
-      user-select: none;
-  
-      &__icon {
-        float: left;
-      }
-  
-      &__text {
-        color: #fff;
-        float: left;
-        margin-top: 4px;
-        margin-left: 4px;
-        white-space: nowrap;
-      }
+      float: left;
+      margin-top: 4px;
+      margin-left: 4px;
+      white-space: nowrap;
     }
   }
-  .selectVersionActionBar {
-    background-color: white;
-    margin: 5px;
+}
+.selectVersionActionBar {
+  background-color: white;
+  margin: 5px;
+}
+.selectThemeActionBar {
+  background-color: white;
+  margin: 5px;
+  float: right;
+}
+.runActionBar {
+  margin-left: 1% !important;
+  margin-top: 10px !important;
+}
+.outputWindow {
+  background-color: rgb(41, 51, 85);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  min-height: 0;
+  overflow: auto;
+  white-space: pre;
+}
+.wrap {
+  display: flex;
+  min-width: 100%;
+  min-height: 100%;
+  justify-content: space-between;
+}
+
+.margin div:last-child {
+  margin-left: auto;
+}
+::ng-deep .mat-form-field {
+  .mat-select-value {
+    color: black;
   }
-  .selectThemeActionBar {
-    background-color: white;
-    margin: 5px;
-    float: right;
-  }
-  .runActionBar {
-    margin-left: 1% !important;
-    margin-top: 10px !important;
-  }
-  .outputWindow {
-    background-color: rgb(41, 51, 85);
-    color: white;
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    height: 100%;
-    max-height: 100%;
-    overflow: hidden;
-    min-height: 0;
-    overflow: auto;
-    white-space: pre;
-  }
-  .wrap {
-    display: flex;
-    min-width: 100%;
-    min-height: 100%;
-    justify-content: space-between;
-  }
-  
-  .margin div:last-child {
-    margin-left: auto;
-  }
-  ::ng-deep .mat-form-field {
-    .mat-select-value{
-        color: black;
-    }
-  }
-  .dropzone{
-    background-color: rgb(41, 51, 85)!important;
-    position: fixed; top: 0; left: 0; 
-    /* above all elements, even if z-index is used elsewhere
+}
+.dropzone {
+  background-color: rgb(41, 51, 85) !important;
+  position: fixed;
+  top: 0;
+  left: 0;
+  /* above all elements, even if z-index is used elsewhere
        it can be lowered as needed, but this value surpasses
        all elements when used on YouTube for example. */
-    z-index: 9999999999;               
-    /* takes up 100% of page */
-    width: 100vw; height: 100vh;         
-    /* dim the page with 50% black background when visible */
-    background-color: rgba(0,0,0,0.5);
-    /* a nice fade effect, visibility toggles after 175ms, opacity will animate for 175ms. note display:none cannot be animated.  */
-    transition: visibility 175ms, opacity 175ms;
-  }
-  
+  z-index: 9999999999;
+  /* takes up 100% of page */
+  width: 100vw;
+  height: 100vh;
+  /* dim the page with 50% black background when visible */
+  background-color: rgba(0, 0, 0, 0.5);
+  /* a nice fade effect, visibility toggles after 175ms, opacity will animate for 175ms. note display:none cannot be animated.  */
+  transition: visibility 175ms, opacity 175ms;
+}
+.exerciseDefinition {
+  overflow-y:auto;
+  -webkit-touch-callout: text; /* iOS Safari */
+  -webkit-user-select: text; /* Safari */
+  -khtml-user-select: text; /* Konqueror HTML */
+  -moz-user-select: text; /* Old versions of Firefox */
+  -ms-user-select: text; /* Internet Explorer/Edge */
+  user-select: text;
+  width: 100%;
+  height: 100%;
+  color: white;
+  padding: 0px 15px;
+  margin-top: 25px;
+}

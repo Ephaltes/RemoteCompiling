@@ -18,6 +18,7 @@ export interface FileEntity {
 }
 export interface UserProject {
     id: number;
+    exerciseID: number;
     projectName: string;
     stdIn?: string;
     files?: FileEntity[];
@@ -39,8 +40,8 @@ export class UserProjectService {
     public getProjects() {
         return this.http.get<User>(globalVar.apiURL + "/api/user/getMySelf");
     }
-    public postProject(projectName: string, projectType: number, files: FileEntity[]) {
-        return this.http.post(globalVar.apiURL + "/api/project/add", { project: { projectName: projectName, files: files, projectType: projectType } })
+    public postProject(exerciseId: number, projectName: string, projectType: number, files: FileEntity[]) {
+        return this.http.post(globalVar.apiURL + "/api/project/add", { project: { projectName: projectName, files: files, projectType: projectType, exerciseID: exerciseId } })
     }
     public deleteProject(projectId: number) {
         return this.http.delete(globalVar.apiURL + "/api/project/delete", { body: { projectId: projectId } })
@@ -58,7 +59,7 @@ export class UserProjectService {
         const calls: Observable<Object>[] = [];
         files.forEach(project => {
             for (const file of project.children) {
-                this.http.post(globalVar.apiURL + "/api/file/addCheckPoint", { fileId: file.fileId, checkpoint: { code: file.code.value } }).subscribe(res => console.log(res));
+                this.http.post(globalVar.apiURL + "/api/file/addCheckPoint", { fileId: file.fileId, checkpoint: { code: file.code.value } }).subscribe();
             }
         });
         forkJoin(calls).subscribe();
@@ -98,6 +99,7 @@ export class UserProjectService {
                     pj.files.forEach(pjFile => {
                         var checkpoint = pjFile.checkpoints.reduce((r, o) => r.created > o.created ? r : o);
                         var childFile = new FileNode(pjFile.fileName, fileType, checkpoint.code);
+                        childFile.exerciseId = pj.exerciseID;
                         childFile.fileId = pjFile.id;
                         childFile.projectid = pj.id;
                         newFileNode.children.push(childFile);

@@ -18,16 +18,24 @@ import * as JSZip from 'jszip';
 import { FolderOptionDialogComponent } from '../folder-option-dialog/folder-option-dialog.component';
 import { AddNewFolderComponent } from '../add-new-folder/add-new-folder.component';
 import { UserProjectService } from '../service/userproject.service';
-import { convertFileTypeToNumber } from '../service/exercise.service';
+import { convertFileTypeToNumber, ExerciseService } from '../service/exercise.service';
 
 @Component({
   selector: 'app-coding-app',
   templateUrl: './coding-app.component.html',
   styleUrls: ['./coding-app.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  providers: [CompileService, UserProjectService]
+  providers: [CompileService, UserProjectService, ExerciseService]
 })
 export class CodingAppComponent implements OnInit, OnDestroy {
+  currentTaskDefinition: string;
+  currentExerciseName: string;
+  currentExerciseAuthor: string;
+  currentProjectId = 0;
+  currentExerciseId = 0;
+  showExerciseNotes = false;
+  editorColSpan = 10;
+  exerciseColSpan = 0;
   private toasterSerivce: ToasterService;
   saveSource = interval(60000);
   newFile = "Test.cs"
@@ -62,7 +70,7 @@ export class CodingAppComponent implements OnInit, OnDestroy {
     },
   };
 
-  constructor(private userProjectService: UserProjectService, private editorService: CodeEditorService, private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer, private compileService: CompileService, private Dialog: MatDialog, private ToasterService: ToasterService) {
+  constructor(private userProjectService: UserProjectService, private exerciseService: ExerciseService, private editorService: CodeEditorService, private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer, private compileService: CompileService, private Dialog: MatDialog, private ToasterService: ToasterService) {
     this.nestedTreeControl = new NestedTreeControl<FileNode>(this._getChildren);
     this.nestedDataSource = new MatTreeNestedDataSource();
 
@@ -101,6 +109,7 @@ export class CodingAppComponent implements OnInit, OnDestroy {
     var projects: FileNode[];
     this.userProjectService.getProjects().subscribe(res => {
       projects = this.userProjectService.convertBEtoFEEntity(res);
+      console.log(projects);
       this.nestedDataSource.data = projects;
       if (projects.length > 0) {
         this.nestedTreeControl.expand(this.nestedDataSource.data[0]);
@@ -174,7 +183,16 @@ export class CodingAppComponent implements OnInit, OnDestroy {
       );
     }
   }
-
+  toggleExercisNote() {
+    if (this.showExerciseNotes) {
+      this.editorColSpan = 10;
+      this.exerciseColSpan = 0;
+    } else {
+      this.editorColSpan = 7;
+      this.exerciseColSpan = 3;
+    }
+    this.showExerciseNotes = !this.showExerciseNotes;
+  }
   showDragZone(event: DragEvent) {
     const element = <HTMLElement>document.getElementsByClassName('dropzone')[0];
     element.style.visibility = "";
@@ -201,10 +219,26 @@ export class CodingAppComponent implements OnInit, OnDestroy {
       node.code === this.selectedModel
     );
   }
+  handIn() {
+    if (this.currentProjectId > 0 && this.currentExerciseId > 0) {
+      this.exerciseService.postExerciseHandIn(this.currentProjectId, this.currentExerciseId).subscribe(res => console.log(res));
+    }
+  }
 
   selectNode(node: FileNode) {
     this.isLoading = false;
     this.selectedModel = node.code;
+    if (node.exerciseId > 0) {
+      this.currentExerciseId = node.exerciseId;
+      this.exerciseService.getExercisesById(this.currentExerciseId).subscribe(res => {
+        this.currentExerciseAuthor = res.data.author;
+        this.currentTaskDefinition = res.data.taskDefinition;
+        this.currentExerciseName = res.data.name;
+      })
+    }
+    if (node.projectid > 0) {
+      this.currentProjectId = node.projectid;
+    }
   }
   downloadFile(node: FileNode) {
     const blob = new Blob([node.code.value], { type: 'text/plain' });
@@ -288,7 +322,7 @@ export class CodingAppComponent implements OnInit, OnDestroy {
     // this.saveSource.subscribe(() => { this.userProjectService.save(this.nestedDataSource.data), this.toasterSerivce.pop(toast) });
   }
   ngOnDestroy() {
-    // this.userProjectService.save(this.nestedDataSource.data);
+    //this.userProjectService.save(this.nestedDataSource.data);
   }
 
 }

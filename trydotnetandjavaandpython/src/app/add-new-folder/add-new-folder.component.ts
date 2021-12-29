@@ -56,7 +56,7 @@ export class AddNewFolderComponent implements OnInit {
     }
     const value = this.newFileForm.value;
     console.log(value.template);
-    this.userProjectService.postProject(value.name, value.template.template.projectType, value.template.template.files).subscribe(() => {
+    this.userProjectService.postProject(value.template.id, value.name, value.template.template.projectType, value.template.template.files).subscribe(() => {
       this.validData = true;
       this.newFileForm.reset();
     })
