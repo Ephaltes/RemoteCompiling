@@ -52,7 +52,7 @@ namespace RestWebservice_RemoteCompiling
             services.AddSingleton<IAliasHelper, AliasHelper>();
             services.AddSingleton<IHttpHelper>(x => new HttpHelper
                                                    (Configuration.GetSection("RemoteCompilerApiLocation").Value));
-            services.AddSingleton<ILdapHelper, LdapHelper>();
+            services.AddTransient<ILdapHelper, LdapHelper>();
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<ISessionRepository, SessionRepository>();
             services.AddTransient<ITokenService, TokenService>();
