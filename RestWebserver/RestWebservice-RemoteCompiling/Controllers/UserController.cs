@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 using MediatR;
 
@@ -31,16 +32,16 @@ namespace RestWebservice_RemoteCompiling.Controllers
         }
 
         [HttpGet("getUser")]
-        public IActionResult GetUser(string ldapIdent)
+        public async Task<IActionResult> GetUser(string ldapIdent)
         {
-            return CustomResponse.Success(_userRepository.GetUserByLdapUid(ldapIdent)).ToResponse();
+            return CustomResponse.Success(await _userRepository.GetUserByLdapUid(ldapIdent)).ToResponse();
         }
         
         [HttpGet("getMySelf")]
-        public IActionResult GetMyself()
+        public async Task<IActionResult> GetMyself()
         {
             var token = GetTokenFromAuthorization();
-            return CustomResponse.Success(_userRepository.GetUserByLdapUid(token.Claims.First(x => x.Type == ClaimTypes.Sid).Value)).ToResponse();
+            return CustomResponse.Success(await _userRepository.GetUserByLdapUid(token.Claims.First(x => x.Type == ClaimTypes.Sid).Value)).ToResponse();
         }
         
     }
