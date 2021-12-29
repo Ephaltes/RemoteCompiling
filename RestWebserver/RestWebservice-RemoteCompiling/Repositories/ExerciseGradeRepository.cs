@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 using RestWebservice_RemoteCompiling.Database;
 
@@ -16,7 +15,7 @@ namespace RestWebservice_RemoteCompiling.Repositories
 
         public int Add(ExerciseGrade exerciseGrade)
         {
-            _context.ExerciseGrades.AddAsync(exerciseGrade);
+            _context.ExerciseGrades.Add(exerciseGrade);
 
             return _context.SaveChanges();
         }
