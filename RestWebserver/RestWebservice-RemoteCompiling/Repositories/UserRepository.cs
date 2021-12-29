@@ -1,4 +1,7 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
+
+using Microsoft.EntityFrameworkCore;
 
 using RestWebservice_RemoteCompiling.Database;
 
@@ -27,9 +30,9 @@ namespace RestWebservice_RemoteCompiling.Repositories
             _context.SaveChanges();
         }
 
-        public User? GetUserByLdapUid(string ldapUid)
+        public async Task<User?> GetUserByLdapUid(string ldapUid)
         {
-            return _context.Users.FirstOrDefault(x => x.LdapUid.ToLower() == ldapUid.ToLower());
+            return await _context.Users.FirstOrDefaultAsync(x => x.LdapUid.ToLower() == ldapUid.ToLower());
         }
     }
 }

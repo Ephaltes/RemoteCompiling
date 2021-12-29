@@ -23,7 +23,7 @@ namespace RestWebservice_RemoteCompiling.Handlers
         public override async Task<CustomResponse<int>> Handle(AddFileForProjectCommand request, CancellationToken cancellationToken)
         {
             string ldapIdent = request.Token.Claims.First(x => x.Type == ClaimTypes.Sid).Value;
-            User? ldapUser = _userRepository.GetUserByLdapUid(ldapIdent);
+            User? ldapUser = await _userRepository.GetUserByLdapUid(ldapIdent);
 
             File file = new File
                         {
@@ -37,7 +37,7 @@ namespace RestWebservice_RemoteCompiling.Handlers
                             FileName = request.File.FileName
                         };
 
-            User? user = _userRepository.GetUserByLdapUid(ldapUser.LdapUid);
+            User? user = await _userRepository.GetUserByLdapUid(ldapUser.LdapUid);
             foreach (Project x in user.Projects)
             {
                 if (x.Id == request.ProjectId)

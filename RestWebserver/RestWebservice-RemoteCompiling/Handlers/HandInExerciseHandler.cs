@@ -26,7 +26,7 @@ namespace RestWebservice_RemoteCompiling.Handlers
         public override async Task<CustomResponse<bool>> Handle(HandInCommand request, CancellationToken cancellationToken)
         {
             Exercise exercise = _exerciseRepository.Get(request.ExerciseId);
-            User? user = _userRepository.GetUserByLdapUid(request.Token.Claims.First(x => x.Type == ClaimTypes.Sid).Value);
+            User? user = await _userRepository.GetUserByLdapUid(request.Token.Claims.First(x => x.Type == ClaimTypes.Sid).Value);
             var userAlreadyInHandIns = exercise.HandIns.Where(x => x.UserToGrade.LdapUid == user.LdapUid).ToList();
             
             if (userAlreadyInHandIns.Count() == 1 && userAlreadyInHandIns[0].Status != GradingStatus.NotGraded)
