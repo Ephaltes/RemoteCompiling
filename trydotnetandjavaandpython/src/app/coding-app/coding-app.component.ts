@@ -1,5 +1,5 @@
 import { NestedTreeControl } from '@angular/cdk/tree';
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { CodeEditorService, CodeModel } from '@ngstack/code-editor';
@@ -31,17 +31,17 @@ export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit {
   currentTaskDefinition: string;
   currentExerciseName: string;
   currentExerciseAuthor: string;
-  currentProjectId = 0;
-  currentExerciseId = 0;
-  currentFileId = 0;
+  private currentProjectId = 0;
+  private currentExerciseId = 0;
+  private currentFileId = 0;
   showExerciseNotes = false;
   editorColSpan = 10;
   exerciseColSpan = 0;
   private toasterSerivce: ToasterService;
-  saveSource = interval(60000);
-  newFile = "Test.cs"
-  newType = FileNodeType.csharp;
-  newCode = "";
+  private saveSource = interval(60000);
+  private newFile = "Test.cs"
+  private newType = FileNodeType.csharp;
+  private newCode = "";
   nestedTreeControl: NestedTreeControl<FileNode>;
   nestedDataSource: MatTreeNestedDataSource<FileNode>;
   title = 'trydotnetandjavaandpython';
@@ -53,8 +53,17 @@ export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit {
     { name: 'High Contrast Dark', value: 'hc-black' },
   ];
   selectedModel: CodeModel = null;
-  selectedTheme = 'vs-dark';
-  readOnly = false;
+  set selectedTheme(value: string) {
+    localStorage.setItem("editorTheme", value);
+  }
+  get selectedTheme(): string {
+    var cachedTheme = localStorage.getItem("editorTheme");
+    if (cachedTheme == undefined)
+      return 'vs-dark';
+    else
+      return cachedTheme;
+  }
+  readOnly: boolean = true;
   isLoading = false;
   isLoading$: Observable<boolean>;
   runFiles: FileCode[];
@@ -106,13 +115,12 @@ export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit {
     this.toasterSerivce = ToasterService;
   }
   ngAfterViewInit(): void {
-    this.toggleExercisNote();
+    // this.toggleExercisNote();
   }
   refreshData() {
     var projects: FileNode[];
     this.userProjectService.getProjects().subscribe(res => {
       projects = this.userProjectService.convertBEtoFEEntity(res);
-      console.log(projects);
       this.nestedDataSource.data = projects;
       if (projects.length > 0) {
         this.nestedTreeControl.expand(this.nestedDataSource.data[0]);
@@ -212,8 +220,6 @@ export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit {
   private _getChildren = (node: FileNode) => node.children;
 
   onCodeChanged(value: any) {
-    console.log(this.nestedDataSource.data)
-    console.log(this.currentProjectId)
     this.nestedDataSource.data.find(c => c.projectid == this.currentProjectId).children.find(c => c.fileId == this.currentFileId).modified = true;
   }
   isNodeSelected(node: FileNode): boolean {

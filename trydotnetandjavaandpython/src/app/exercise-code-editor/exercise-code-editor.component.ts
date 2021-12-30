@@ -27,7 +27,7 @@ export class ExerciseCodeEditorComponent implements OnInit {
     this._currentExercise = value;
     this.taskDefinition = value.taskDefinition;
     this.nestedDataSource.data = value.files;
-    if (this.nestedDataSource.data.length > 1)
+    if (this.nestedDataSource.data.length >= 1)
       this.selectNode(this.nestedDataSource.data[this.nestedDataSource.data.length - 1])
     else
       this.selectedModel = { uri: "", value: "", language: "" }

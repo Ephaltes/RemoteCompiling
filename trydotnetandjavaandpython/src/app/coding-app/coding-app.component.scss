@@ -106,6 +106,7 @@
   transition: visibility 175ms, opacity 175ms;
 }
 .exerciseDefinition {
+  z-index: 10;
   overflow-y: auto;
   -webkit-touch-callout: text; /* iOS Safari */
   -webkit-user-select: text; /* Safari */
@@ -128,5 +129,12 @@
 }
 .openExerciseNote button:hover {
   right: -1px;
-
+}
+.stdin {
+  display: inline;
+  color: white;
+  padding-left: 10px;
+}
+.stdin .mat-checkbox .mat-checkbox-frame {
+  border-color: white;
 }
