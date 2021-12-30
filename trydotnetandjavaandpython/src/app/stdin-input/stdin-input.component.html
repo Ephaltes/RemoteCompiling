@@ -1,0 +1,22 @@
+<div class="container-fluid" id="contentWrapper">
+    <mat-card id="stdinCard">
+        <mat-card-header>
+            <mat-card-title>Standardeingabe...</mat-card-title>
+        </mat-card-header>
+        <form [formGroup]="stdinForm" (ngSubmit)="submit()">
+            <mat-card-content>
+                <div class="col-md-12 mb-3">
+                    <mat-form-field appearance="outline" [style.width.%]="100" style="padding-right: 2%;"
+                        class="stdinForm">
+                        <mat-label>Standardeingabe</mat-label>
+                        <input matInput formControlName="stdin" value="" autocomplete="off" placeholder="-m helloworld">
+                    </mat-form-field>
+                </div>
+            </mat-card-content>
+            <mat-card-actions style="padding: 20px;">
+                <button style="float: left;" mat-raised-button color="primary" type="submit"
+                    [disabled]="stdinForm.invalid" mat-dialog-close>Submit</button>
+            </mat-card-actions>
+        </form>
+    </mat-card>
+</div>

@@ -41,6 +41,7 @@ import { LoggedInUserComponent } from './logged-in-user/logged-in-user.component
 import { ExercisePlatformEditExerciseComponent } from './exercise-platform-edit-exercise/exercise-platform-edit-exercise.component';
 import { ExercisePlatformCreateFileComponent } from './exercise-platform-create-file/exercise-platform-create-file.component';
 import { ExerciseCodeGradingEditorComponent } from './exercise-code-grading-editor/exercise-code-grading-editor.component';
+import { StdinInputComponent } from './stdin-input/stdin-input.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -62,7 +63,8 @@ import { ExerciseCodeGradingEditorComponent } from './exercise-code-grading-edit
     LoggedInUserComponent,
     ExercisePlatformEditExerciseComponent,
     ExercisePlatformCreateFileComponent,
-    ExerciseCodeGradingEditorComponent
+    ExerciseCodeGradingEditorComponent,
+    StdinInputComponent
   ],
   imports: [
     BrowserModule,

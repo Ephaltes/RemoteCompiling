@@ -19,6 +19,7 @@ import { FolderOptionDialogComponent } from '../folder-option-dialog/folder-opti
 import { AddNewFolderComponent } from '../add-new-folder/add-new-folder.component';
 import { UserProjectService } from '../service/userproject.service';
 import { convertFileTypeToNumber, ExerciseService } from '../service/exercise.service';
+import { StdinInputComponent } from '../stdin-input/stdin-input.component';
 
 @Component({
   selector: 'app-coding-app',
@@ -28,6 +29,7 @@ import { convertFileTypeToNumber, ExerciseService } from '../service/exercise.se
   providers: [CompileService, UserProjectService, ExerciseService]
 })
 export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit {
+  stdin: boolean = false;
   currentTaskDefinition: string;
   currentExerciseName: string;
   currentExerciseAuthor: string;
@@ -310,10 +312,22 @@ export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit {
     console.log('Online Editor loaded!');
   }
   runCode() {
-    this.runFiles = [];
-    this.isLoading = true;
-    this.output = "Loading...";
-    this.compileService.compile(this.selectedModel, this.runFiles).subscribe((item => { this.isLoading = false; item.data.run.stderr.length > 0 ? this.output = item.data.run.stderr : this.output = item.data.run.stdout }))
+    var stdin = "";
+    if (this.stdin) {
+      const dialogRef = this.Dialog.open(StdinInputComponent);
+      dialogRef.afterClosed().subscribe(() => {
+        dialogRef.componentInstance.validData ? stdin = dialogRef.componentInstance.emittingData : false;
+        this.runFiles = [];
+        this.isLoading = true;
+        this.output = "Loading...";
+        this.compileService.compile(this.selectedModel, this.runFiles).subscribe((item => { this.isLoading = false; item.data.run.stderr.length > 0 ? this.output = item.data.run.stderr : this.output = item.data.run.stdout }))
+      });
+    } else {
+      this.runFiles = [];
+      this.isLoading = true;
+      this.output = "Loading...";
+      this.compileService.compile(this.selectedModel, this.runFiles).subscribe((item => { this.isLoading = false; item.data.run.stderr.length > 0 ? this.output = item.data.run.stderr : this.output = item.data.run.stdout }))
+    }
 
   }
   openNewFolderDialog() {

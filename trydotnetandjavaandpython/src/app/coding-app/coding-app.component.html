@@ -134,7 +134,8 @@
         <button mat-raised-button color="primary" [disabled]="isLoading" (click)="runCode()">Run</button>
 
         <div class="stdin">stdin
-          <mat-checkbox color="warn" style="padding-left: 5px;"></mat-checkbox>
+          <mat-checkbox color="warn" [checked]="stdin" (change)="stdin=!stdin" style="padding-left: 5px;">
+          </mat-checkbox>
         </div>
         <button mat-raised-button color="primary" (click)="saveButton()" style="left: 10px;">Force Save</button>
       </div>
