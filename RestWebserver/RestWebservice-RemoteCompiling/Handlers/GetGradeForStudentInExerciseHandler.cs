@@ -23,15 +23,16 @@ namespace RestWebservice_RemoteCompiling.Handlers
         {
             User user = GetUserFromToken(request.Token);
 
-            ExerciseGrade? exerciseGrade = _exerciseGradeRepository.Get(request.StudentId, request.ExerciseId);
+            ExerciseGrade? exerciseGrade = await _exerciseGradeRepository.Get(request.StudentId, request.ExerciseId);
 
             if (exerciseGrade is null)
                 return CustomResponse.Error<ExerciseGradeEntity>(404, "No grade found for this student in this exercise");
-            
+
             if (exerciseGrade.Status == GradingStatus.NotGraded)
             {
                 return CustomResponse.Error<ExerciseGradeEntity>(425, "too early");
             }
+
             if (exerciseGrade.Status == GradingStatus.InProcess)
             {
                 return CustomResponse.Error<ExerciseGradeEntity>(425, "too early, in processing");
@@ -72,14 +73,14 @@ namespace RestWebservice_RemoteCompiling.Handlers
                                                                    });
 
             var z = new ExerciseGradeEntity
-                   {
-                       Id = exerciseGrade.Id,
-                       UserToGrade = userEntity,
-                       Grade = exerciseGrade.Grade,
-                       Status = exerciseGrade.Status,
-                       Feedback = exerciseGrade.Feedback,
-                       Project = project
-                   };
+                    {
+                        Id = exerciseGrade.Id,
+                        UserToGrade = userEntity,
+                        Grade = exerciseGrade.Grade,
+                        Status = exerciseGrade.Status,
+                        Feedback = exerciseGrade.Feedback,
+                        Project = project
+                    };
 
 
             return CustomResponse.Success(z);

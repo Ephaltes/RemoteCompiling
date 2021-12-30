@@ -39,7 +39,8 @@ namespace RestWebservice_RemoteCompiling.Handlers
             exercise.Template = request.template;
             exercise.Template.ProjectName = exercise.Name + " Project";
             exercise.Template.ProjectType = request.TemplateProjectType;
-            return CustomResponse.Success(_exerciseRepository.Add(exercise));
+
+            return CustomResponse.Success(await _exerciseRepository.Add(exercise));
         }
     }
 }

@@ -21,8 +21,8 @@ namespace RestWebservice_RemoteCompiling.Handlers
 
         public override async Task<CustomResponse<List<ExerciseEntity>>> Handle(GetExercisesQuery request, CancellationToken cancellationToken)
         {
-            List<Exercise> dbExerciseList = _exerciseRepository.GetAll();
-            List<ExerciseEntity> exerciseList = new();
+            List<Exercise> dbExerciseList = await _exerciseRepository.GetAll();
+            List<ExerciseEntity> exerciseList = new List<ExerciseEntity>();
 
             if (dbExerciseList is null || dbExerciseList.Count == 0)
                 return CustomResponse.Success(exerciseList);
@@ -32,14 +32,14 @@ namespace RestWebservice_RemoteCompiling.Handlers
             {
                 List<ExerciseGradeEntity> y = item.HandIns.ConvertAll(x =>
                                                                       {
-                                                                          UserEntity user = new()
+                                                                          UserEntity user = new UserEntity
                                                                                             {
                                                                                                 Email = x.UserToGrade.Email,
                                                                                                 Name = x.UserToGrade.Name,
                                                                                                 LdapUid = x.UserToGrade.LdapUid,
                                                                                                 UserRole = x.UserToGrade.UserRole
                                                                                             };
-                                                                          ProjectEntity project = new()
+                                                                          ProjectEntity project = new ProjectEntity
                                                                                                   {
                                                                                                       ExerciseID = x.Exercise.Id,
                                                                                                       Id = x.Project.Id,
@@ -56,7 +56,7 @@ namespace RestWebservice_RemoteCompiling.Handlers
                                                                                                                                     LastModified = x.LastModified,
                                                                                                                                     Checkpoints = new List<CheckPointEntity>
                                                                                                                                                   {
-                                                                                                                                                      new()
+                                                                                                                                                      new CheckPointEntity
                                                                                                                                                       {
                                                                                                                                                           Code = x.Checkpoint.Code,
                                                                                                                                                           Created = x.Checkpoint.Created,
@@ -76,7 +76,7 @@ namespace RestWebservice_RemoteCompiling.Handlers
                                                                                      Project = project
                                                                                  };
                                                                       });
-                ExerciseEntity x = new()
+                ExerciseEntity x = new ExerciseEntity
                                    {
                                        Author = item.Author.LdapUid,
                                        Description = item.Description,
@@ -87,10 +87,10 @@ namespace RestWebservice_RemoteCompiling.Handlers
                                        DueDate = item.DueDate,
                                        TaskDefinition = item.TaskDefinition
                                    };
-            exerciseList.Add(x);
-        }
-        return CustomResponse.Success(exerciseList);
-    }
-}
+                exerciseList.Add(x);
+            }
 
+            return CustomResponse.Success(exerciseList);
+        }
+    }
 }

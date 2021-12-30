@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading;
@@ -25,14 +26,15 @@ namespace RestWebservice_RemoteCompiling.Handlers
 
         public override async Task<CustomResponse<bool>> Handle(HandInCommand request, CancellationToken cancellationToken)
         {
-            Exercise exercise = _exerciseRepository.Get(request.ExerciseId);
+            Exercise exercise = await _exerciseRepository.Get(request.ExerciseId);
             User? user = await _userRepository.GetUserByLdapUid(request.Token.Claims.First(x => x.Type == ClaimTypes.Sid).Value);
-            var userAlreadyInHandIns = exercise.HandIns.Where(x => x.UserToGrade.LdapUid == user.LdapUid).ToList();
-            
+            List<ExerciseGrade> userAlreadyInHandIns = exercise.HandIns.Where(x => x.UserToGrade.LdapUid == user.LdapUid).ToList();
+
             if (userAlreadyInHandIns.Count() == 1 && userAlreadyInHandIns[0].Status != GradingStatus.NotGraded)
             {
                 throw new Exception("currently in grading or already graded");
             }
+
             if (userAlreadyInHandIns.Count() == 1)
             {
                 exercise.HandIns.Remove(userAlreadyInHandIns[0]);
@@ -43,7 +45,7 @@ namespace RestWebservice_RemoteCompiling.Handlers
                                    Exercise = exercise,
                                    Feedback = "",
                                    Grade = -1,
-                                   Status =  GradingStatus.NotGraded,
+                                   Status = GradingStatus.NotGraded,
                                    UserToGrade = user
                                };
 
@@ -78,7 +80,7 @@ namespace RestWebservice_RemoteCompiling.Handlers
 
             //_exerciseGradeRepository.Add(x);
             exercise.HandIns.Add(x);
-            _exerciseRepository.Update(exercise);
+            await _exerciseRepository.Update(exercise);
 
             return CustomResponse.Success(true);
         }

@@ -21,7 +21,7 @@ namespace RestWebservice_RemoteCompiling.Handlers
 
         public override async Task<CustomResponse<ExerciseEntity>> Handle(GetExerciseQuery request, CancellationToken cancellationToken)
         {
-            Exercise? dbExercise = _exerciseRepository.Get(request.Id);
+            Exercise? dbExercise = await _exerciseRepository.Get(request.Id);
 
             if (dbExercise is null)
                 return CustomResponse.Error<ExerciseEntity>(404, "Exercise not found");
