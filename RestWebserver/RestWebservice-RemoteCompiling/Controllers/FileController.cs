@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 using MediatR;
 
@@ -42,7 +44,6 @@ namespace RestWebservice_RemoteCompiling.Controllers
             command.Token = GetTokenFromAuthorization();
 
             CustomResponse<int> result = await _mediator.Send(command);
-
             return result.ToResponse();
         }
 
