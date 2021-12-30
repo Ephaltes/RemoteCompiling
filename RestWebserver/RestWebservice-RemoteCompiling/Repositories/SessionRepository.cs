@@ -1,5 +1,7 @@
 ﻿using System;
-using System.Linq;
+using System.Threading.Tasks;
+
+using Microsoft.EntityFrameworkCore;
 
 using RestWebservice_RemoteCompiling.Database;
 
@@ -12,18 +14,18 @@ namespace RestWebservice_RemoteCompiling.Repositories
         {
             _context = context;
         }
-        public Session Add(Session session)
+        public async Task<Session> Add(Session session)
         {
-            _context.Sessions.Add(session);
-            _context.SaveChanges();
+            await _context.Sessions.AddAsync(session);
+            await _context.SaveChangesAsync();
 
             return session;
         }
-        public Session? GetSessionByGuid(Guid guid)
+        public async Task<Session?> GetSessionByGuid(Guid guid)
         {
-            return _context.Sessions.FirstOrDefault(x => x.Id.ToString("N") == guid.ToString("N"));
+            return await _context.Sessions.FirstOrDefaultAsync(x => x.Id.ToString("N") == guid.ToString("N"));
         }
-        public void DeleteExpiredSessions()
+        public async Task DeleteExpiredSessions()
         {
             foreach (Session session in _context.Sessions)
             {
@@ -31,7 +33,7 @@ namespace RestWebservice_RemoteCompiling.Repositories
                     _context.Sessions.Remove(session);
             }
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
+
+using Microsoft.EntityFrameworkCore;
 
 using RestWebservice_RemoteCompiling.Database;
 
@@ -12,35 +14,35 @@ namespace RestWebservice_RemoteCompiling.Repositories
         {
             _context = context;
         }
-        public int Add(Exercise exercise)
+        public async Task<int> Add(Exercise exercise)
         {
-            _context.Exercises.Add(exercise);
-            _context.SaveChanges();
+            await _context.Exercises.AddAsync(exercise);
+            await _context.SaveChangesAsync();
 
             return exercise.Id;
         }
 
-        public void Update(Exercise exercise)
+        public async Task Update(Exercise exercise)
         {
             _context.Exercises.Update(exercise);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void Delete(int id)
+        public async Task Delete(int id)
         {
-            Exercise? exercise = _context.Exercises.Find(id);
+            Exercise? exercise = await _context.Exercises.FindAsync(id);
             _context.Exercises.Remove(exercise);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public Exercise? Get(int? id)
+        public async Task<Exercise?> Get(int? id)
         {
-            return _context.Exercises.Find(id);
+            return await _context.Exercises.FindAsync(id);
         }
 
-        public List<Exercise> GetAll()
+        public async Task<List<Exercise>> GetAll()
         {
-            return _context.Exercises.ToList();
+            return await _context.Exercises.ToListAsync();
         }
     }
 }
