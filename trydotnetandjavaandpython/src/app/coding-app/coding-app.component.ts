@@ -316,11 +316,14 @@ export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.stdin) {
       const dialogRef = this.Dialog.open(StdinInputComponent);
       dialogRef.afterClosed().subscribe(() => {
-        dialogRef.componentInstance.validData ? stdin = dialogRef.componentInstance.emittingData : false;
-        this.runFiles = [];
-        this.isLoading = true;
-        this.output = "Loading...";
-        this.compileService.compile(this.selectedModel, this.runFiles).subscribe((item => { this.isLoading = false; item.data.run.stderr.length > 0 ? this.output = item.data.run.stderr : this.output = item.data.run.stdout }))
+        var closedWithoutInput = false;
+        dialogRef.componentInstance.validData ? stdin = dialogRef.componentInstance.emittingData : closedWithoutInput = true;
+        if (!closedWithoutInput) {
+          this.runFiles = [];
+          this.isLoading = true;
+          this.output = "Loading...";
+          this.compileService.compile(this.selectedModel, this.runFiles).subscribe((item => { this.isLoading = false; item.data.run.stderr.length > 0 ? this.output = item.data.run.stderr : this.output = item.data.run.stdout }))
+        }
       });
     } else {
       this.runFiles = [];
