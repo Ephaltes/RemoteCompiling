@@ -42,6 +42,8 @@ import { ExercisePlatformEditExerciseComponent } from './exercise-platform-edit-
 import { ExercisePlatformCreateFileComponent } from './exercise-platform-create-file/exercise-platform-create-file.component';
 import { ExerciseCodeGradingEditorComponent } from './exercise-code-grading-editor/exercise-code-grading-editor.component';
 import { StdinInputComponent } from './stdin-input/stdin-input.component';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -70,6 +72,7 @@ import { StdinInputComponent } from './stdin-input/stdin-input.component';
     BrowserModule,
     HttpClientModule,
     BrowserAnimationsModule, MatGridListModule, MatTreeModule, MatIconModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatCardModule, MatTableModule, MatPaginatorModule, MatCheckboxModule,
+    NgxMatSelectSearchModule,
     RouterModule.forRoot([
       { path: '', pathMatch: 'full', redirectTo: 'login' },
       { path: 'login', component: LoginSiteComponent },

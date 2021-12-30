@@ -28,8 +28,11 @@
                     </mat-form-field>
                     <mat-form-field appearance="outline" [style.width.%]="49" class="newFileForm">
                         <mat-label>Aufgabe</mat-label>
-                        <mat-select matInput formControlName="template" name="template">
-                            <mat-option *ngFor="let exercise of exercises" [value]="exercise">
+                        <mat-select matInput formControlName="template" name="template"  #singleSelect>
+                            <mat-option>
+                                <ngx-mat-select-search formControlName="templateFilterCtrl"></ngx-mat-select-search>
+                              </mat-option>
+                            <mat-option *ngFor="let exercise of filteredExercises | async" [value]="exercise">
                                 {{exercise.name}} - {{exercise.author}}
                             </mat-option>
                         </mat-select>
