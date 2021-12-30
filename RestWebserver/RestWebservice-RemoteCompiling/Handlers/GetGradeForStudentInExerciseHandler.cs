@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,16 +14,24 @@ namespace RestWebservice_RemoteCompiling.Handlers
     public class GetGradeForStudentInExerciseHandler : BaseHandler<GetGradeForStudentInExerciseQuery, CustomResponse<ExerciseGradeEntity>>
     {
         private readonly IExerciseGradeRepository _exerciseGradeRepository;
+        private readonly IUserRepository _userRepository;
 
         public GetGradeForStudentInExerciseHandler(IUserRepository userRepository, IExerciseGradeRepository exerciseGradeRepository)
             : base(userRepository)
         {
+            _userRepository = userRepository;
             _exerciseGradeRepository = exerciseGradeRepository;
         }
 
         public override async Task<CustomResponse<ExerciseGradeEntity>> Handle(GetGradeForStudentInExerciseQuery request, CancellationToken cancellationToken)
         {
-            User user = GetUserFromToken(request.Token);
+            string ldapIdent = request.Token.Claims.First(x => x.Type == ClaimTypes.Sid).Value;
+            User? ldapUser = await _userRepository.GetUserByLdapUid(ldapIdent);
+
+            if (ldapUser is null)
+            {
+                return CustomResponse.Error<ExerciseGradeEntity>(403);
+            }
 
             ExerciseGrade? exerciseGrade = await _exerciseGradeRepository.Get(request.StudentId, request.ExerciseId);
 

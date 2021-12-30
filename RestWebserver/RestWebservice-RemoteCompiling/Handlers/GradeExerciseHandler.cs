@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -25,6 +27,14 @@ namespace RestWebservice_RemoteCompiling.Handlers
 
         public override async Task<CustomResponse<bool>> Handle(GradeExerciseCommand request, CancellationToken cancellationToken)
         {
+            string ldapIdent = request.Token.Claims.First(x => x.Type == ClaimTypes.Sid).Value;
+            User? ldapUser = await _userRepository.GetUserByLdapUid(ldapIdent);
+
+            if (ldapUser is null /* TODO || ldapUser.UserRole != UserRole.Teacher */)
+            {
+                return CustomResponse.Error<bool>(403);
+            }
+
             ExerciseGrade obj = await _exerciseGradeRepository.Get(request.ExerciseId);
             obj.Feedback = request.Feedback ?? obj.Feedback;
             obj.Grade = request.Grading ?? obj.Grade;

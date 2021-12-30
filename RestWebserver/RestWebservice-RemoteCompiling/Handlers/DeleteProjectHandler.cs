@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,23 +12,36 @@ namespace RestWebservice_RemoteCompiling.Handlers
 {
     public class DeleteProjectHandler : BaseHandler<DeleteProjectCommand, CustomResponse<bool>>
     {
+        private readonly IProjectRepository _projectRepository;
         private readonly IUserRepository _userRepository;
 
-        public DeleteProjectHandler(IUserRepository userRepository)
+        public DeleteProjectHandler(IUserRepository userRepository, IProjectRepository projectRepository)
             : base(userRepository)
         {
             _userRepository = userRepository;
+            _projectRepository = projectRepository;
         }
 
         public override async Task<CustomResponse<bool>> Handle(DeleteProjectCommand request, CancellationToken cancellationToken)
         {
-            User user = GetUserFromToken(request.Token);
+            string ldapIdent = request.Token.Claims.First(x => x.Type == ClaimTypes.Sid).Value;
+            User? ldapUser = await _userRepository.GetUserByLdapUid(ldapIdent);
 
-            Project? project = user.Projects.FirstOrDefault(x => x.Id == request.ProjectId);
+            if (ldapUser is null)
+            {
+                return CustomResponse.Error<bool>(403);
+            }
 
-            user.Projects.Remove(project);
+            Project? project = ldapUser.Projects.FirstOrDefault(x => x.Id == request.ProjectId);
 
-            _userRepository.UpdateUser(user);
+            if (project is null)
+            {
+                return CustomResponse.Error<bool>(403);
+            }
+
+            ldapUser.Projects.Remove(project);
+
+            await _userRepository.UpdateUser(ldapUser);
 
             return CustomResponse.Success(true);
         }

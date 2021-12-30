@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,21 +25,26 @@ namespace RestWebservice_RemoteCompiling.Handlers
         {
             string ldapIdent = request.Token.Claims.First(x => x.Type == ClaimTypes.Sid).Value;
             User? ldapUser = await _userRepository.GetUserByLdapUid(ldapIdent);
-            if (ldapUser is null)
+
+            if (ldapUser is null /*||  TODO: ldapUser.UserRole != UserRole.Teacher*/)
             {
-                throw new Exception("ldapuser not found in db");
+                return CustomResponse.Error<int>(403);
             }
 
-            Exercise exercise = new Exercise();
-            exercise.Description = request.Description;
-            exercise.Name = request.Name;
-            exercise.Author = ldapUser;
-            exercise.TaskDefinition = request.TaskDefinition;
-            exercise.Template = request.template;
+            Exercise exercise = new Exercise
+                                {
+                                    Description = request.Description,
+                                    Name = request.Name,
+                                    Author = ldapUser,
+                                    TaskDefinition = request.TaskDefinition,
+                                    Template = request.template
+                                };
             exercise.Template.ProjectName = exercise.Name + " Project";
             exercise.Template.ProjectType = request.TemplateProjectType;
 
-            return CustomResponse.Success(await _exerciseRepository.Add(exercise));
+            int retVal = await _exerciseRepository.Add(exercise);
+
+            return CustomResponse.Success(retVal);
         }
     }
 }
