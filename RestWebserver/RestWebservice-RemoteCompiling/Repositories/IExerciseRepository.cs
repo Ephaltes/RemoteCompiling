@@ -14,5 +14,6 @@ namespace RestWebservice_RemoteCompiling.Repositories
         public Exercise? Get(int? id);
 
         public List<Exercise> GetAll();
+        
     }
 }

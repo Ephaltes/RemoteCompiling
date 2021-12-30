@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+
+using Microsoft.EntityFrameworkCore;
 
 using RestWebservice_RemoteCompiling.Database;
 
@@ -7,7 +10,7 @@ namespace RestWebservice_RemoteCompiling.Repositories
 {
     public class ExerciseRepository : IExerciseRepository
     {
-        private readonly RemoteCompileDbContext _context;
+        private RemoteCompileDbContext _context;
         public ExerciseRepository(RemoteCompileDbContext context)
         {
             _context = context;
