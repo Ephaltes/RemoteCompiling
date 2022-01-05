@@ -14,12 +14,13 @@ import { UserProjectService } from '../service/userproject.service';
 export class StdinInputComponent implements OnInit {
   stdinForm: FormGroup;
   validData: boolean;
-  emittingData: string
+  emittingData: { stdin: string, args: string[] }
   constructor(private fb: FormBuilder, @Inject(MAT_DIALOG_DATA) public project: any, public userProjectService: UserProjectService) {
-    this.emittingData = ""
+    this.emittingData = { stdin: "", args: [""] }
     this.validData = false;
     this.stdinForm = fb.group({
-      stdin: ['']
+      stdin: [''],
+      args: ['']
     });
   }
 
@@ -31,11 +32,15 @@ export class StdinInputComponent implements OnInit {
       return;
     }
     const value = this.stdinForm.value;
-    this.emittingData = value.stdin;
+    this.emittingData.stdin = value.stdin;
+    this.emittingData.args = value.args.split(";");
     this.validData = true;
     this.stdinForm.reset();
   }
-  get name() {
+  get stdin() {
     return this.stdinForm.get('stdin')!;
+  }
+  get args() {
+    return this.stdinForm.get('args')!;
   }
 }

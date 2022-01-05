@@ -41,9 +41,6 @@ export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit {
   exerciseColSpan = 0;
   private toasterSerivce: ToasterService;
   private saveSource = interval(60000);
-  private newFile = "Test.cs"
-  private newType = FileNodeType.csharp;
-  private newCode = "";
   nestedTreeControl: NestedTreeControl<FileNode>;
   nestedDataSource: MatTreeNestedDataSource<FileNode>;
   title = 'trydotnetandjavaandpython';
@@ -313,23 +310,30 @@ export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit {
   }
   runCode() {
     var stdin = "";
+    var args: string[] = []
+    this.runFiles = [];
     if (this.stdin) {
       const dialogRef = this.Dialog.open(StdinInputComponent);
       dialogRef.afterClosed().subscribe(() => {
         var closedWithoutInput = false;
-        dialogRef.componentInstance.validData ? stdin = dialogRef.componentInstance.emittingData : closedWithoutInput = true;
+        args = dialogRef.componentInstance.emittingData.args;
+        dialogRef.componentInstance.validData ? stdin = dialogRef.componentInstance.emittingData.stdin : closedWithoutInput = true;
         if (!closedWithoutInput) {
-          this.runFiles = [];
+          this.nestedDataSource.data.find(c => c.projectid == this.currentProjectId).children.forEach(file => {
+            this.runFiles.push(new FileCode(file.name, file.code.value))
+          })
           this.isLoading = true;
           this.output = "Loading...";
-          this.compileService.compile(this.selectedModel, this.runFiles).subscribe((item => { this.isLoading = false; item.data.run.stderr.length > 0 ? this.output = item.data.run.stderr : this.output = item.data.run.stdout }))
+          this.compileService.compile(this.selectedModel, this.runFiles, args, stdin).subscribe((item => { this.isLoading = false; item.data.run.stderr.length > 0 ? this.output = item.data.run.stderr : this.output = item.data.run.stdout }))
         }
       });
     } else {
-      this.runFiles = [];
+      this.nestedDataSource.data.find(c => c.projectid == this.currentProjectId).children.forEach(file => {
+        this.runFiles.push(new FileCode(file.name, file.code.value))
+      })
       this.isLoading = true;
       this.output = "Loading...";
-      this.compileService.compile(this.selectedModel, this.runFiles).subscribe((item => { this.isLoading = false; item.data.run.stderr.length > 0 ? this.output = item.data.run.stderr : this.output = item.data.run.stdout }))
+      this.compileService.compile(this.selectedModel, this.runFiles, args, stdin).subscribe((item => { this.isLoading = false; item.data.run.stderr.length > 0 ? this.output = item.data.run.stderr : this.output = item.data.run.stdout }))
     }
 
   }
