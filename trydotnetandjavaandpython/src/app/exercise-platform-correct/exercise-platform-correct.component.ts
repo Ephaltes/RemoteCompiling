@@ -55,9 +55,7 @@ export class ExercisePlatformCorrectComponent implements OnInit {
   }
   changeToNextStudent() {
     if (this.selectedItem != null && this.selectedStudent != null) {
-      console.log("working")
       var nextIndex = this.selectedItem.handIns.indexOf(this.selectedStudent) + 1;
-      console.log(nextIndex)
       if (nextIndex != this.selectedItem.handIns.length) {
         this.selectedStudent = this.selectedItem.handIns[nextIndex];
         this.currentStudentIndex = nextIndex + 1;
