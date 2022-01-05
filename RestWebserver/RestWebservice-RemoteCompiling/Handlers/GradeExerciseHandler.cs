@@ -35,7 +35,7 @@ namespace RestWebservice_RemoteCompiling.Handlers
                 return CustomResponse.Error<bool>(403);
             }
 
-            ExerciseGrade obj = await _exerciseGradeRepository.Get(request.ExerciseId);
+            ExerciseGrade obj = await _exerciseGradeRepository.Get(request.StudentId, request.ExerciseId);
             obj.Feedback = request.Feedback ?? obj.Feedback;
             obj.Grade = request.Grading ?? obj.Grade;
             obj.Status = request.Status ?? obj.Status;
