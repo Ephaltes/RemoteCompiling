@@ -7,12 +7,12 @@
                 </mat-icon>Back
             </button>
         </mat-grid-tile>
-        <mat-grid-tile [colspan]="12" [rowspan]="15">
+        <mat-grid-tile [colspan]="12" [rowspan]="13">
             <ngs-code-editor [codeModel]="selectedModel" [theme]="selectedTheme" [options]="options"
                 style="height: 100%; width: 97%;">
             </ngs-code-editor>
         </mat-grid-tile>
-        <mat-grid-tile [colspan]="2" [rowspan]="14">
+        <mat-grid-tile [colspan]="2" [rowspan]="12">
             <mat-tree [dataSource]="nestedDataSource" [treeControl]="nestedTreeControl" class="file-tree">
                 <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
                     <li class="mat-tree-node">
@@ -58,10 +58,16 @@
                 </mat-nested-tree-node>
             </mat-tree>
         </mat-grid-tile>
-        <mat-grid-tile [colspan]="14" [rowspan]="5">
+        <mat-grid-tile [colspan]="14" [rowspan]="7">
             <div style="height: 100%; width: 100%;">
-                <textarea style="width: 97%; max-height: 60%; height: 60%; max-width: 97%;" [(ngModel)]="feedback"
-                    placeholder="Aufgabenstellung..."></textarea>
+                <form class="feedback-form">
+                    <mat-form-field class="feedback-form" appearance="outline">
+                        <mat-label>Benotung</mat-label>
+                        <input matInput placeholder="0" type="number" value="0">
+                    </mat-form-field>
+                </form>
+                <textarea matInput style="width: 97%; max-height: 40%; height:40%; max-width: 97%;"
+                    [(ngModel)]="feedback" placeholder="feedback..."></textarea>
                 <br>
                 <button mat-stroked-button color="accent" (click)="saveGrading()">Save</button>
             </div>

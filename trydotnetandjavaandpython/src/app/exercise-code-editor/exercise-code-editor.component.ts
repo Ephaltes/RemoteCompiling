@@ -11,7 +11,7 @@ import { StudentNode } from '../exercise-module/student-node';
 import { ExercisePlatformCreateFileComponent } from '../exercise-platform-create-file/exercise-platform-create-file.component';
 import { FileNode, FileNodeType } from '../file-module/file-node';
 import { ExerciseService } from '../service/exercise.service';
-import { convertBEtoFEEntityFromUserProject } from '../service/help.function.service';
+import { convertNumberToFileType } from '../service/help.function.service';
 import { UserProject } from '../service/userproject.service';
 
 @Component({
@@ -24,7 +24,7 @@ export class ExerciseCodeEditorComponent implements OnInit {
   taskDefinition: string = ""
   private _currentExercise: ExerciseNode
   @Input() set currentExercise(value: ExerciseNode) {
-    value.files = convertBEtoFEEntityFromUserProject(value.template);
+    value.files = this.convertBEtoFEEntity(value.template);
     this._currentExercise = value;
     this.taskDefinition = value.taskDefinition;
     this.nestedDataSource.data = value.files;
@@ -126,7 +126,22 @@ export class ExerciseCodeEditorComponent implements OnInit {
     });
 
   }
-  
+  public convertBEtoFEEntity(template: UserProject): FileNode[] {
+    var projectsConverted: FileNode[] = [];
+    if (template != undefined) {
+      var fileType: FileNodeType = convertNumberToFileType(template.projectType)
+      if (template.files.length > 0) {
+        template.files.forEach(pjFile => {
+          var checkpoint = pjFile.checkpoints.reduce((r, o) => r.created < o.created ? r : o);
+          var childFile = new FileNode(pjFile.fileName, fileType, checkpoint.code);
+          childFile.fileId = pjFile.id;
+          childFile.projectid = template.id;
+          projectsConverted.push(childFile);
+        });
+      }
+    }
+    return projectsConverted;
+  }
   public convertFEtoBEEntity(exercise: ExerciseNode): ExerciseNode {
     exercise.taskDefinition = this.taskDefinition;
     if (exercise.files != undefined) {
