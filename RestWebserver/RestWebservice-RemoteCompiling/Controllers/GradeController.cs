@@ -34,13 +34,9 @@ namespace RestWebservice_RemoteCompiling.Controllers
         {
             GetGradeForStudentInExerciseQuery query = new GetGradeForStudentInExerciseQuery
                                                       { ExerciseId = exerciseId, StudentId = studentId, Token = GetTokenFromAuthorization() };
-            CustomResponse<ExerciseGrade> response = await _mediator.Send(query);
-            if (response.Data.Status == GradingStatus.Graded)
-            {
-                return response.ToResponse(); 
-            }
+            CustomResponse<ExerciseGradeEntity> response = await _mediator.Send(query);
             
-            return NotFound();
+            return response.ToResponse();
         }
 
         [HttpPut("gradeExercise")]

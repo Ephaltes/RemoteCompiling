@@ -49,6 +49,10 @@ namespace RestWebservice_RemoteCompiling.Entities
             init;
         }
 
+        public LdapUser()
+        {
+            
+        }
         public LdapUser(SearchResultEntry entry)
         {
             foreach (DictionaryEntry dictionaryEntry in entry.Attributes)

@@ -50,6 +50,12 @@ namespace RestWebservice_RemoteCompiling.Database
             set;
         }
 
+        public DbSet<Project> Projects
+        {
+            get;
+            set;
+        }
+
         public RemoteCompileDbContext(DbContextOptions<RemoteCompileDbContext> options)
             : base(options)
         {

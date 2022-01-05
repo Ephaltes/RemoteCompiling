@@ -1,4 +1,3 @@
-﻿using System.Linq;
 using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
@@ -16,18 +15,18 @@ namespace RestWebservice_RemoteCompiling.Repositories
             _context = context;
         }
 
-        public User AddUser(User newUser)
+        public async Task<User> AddUser(User newUser)
         {
-            _context.Add(newUser);
-            _context.SaveChanges();
+            await _context.AddAsync(newUser);
+            await _context.SaveChangesAsync();
 
             return newUser;
         }
 
-        public void UpdateUser(User updateUser)
+        public async Task UpdateUser(User updateUser)
         {
             _context.Users.Update(updateUser);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
         public async Task<User?> GetUserByLdapUid(string ldapUid)

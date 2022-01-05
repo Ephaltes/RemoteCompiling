@@ -4,8 +4,6 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 
-using Microsoft.EntityFrameworkCore;
-
 using RestWebservice_RemoteCompiling.Command;
 using RestWebservice_RemoteCompiling.Database;
 using RestWebservice_RemoteCompiling.Entities;
@@ -15,13 +13,15 @@ namespace RestWebservice_RemoteCompiling.Handlers
 {
     public class AddProjectHandler : BaseHandler<AddProjectCommand, CustomResponse<int>>
     {
-        private readonly IUserRepository _userRepository;
         private readonly IExerciseRepository _exerciseRepository;
-        public AddProjectHandler(IUserRepository userRepository, IExerciseRepository exerciseRepository)
+        private readonly IProjectRepository _projectRepository;
+        private readonly IUserRepository _userRepository;
+        public AddProjectHandler(IUserRepository userRepository, IExerciseRepository exerciseRepository, IProjectRepository projectRepository)
             : base(userRepository)
         {
             _userRepository = userRepository;
             _exerciseRepository = exerciseRepository;
+            _projectRepository = projectRepository;
         }
 
         public override async Task<CustomResponse<int>> Handle(AddProjectCommand request, CancellationToken cancellationToken)
@@ -29,44 +29,49 @@ namespace RestWebservice_RemoteCompiling.Handlers
             string ldapIdent = request.Token.Claims.First(x => x.Type == ClaimTypes.Sid).Value;
             User? ldapUser = await _userRepository.GetUserByLdapUid(ldapIdent);
 
+            if (ldapUser is null)
+                return CustomResponse.Error<int>(403);
+
             Project project = new Project
                               {
                                   ProjectName = request.Project.ProjectName,
                                   StdIn = request.Project.StdIn,
                                   ProjectType = request.Project.ProjectType
                               };
-            foreach (FileEntity projectFiles in request.Project.Files)
+
+            foreach (FileEntity fileEntity in request.Project.Files)
             {
-                var x = new File();
-                foreach (var VARIABLE in projectFiles.Checkpoints)
+                File file = new File();
+                foreach (CheckPointEntity checkPointEntity in fileEntity.Checkpoints)
                 {
-                    x.Checkpoints.Add(new Checkpoint()
-                                      {
-                                          Code = VARIABLE.Code,
-                                          Created = VARIABLE.Created
-                                      });
+                    file.Checkpoints.Add(new Checkpoint
+                                         {
+                                             Code = checkPointEntity.Code,
+                                             Created = checkPointEntity.Created
+                                         });
                 }
-                x.FileName = projectFiles.FileName;
-                x.LastModified = DateTime.Now;
-                project.Files.Add(x);
+
+                file.FileName = fileEntity.FileName;
+                file.LastModified = DateTime.Now;
+                project.Files.Add(file);
             }
 
             if (request.Project.ExerciseID is not null)
             {
-               var x = _exerciseRepository.Get(request.Project.ExerciseID);
-               if (x is not null)
-               {
-                   project.ExerciseID = x.Id;
-               }
-               else
-               {
-                   throw new Exception("not allowed");
-               }
+                Exercise? exercise = await _exerciseRepository.Get(request.Project.ExerciseID);
+                if (exercise is not null)
+                {
+                    project.ExerciseID = exercise.Id;
+                }
+                else
+                {
+                    throw new Exception("not allowed");
+                }
             }
-                
+
             ldapUser.Projects.Add(project);
 
-            _userRepository.UpdateUser(ldapUser);
+            await _userRepository.UpdateUser(ldapUser);
 
             return CustomResponse.Success(project.Id);
         }
