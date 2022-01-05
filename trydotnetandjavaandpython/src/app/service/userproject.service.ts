@@ -65,49 +65,5 @@ export class UserProjectService {
         });
     }
 
-    public convertBEtoFEEntity(user: User): FileNode[] {
-        var projectsConverted: FileNode[] = [];
-        const projects = user.data.projects;
-        if (projects != undefined) {
-            projects.forEach(pj => {
-                var newFileNode = new FileNode(pj.projectName, FileNodeType.folder, "")
-                newFileNode.children = [];
-                newFileNode.projectid = pj.id;
-                newFileNode.projectType = pj.projectType;
-                var fileType: FileNodeType;
-                switch (pj.projectType) {
-                    case 0:
-                        fileType = FileNodeType.csharp;
-                        break;
-                    case 1:
-                        fileType = FileNodeType.c;
-                        break;
-                    case 2:
-                        fileType = FileNodeType.cpp;
-                        break;
-                    case 3:
-                        fileType = FileNodeType.java;
-                        break;
-                    case 4:
-                        fileType = FileNodeType.python;
-                        break;
-                    default:
-                        fileType = FileNodeType.csharp;
-                        break;
-                }
-                if (pj.files.length > 0) {
-                    pj.files.forEach(pjFile => {
-                        var checkpoint = pjFile.checkpoints.reduce((r, o) => r.created > o.created ? r : o);
-                        var childFile = new FileNode(pjFile.fileName, fileType, checkpoint.code);
-                        childFile.exerciseId = pj.exerciseID;
-                        childFile.fileId = pjFile.id;
-                        childFile.projectid = pj.id;
-                        newFileNode.children.push(childFile);
-                    });
-                }
-                projectsConverted.push(newFileNode);
-            });
-        }
-        return projectsConverted;
-    }
+    
 }
