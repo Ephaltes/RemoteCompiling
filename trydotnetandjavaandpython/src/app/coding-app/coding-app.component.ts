@@ -30,6 +30,7 @@ import { convertBEtoFEEntity, convertFileTypeToNumber } from '../service/help.fu
   providers: [CompileService, UserProjectService, ExerciseService]
 })
 export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit {
+  stdinString: string = ""
   currentldapUid: string = "";
   stdin: boolean = false;
   graded: boolean = false;
@@ -243,6 +244,7 @@ export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   selectNode(node: FileNode) {
+    this.stdinString = node.stdin;
     this.isLoading = false;
     this.graded = false;
     this.selectedModel = node.code;
@@ -322,11 +324,12 @@ export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit {
     console.log('Online Editor loaded!');
   }
   runCode() {
-    var stdin = "";
+    var stdin = this.nestedDataSource.data.find(c => c.projectid == this.currentProjectId).children
+    .find(c => c.fileId = this.currentFileId).stdin;
     var args: string[] = []
     this.runFiles = [];
     if (this.stdin) {
-      const dialogRef = this.Dialog.open(StdinInputComponent);
+      const dialogRef = this.Dialog.open(StdinInputComponent, { data: { stdin: stdin } });
       dialogRef.afterClosed().subscribe(() => {
         var closedWithoutInput = false;
         args = dialogRef.componentInstance.emittingData.args;
@@ -338,6 +341,8 @@ export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit {
           this.isLoading = true;
           this.output = "Loading...";
           this.compileService.compile(this.selectedModel, this.runFiles, args, stdin).subscribe((item => { this.isLoading = false; item.data.run.stderr.length > 0 ? this.output = item.data.run.stderr : this.output = item.data.run.stdout }))
+          this.userProjectService.putProject(this.currentProjectId, stdin).subscribe(() => this.nestedDataSource.data.find(c => c.projectid == this.currentProjectId).children
+            .find(c => c.fileId = this.currentFileId).stdin = stdin);
         }
       });
     } else {

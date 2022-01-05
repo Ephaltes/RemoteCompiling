@@ -58,6 +58,7 @@ export function convertBEtoFEEntity(user: User): FileNode[] {
                     childFile.exerciseId = pj.exerciseID;
                     childFile.fileId = pjFile.id;
                     childFile.projectid = pj.id;
+                    childFile.stdin = pj.stdIn;
                     newFileNode.children.push(childFile);
                 });
             }

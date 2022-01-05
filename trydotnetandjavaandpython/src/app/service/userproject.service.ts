@@ -15,7 +15,7 @@ export interface FileEntity {
     lastModified?: Date;
     fileName: string;
     checkpoints: CheckPoint[]
-    checkpoint?:CheckPoint
+    checkpoint?: CheckPoint
 }
 export interface UserProject {
     id: number;
@@ -57,6 +57,9 @@ export class UserProjectService {
     public deleteFileFromProject(projectId: number, fileId: number) {
         return this.http.delete(globalVar.apiURL + "/api/file/remove", { body: { projectId: projectId, fileId: fileId } })
     }
+    public putProject(projectId: number, stdin: string) {
+        return this.http.put(globalVar.apiURL + "/api/project/update", { projectId: projectId, stdin: stdin });
+    }
     public save(files: FileNode[]) {
         files.forEach(async project => {
             for (const file of project.children) {
@@ -66,5 +69,5 @@ export class UserProjectService {
         });
     }
 
-    
+
 }

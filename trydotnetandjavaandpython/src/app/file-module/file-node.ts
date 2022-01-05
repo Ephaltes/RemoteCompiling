@@ -18,6 +18,7 @@ export class FileNode {
     type: FileNodeType;
     exerciseId?: number;
     modified?:boolean;
+    stdin?:string;
 
     code?: CodeModel;
 

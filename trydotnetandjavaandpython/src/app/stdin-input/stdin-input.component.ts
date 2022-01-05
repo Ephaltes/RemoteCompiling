@@ -15,11 +15,11 @@ export class StdinInputComponent implements OnInit {
   stdinForm: FormGroup;
   validData: boolean;
   emittingData: { stdin: string, args: string[] }
-  constructor(private fb: FormBuilder, @Inject(MAT_DIALOG_DATA) public project: any, public userProjectService: UserProjectService) {
+  constructor(private fb: FormBuilder, @Inject(MAT_DIALOG_DATA) public projectStdin: any, public userProjectService: UserProjectService) {
     this.emittingData = { stdin: "", args: [""] }
     this.validData = false;
     this.stdinForm = fb.group({
-      stdin: [''],
+      stdin: [projectStdin.stdin],
       args: ['']
     });
   }
