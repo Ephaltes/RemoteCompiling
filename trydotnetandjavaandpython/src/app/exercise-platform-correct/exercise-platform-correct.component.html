@@ -5,13 +5,13 @@
 
 <ng-container *ngIf="exerciseSelected && !studentSelected">
     <app-exercise-platform-exercise-student-table (itemSelectedEvent)="openCodingApp($event)"
-        (finishedStudentListEvent)="backFromStudentList($event)" [currentStudentList]="selectedItem.students">
+        (finishedStudentListEvent)="backFromStudentList($event)" [currentStudentList]="selectedItem.handIns">
     </app-exercise-platform-exercise-student-table>
 </ng-container>
 
 <ng-container *ngIf="studentSelected">
     <div style="color:white; padding: 35px 0 0 25px;">
-        <h3 style="display: inline-block; padding-right: 40%;">Student: {{selectedStudent.id}} {{selectedStudent.name}}
+        <h3 style="display: inline-block; padding-right: 40%;">Student: {{selectedStudent.id}} {{selectedStudent.userToGrade.data.name}}
         </h3>
         <button mat-stroked-button color="primary" (click)="changeToPreviousStudent()">
             <mat-icon aria-hidden="false" aria-label="Back">
@@ -28,6 +28,6 @@
         </button>
     </div>
     <app-exercise-code-grading-editor (finishedWorkingEvent)="backFromCodingApp($event)"
-        [currentEditor]="selectedStudent.files">
+        [currentEditor]="selectedStudent">
     </app-exercise-code-grading-editor>
 </ng-container>

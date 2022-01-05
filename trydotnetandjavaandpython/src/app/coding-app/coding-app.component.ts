@@ -354,7 +354,7 @@ export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit {
       title: 'Auto save complete',
       showCloseButton: false
     };
-    this.saveSource.subscribe(() => { this.userProjectService.save(this.nestedDataSource.data), this.toasterSerivce.pop(toast) });
+    //this.saveSource.subscribe(() => { this.userProjectService.save(this.nestedDataSource.data), this.toasterSerivce.pop(toast) });
   }
   ngOnDestroy() {
     this.userProjectService.save(this.nestedDataSource.data);

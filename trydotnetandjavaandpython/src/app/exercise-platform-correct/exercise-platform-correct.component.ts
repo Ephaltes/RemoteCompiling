@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ExerciseNode } from '../exercise-module/exercise-node';
+import { HandInNode } from '../exercise-module/handin-node';
 import { StudentNode } from '../exercise-module/student-node';
 
 @Component({
@@ -9,10 +10,10 @@ import { StudentNode } from '../exercise-module/student-node';
 })
 
 export class ExercisePlatformCorrectComponent implements OnInit {
-  selectedItem: ExerciseNode = { id: 1, name: "", author: "", description: "", files: [], students: [] };
+  selectedItem: ExerciseNode = { id: 1, name: "", author: "", description: "", files: [] };
   exerciseSelected = false;
   studentSelected = false;
-  selectedStudent: StudentNode = { id: "ifxxbxxx", name: "", grading: 0, files: [] }
+  selectedStudent: HandInNode = { id: 1, project: { id: 1, exerciseID: 1, projectName: "test", projectType: 0 } }
   lengthOfStudentList = 0;
   currentStudentIndex = 0;
   constructor() { }
@@ -23,11 +24,11 @@ export class ExercisePlatformCorrectComponent implements OnInit {
     this.exerciseSelected = true;
     this.selectedItem = row;
   }
-  openCodingApp(row: StudentNode) {
+  openCodingApp(row: HandInNode) {
     this.studentSelected = true;
     this.selectedStudent = row;
-    this.lengthOfStudentList = this.selectedItem.students.length;
-    this.currentStudentIndex = this.selectedItem.students.indexOf(this.selectedStudent) + 1;
+    this.lengthOfStudentList = this.selectedItem.handIns.length;
+    this.currentStudentIndex = this.selectedItem.handIns.indexOf(this.selectedStudent) + 1;
   }
   backFromCodingApp(status: boolean) {
     this.studentSelected = status
@@ -37,18 +38,18 @@ export class ExercisePlatformCorrectComponent implements OnInit {
   }
   changeToPreviousStudent() {
     if (this.selectedItem != null && this.selectedStudent != null) {
-      var previousIndex = this.selectedItem.students.indexOf(this.selectedStudent) - 1;
+      var previousIndex = this.selectedItem.handIns.indexOf(this.selectedStudent) - 1;
       if (previousIndex >= 0) {
-        this.selectedStudent = this.selectedItem.students[previousIndex];
+        this.selectedStudent = this.selectedItem.handIns[previousIndex];
         this.currentStudentIndex = previousIndex + 1;
       }
     }
   }
   changeToNextStudent() {
     if (this.selectedItem != null && this.selectedStudent != null) {
-      var nextIndex = this.selectedItem.students.indexOf(this.selectedStudent) + 1;
-      if (nextIndex != this.selectedItem.students.length) {
-        this.selectedStudent = this.selectedItem.students[nextIndex];
+      var nextIndex = this.selectedItem.handIns.indexOf(this.selectedStudent) + 1;
+      if (nextIndex != this.selectedItem.handIns.length) {
+        this.selectedStudent = this.selectedItem.handIns[nextIndex];
         this.currentStudentIndex = nextIndex + 1;
       }
     }

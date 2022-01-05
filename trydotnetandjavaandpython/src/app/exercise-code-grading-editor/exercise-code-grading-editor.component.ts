@@ -7,6 +7,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { CodeModel } from '@ngstack/code-editor';
 import { debounceTime } from 'rxjs/operators';
 import { ExerciseNode } from '../exercise-module/exercise-node';
+import { HandInNode } from '../exercise-module/handin-node';
 import { StudentNode } from '../exercise-module/student-node';
 import { ExercisePlatformCreateFileComponent } from '../exercise-platform-create-file/exercise-platform-create-file.component';
 import { FileNode, FileNodeType } from '../file-module/file-node';
@@ -21,28 +22,18 @@ import { UserProject } from '../service/userproject.service';
 })
 export class ExerciseCodeGradingEditorComponent implements OnInit {
   taskDefinition: string = ""
-  private _currentEditor: FileNode[]
-  @Input() set currentEditor(value: FileNode[]) {
+  private _currentEditor: HandInNode;
+  @Input() set currentEditor(value: HandInNode) {
+    console.log(value)
     this._currentEditor = value;
-    this.nestedDataSource.data = value;
-    if (value != undefined) {
-      if (value.length > 0) {
-        this.selectNode(this.nestedDataSource.data[0])
-      }
-    } else {
+    this.nestedDataSource.data = this.convertBEtoFEEntity(value.project);
+    if (this.nestedDataSource.data.length >= 1)
+      this.selectNode(this.nestedDataSource.data[this.nestedDataSource.data.length - 1])
+    else
       this.selectedModel = { uri: "", value: "", language: "" }
-    }
   }
-  get currentEditor(): FileNode[] {
+  get currentEditor(): HandInNode {
     return this._currentEditor;
-  }
-  private _currentExercise: ExerciseNode
-  @Input() set currentExercise(value: ExerciseNode) {
-    this._currentExercise = value;
-    this.taskDefinition = value.taskDefinition;
-  }
-  get currentExercise(): ExerciseNode {
-    return this._currentExercise;
   }
   @Output() finishedWorkingEvent = new EventEmitter<boolean>();
   selectedModel: CodeModel = null;
@@ -59,7 +50,6 @@ export class ExerciseCodeGradingEditorComponent implements OnInit {
   constructor(private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer, private Dialog: MatDialog, private exerciseService: ExerciseService) {
     this.nestedTreeControl = new NestedTreeControl<FileNode>(this._getChildren);
     this.nestedDataSource = new MatTreeNestedDataSource();
-    this.nestedDataSource.data = this._currentEditor;
     this.matIconRegistry.addSvgIcon(
       `csharp`,
       this.domSanitizer.bypassSecurityTrustResourceUrl(`./assets/csharp.svg`)
@@ -95,13 +85,6 @@ export class ExerciseCodeGradingEditorComponent implements OnInit {
       if (this.nestedDataSource.data.length > 0)
         this.selectNode(this.nestedDataSource.data[0])
   }
-  removeNode(node: FileNode) {
-    if (confirm("Are you sure to delete " + node.name + "?")) {
-      this.currentExercise.files = this.currentExercise.files.filter(c => c.fileId != node.fileId);
-      this.currentExercise.template.files = this.currentExercise.template.files.filter(c => c.id != node.fileId);
-      this.exerciseService.putExercises(this.convertFEtoBEEntity(this.currentExercise)).subscribe(() => this.refreshData());
-    }
-  }
   private _getChildren = (node: FileNode) => node.children;
   hasNestedChild(_: number, nodeData: FileNode): boolean {
     return nodeData.type === FileNodeType.folder;
@@ -114,32 +97,14 @@ export class ExerciseCodeGradingEditorComponent implements OnInit {
       node.code === this.selectedModel
     );
   }
+  saveGrading() {
 
+  }
   selectNode(node: FileNode) {
     this.selectedModel = node.code;
   }
-  saveExercise() {
-    this.exerciseService.putExercises(this.convertFEtoBEEntity(this.currentExercise)).subscribe(() => this.finishedWorkingEvent.emit(false));
-  }
   backToParent() {
     this.finishedWorkingEvent.emit(false);
-  }
-  openCreateExerciseFile() {
-    const dialogRef = this.Dialog.open(ExercisePlatformCreateFileComponent, { data: this.currentExercise });
-    dialogRef.afterClosed().subscribe(() => { dialogRef.componentInstance.validData ? this.refreshData() : false })
-  }
-  refreshData() {
-    this.exerciseService.getExercisesById(this.currentExercise.id).subscribe(res => {
-      this.currentExercise = res.data;
-      this.currentExercise.files = this.convertBEtoFEEntity(this.currentExercise.template);
-      this.currentEditor = this.currentExercise.files;
-      if (this.nestedDataSource.data.length > 1)
-        this.selectNode(this.nestedDataSource.data[this.nestedDataSource.data.length - 1])
-      else
-        this.selectedModel = { uri: "", value: "", language: "" }
-          ;
-    });
-
   }
   public convertBEtoFEEntity(template: UserProject): FileNode[] {
     var projectsConverted: FileNode[] = [];

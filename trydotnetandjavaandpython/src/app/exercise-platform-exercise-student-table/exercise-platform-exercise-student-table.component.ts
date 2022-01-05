@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
+import { HandInNode } from '../exercise-module/handin-node';
 import { StudentNode } from '../exercise-module/student-node';
 import { FileNode, FileNodeType } from '../file-module/file-node';
 
@@ -14,20 +15,19 @@ import { FileNode, FileNodeType } from '../file-module/file-node';
 })
 
 export class ExercisePlatformExerciseStudentTableComponent implements OnInit {
-  private _currentStudentList: StudentNode[] = []
-  @Input() set currentStudentList(value: StudentNode[]) {
+  private _currentStudentList: HandInNode[] = []
+  @Input() set currentStudentList(value: HandInNode[]) {
     this._currentStudentList = value;
-    this.dataSource = new MatTableDataSource<StudentNode>(value)
+    this.dataSource = new MatTableDataSource<HandInNode>(value)
   }
-  get currentStudentList(): StudentNode[] {
+  get currentStudentList(): HandInNode[] {
     return this._currentStudentList;
   }
-  @Output() itemSelectedEvent = new EventEmitter<StudentNode>();
+  @Output() itemSelectedEvent = new EventEmitter<HandInNode>();
   @Output() finishedStudentListEvent = new EventEmitter<boolean>();
   displayedColumns: string[] = ['id', 'name', 'grading'];
-  dataSource = new MatTableDataSource<StudentNode>(this._currentStudentList);
+  dataSource = new MatTableDataSource<HandInNode>(this._currentStudentList);
   exerciseSelected = false;
-  nestedDataSource: MatTreeNestedDataSource<FileNode>
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(private Dialog: MatDialog) { }
@@ -41,7 +41,7 @@ export class ExercisePlatformExerciseStudentTableComponent implements OnInit {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
-  openCodingApp(row: StudentNode) {
+  openCodingApp(row: HandInNode) {
     this.itemSelectedEvent.emit(row);
   }
   backToParent() {

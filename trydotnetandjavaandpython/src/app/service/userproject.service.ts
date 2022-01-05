@@ -26,6 +26,7 @@ export interface UserProject {
 }
 export interface User {
     data: {
+        ldapUid?: string;
         name: string;
         email: string;
         projects: UserProject[];
