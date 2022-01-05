@@ -27,7 +27,7 @@
             </mat-icon>
         </button>
     </div>
-    <app-exercise-code-grading-editor (finishedWorkingEvent)="backFromCodingApp($event)"
-        [currentEditor]="selectedStudent">
+    <app-exercise-code-grading-editor (finishedWorkingEvent)="backFromCodingApp($event)" (savedWorkingEvent)="refreshData($event)"
+        [currentEditor]="selectedStudent" [currentExercise]="selectedItem">
     </app-exercise-code-grading-editor>
 </ng-container>

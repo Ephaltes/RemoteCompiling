@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { shareReplay } from 'rxjs/operators';
+import { share, shareReplay } from 'rxjs/operators';
 import * as globalVar from '../../../globals'
 import { ExerciseNode } from '../exercise-module/exercise-node';
+import { HandInNode } from '../exercise-module/handin-node';
 import { FileNode, FileNodeType } from '../file-module/file-node';
 import { convertFileTypeToNumber } from './help.function.service';
 export interface ResponseBody {
@@ -36,5 +37,8 @@ export class ExerciseService {
     public putExerciseHandIn(projectId: number, exerciseId: number) {
         return this.http.put(globalVar.apiURL + "/api/exercises/handin", { projectId: projectId, exerciseId: exerciseId })
             .pipe(shareReplay(1));
+    }
+    public gradeExercise(exercise: ExerciseNode, handIn: HandInNode, feedback: string, grade: number) {
+        return this.http.put(globalVar.apiURL + "/api/grade/gradeExercise", { exerciseId: exercise.id, studentId: handIn.userToGrade.ldapUid, status: 2, grading: grade, feedback: feedback }).pipe(shareReplay(1));
     }
 }

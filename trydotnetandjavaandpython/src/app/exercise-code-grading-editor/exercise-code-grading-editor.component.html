@@ -60,12 +60,10 @@
         </mat-grid-tile>
         <mat-grid-tile [colspan]="14" [rowspan]="7">
             <div style="height: 100%; width: 100%;">
-                <form class="feedback-form">
                     <mat-form-field class="feedback-form" appearance="outline">
                         <mat-label>Benotung</mat-label>
-                        <input matInput placeholder="0" type="number" value="0">
+                        <input matInput placeholder="0" type="number" [(ngModel)]="grading">
                     </mat-form-field>
-                </form>
                 <textarea matInput style="width: 97%; max-height: 40%; height:40%; max-width: 97%;"
                     [(ngModel)]="feedback" placeholder="feedback..."></textarea>
                 <br>

@@ -69,15 +69,16 @@ export function convertBEtoFEEntity(user: User): FileNode[] {
 export function convertBEtoFEEntityFromUserProject(template: UserProject): FileNode[] {
     var projectsConverted: FileNode[] = [];
     if (template != undefined) {
-        var fileType: FileNodeType = convertNumberToFileType(template.projectType);
-        if (template.files.length > 0) {
-            template.files.forEach(pjFile => {
-                var childFile = new FileNode(pjFile.fileName, fileType, pjFile.checkpoint.code);
-                childFile.fileId = pjFile.id;
-                childFile.projectid = template.id;
-                projectsConverted.push(childFile);
-            });
-        }
+      var fileType: FileNodeType = convertNumberToFileType(template.projectType)
+      if (template.files.length > 0) {
+        template.files.forEach(pjFile => {
+          var checkpoint = pjFile.checkpoints.reduce((r, o) => r.created < o.created ? r : o);
+          var childFile = new FileNode(pjFile.fileName, fileType, checkpoint.code);
+          childFile.fileId = pjFile.id;
+          childFile.projectid = template.id;
+          projectsConverted.push(childFile);
+        });
+      }
     }
     return projectsConverted;
-}
+  }

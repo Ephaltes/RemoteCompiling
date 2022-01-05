@@ -15,6 +15,6 @@ export class CompileService {
 
   constructor(private http: HttpClient) { }
   public compile(code: CodeModel, runFiles: FileCode[], args: string[], stdin: string) {
-    return this.http.post<CompileCode>(globalVar.apiURL + "/api/compile", {language: code.language, code: { args: args, stdin: stdin, mainFile: code.uri, files: runFiles } });
+    return this.http.post<CompileCode>(globalVar.apiURL + "/api/compile", { language: code.language, code: { args: args, stdin: stdin, mainFile: code.uri, files: runFiles } });
   }
 }

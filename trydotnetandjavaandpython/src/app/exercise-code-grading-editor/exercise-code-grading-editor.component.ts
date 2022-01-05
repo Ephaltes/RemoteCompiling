@@ -23,11 +23,23 @@ import { UserProject } from '../service/userproject.service';
 })
 export class ExerciseCodeGradingEditorComponent implements OnInit {
   feedback: string = ""
+  grading: number = 0;
+  private _currentExercise: ExerciseNode;
+  @Input() set currentExercise(value: ExerciseNode) {
+    this._currentExercise = value;
+  }
+  get currentExercise(): ExerciseNode {
+    return this._currentExercise;
+  }
   private _currentEditor: HandInNode;
   @Input() set currentEditor(value: HandInNode) {
     value.files = convertBEtoFEEntityFromUserProject(value.project);
     this._currentEditor = value;
     this.feedback = value.feedback;
+    if (value.grade != -1)
+      this.grading = value.grade;
+    else
+      this.grading = 0;
     this.nestedDataSource.data = value.files;
     if (this.nestedDataSource.data.length >= 1)
       this.selectNode(this.nestedDataSource.data[this.nestedDataSource.data.length - 1])
@@ -38,6 +50,7 @@ export class ExerciseCodeGradingEditorComponent implements OnInit {
     return this._currentEditor;
   }
   @Output() finishedWorkingEvent = new EventEmitter<boolean>();
+  @Output() savedWorkingEvent = new EventEmitter<HandInNode>();
   selectedModel: CodeModel = null;
   selectedTheme = 'vs-dark';
   options = {
@@ -100,7 +113,7 @@ export class ExerciseCodeGradingEditorComponent implements OnInit {
     );
   }
   saveGrading() {
-
+    this.exerciseService.gradeExercise(this.currentExercise, this.currentEditor, this.feedback, this.grading).subscribe(() => this.savedWorkingEvent.emit( this.currentEditor));
   }
   selectNode(node: FileNode) {
     this.selectedModel = node.code;
