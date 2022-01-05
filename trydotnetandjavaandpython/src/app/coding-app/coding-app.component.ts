@@ -18,8 +18,9 @@ import * as JSZip from 'jszip';
 import { FolderOptionDialogComponent } from '../folder-option-dialog/folder-option-dialog.component';
 import { AddNewFolderComponent } from '../add-new-folder/add-new-folder.component';
 import { UserProjectService } from '../service/userproject.service';
-import { convertFileTypeToNumber, ExerciseService } from '../service/exercise.service';
+import { ExerciseService } from '../service/exercise.service';
 import { StdinInputComponent } from '../stdin-input/stdin-input.component';
+import { convertBEtoFEEntity, convertFileTypeToNumber } from '../service/help.function.service';
 
 @Component({
   selector: 'app-coding-app',
@@ -119,7 +120,7 @@ export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit {
   refreshData() {
     var projects: FileNode[];
     this.userProjectService.getProjects().subscribe(res => {
-      projects = this.userProjectService.convertBEtoFEEntity(res);
+      projects = convertBEtoFEEntity(res);
       this.nestedDataSource.data = projects;
       if (projects.length > 0) {
         this.nestedTreeControl.expand(this.nestedDataSource.data[0]);
@@ -131,7 +132,7 @@ export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit {
   refreshDataNavivagte(projectId: number, projectFileId: number) {
     var projects: FileNode[];
     this.userProjectService.getProjects().subscribe(res => {
-      projects = this.userProjectService.convertBEtoFEEntity(res);
+      projects = convertBEtoFEEntity(res);
       this.nestedDataSource.data = projects;
       if (projects.length > 0) {
         var nestedTreeProjectValue = this.nestedDataSource.data.find(c => c.projectid == projectId);

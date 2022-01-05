@@ -11,7 +11,7 @@
 
 <ng-container *ngIf="studentSelected">
     <div style="color:white; padding: 35px 0 0 25px;">
-        <h3 style="display: inline-block; padding-right: 40%;">Student: {{selectedStudent.id}} {{selectedStudent.userToGrade.data.name}}
+        <h3 style="display: inline-block; padding-right: 40%;">Student: {{selectedStudent.userToGrade.ldapUid}} {{selectedStudent.userToGrade.name}}
         </h3>
         <button mat-stroked-button color="primary" (click)="changeToPreviousStudent()">
             <mat-icon aria-hidden="false" aria-label="Back">

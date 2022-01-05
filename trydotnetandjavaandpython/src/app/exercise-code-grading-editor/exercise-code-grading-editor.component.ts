@@ -24,7 +24,6 @@ export class ExerciseCodeGradingEditorComponent implements OnInit {
   taskDefinition: string = ""
   private _currentEditor: HandInNode;
   @Input() set currentEditor(value: HandInNode) {
-    console.log(value)
     this._currentEditor = value;
     this.nestedDataSource.data = this.convertBEtoFEEntity(value.project);
     if (this.nestedDataSource.data.length >= 1)
@@ -107,6 +106,7 @@ export class ExerciseCodeGradingEditorComponent implements OnInit {
     this.finishedWorkingEvent.emit(false);
   }
   public convertBEtoFEEntity(template: UserProject): FileNode[] {
+    console.log(template)
     var projectsConverted: FileNode[] = [];
     if (template != undefined) {
       var fileType: FileNodeType;
@@ -140,6 +140,7 @@ export class ExerciseCodeGradingEditorComponent implements OnInit {
         });
       }
     }
+    console.log(projectsConverted)
     return projectsConverted;
   }
   public convertFEtoBEEntity(exercise: ExerciseNode): ExerciseNode {

@@ -3,29 +3,14 @@ import { Injectable } from '@angular/core';
 import { shareReplay } from 'rxjs/operators';
 import * as globalVar from '../../../globals'
 import { ExerciseNode } from '../exercise-module/exercise-node';
-import { FileNodeType } from '../file-module/file-node';
+import { FileNode, FileNodeType } from '../file-module/file-node';
+import { convertFileTypeToNumber } from './help.function.service';
 export interface ResponseBody {
     data: ExerciseNode[];
 };
 export interface ResponseBodySingle {
     data: ExerciseNode;
 };
-export function convertFileTypeToNumber(fileType: FileNodeType): number {
-    switch (fileType) {
-        case FileNodeType.csharp:
-            return 0;
-        case FileNodeType.c:
-            return 1;
-        case FileNodeType.cpp:
-            return 2;
-        case FileNodeType.java:
-            return 3;
-        case FileNodeType.python:
-            return 4;
-        default:
-            return 0;
-    }
-}
 @Injectable()
 export class ExerciseService {
 
