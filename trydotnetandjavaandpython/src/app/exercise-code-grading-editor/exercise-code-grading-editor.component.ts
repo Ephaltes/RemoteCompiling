@@ -12,6 +12,7 @@ import { StudentNode } from '../exercise-module/student-node';
 import { ExercisePlatformCreateFileComponent } from '../exercise-platform-create-file/exercise-platform-create-file.component';
 import { FileNode, FileNodeType } from '../file-module/file-node';
 import { ExerciseService } from '../service/exercise.service';
+import { convertBEtoFEEntity, convertBEtoFEEntityFromUserProject } from '../service/help.function.service';
 import { UserProject } from '../service/userproject.service';
 
 @Component({
@@ -21,11 +22,13 @@ import { UserProject } from '../service/userproject.service';
   providers: [ExerciseService]
 })
 export class ExerciseCodeGradingEditorComponent implements OnInit {
-  taskDefinition: string = ""
+  feedback: string = ""
   private _currentEditor: HandInNode;
   @Input() set currentEditor(value: HandInNode) {
+    value.files = convertBEtoFEEntityFromUserProject(value.project);
     this._currentEditor = value;
-    this.nestedDataSource.data = this.convertBEtoFEEntity(value.project);
+    this.feedback = value.feedback;
+    this.nestedDataSource.data = value.files;
     if (this.nestedDataSource.data.length >= 1)
       this.selectNode(this.nestedDataSource.data[this.nestedDataSource.data.length - 1])
     else
@@ -104,54 +107,5 @@ export class ExerciseCodeGradingEditorComponent implements OnInit {
   }
   backToParent() {
     this.finishedWorkingEvent.emit(false);
-  }
-  public convertBEtoFEEntity(template: UserProject): FileNode[] {
-    console.log(template)
-    var projectsConverted: FileNode[] = [];
-    if (template != undefined) {
-      var fileType: FileNodeType;
-      switch (template.projectType) {
-        case 0:
-          fileType = FileNodeType.csharp;
-          break;
-        case 1:
-          fileType = FileNodeType.c;
-          break;
-        case 2:
-          fileType = FileNodeType.cpp;
-          break;
-        case 3:
-          fileType = FileNodeType.java;
-          break;
-        case 4:
-          fileType = FileNodeType.python;
-          break;
-        default:
-          fileType = FileNodeType.csharp;
-          break;
-      }
-      if (template.files.length > 0) {
-        template.files.forEach(pjFile => {
-          var checkpoint = pjFile.checkpoints.reduce((r, o) => r.created < o.created ? r : o);
-          var childFile = new FileNode(pjFile.fileName, fileType, checkpoint.code);
-          childFile.fileId = pjFile.id;
-          childFile.projectid = template.id;
-          projectsConverted.push(childFile);
-        });
-      }
-    }
-    console.log(projectsConverted)
-    return projectsConverted;
-  }
-  public convertFEtoBEEntity(exercise: ExerciseNode): ExerciseNode {
-    exercise.taskDefinition = this.taskDefinition;
-    if (exercise.files != undefined) {
-      if (exercise.files.length > 0) {
-        exercise.files.forEach(file => {
-          exercise.template.files.find(c => c.id == file.fileId).checkpoints[0].code = file.code.value;
-        });
-      }
-    }
-    return exercise;
   }
 }

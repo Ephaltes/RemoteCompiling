@@ -15,6 +15,7 @@ export interface FileEntity {
     lastModified?: Date;
     fileName: string;
     checkpoints: CheckPoint[]
+    checkpoint?:CheckPoint
 }
 export interface UserProject {
     id: number;

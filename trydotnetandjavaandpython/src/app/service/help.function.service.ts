@@ -72,8 +72,7 @@ export function convertBEtoFEEntityFromUserProject(template: UserProject): FileN
         var fileType: FileNodeType = convertNumberToFileType(template.projectType);
         if (template.files.length > 0) {
             template.files.forEach(pjFile => {
-                var checkpoint = pjFile.checkpoints.reduce((r, o) => r.created < o.created ? r : o);
-                var childFile = new FileNode(pjFile.fileName, fileType, checkpoint.code);
+                var childFile = new FileNode(pjFile.fileName, fileType, pjFile.checkpoint.code);
                 childFile.fileId = pjFile.id;
                 childFile.projectid = template.id;
                 projectsConverted.push(childFile);
