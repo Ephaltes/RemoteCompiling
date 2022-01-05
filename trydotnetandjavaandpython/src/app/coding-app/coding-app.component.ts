@@ -30,7 +30,11 @@ import { convertBEtoFEEntity, convertFileTypeToNumber } from '../service/help.fu
   providers: [CompileService, UserProjectService, ExerciseService]
 })
 export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit {
+  currentldapUid: string = "";
   stdin: boolean = false;
+  graded: boolean = false;
+  gradedGrade: number = 0;
+  gradedFeedback: string = "";
   currentTaskDefinition: string;
   currentExerciseName: string;
   currentExerciseAuthor: string;
@@ -127,6 +131,7 @@ export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit {
         if (projects[0].children.length > 0)
           this.selectNode(this.nestedDataSource.data[0].children[0]);
       }
+      this.currentldapUid = res.data.ldapUid;
     });
   }
   refreshDataNavivagte(projectId: number, projectFileId: number) {
@@ -231,6 +236,7 @@ export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit {
     );
   }
   handIn() {
+    this.userProjectService.save(this.nestedDataSource.data);
     if (this.currentProjectId > 0 && this.currentExerciseId > 0) {
       this.exerciseService.putExerciseHandIn(this.currentProjectId, this.currentExerciseId).subscribe();
     }
@@ -238,6 +244,7 @@ export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   selectNode(node: FileNode) {
     this.isLoading = false;
+    this.graded = false;
     this.selectedModel = node.code;
     if (node.exerciseId > 0) {
       this.currentExerciseId = node.exerciseId;
@@ -245,6 +252,11 @@ export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.currentExerciseAuthor = res.data.author;
         this.currentTaskDefinition = res.data.taskDefinition;
         this.currentExerciseName = res.data.name;
+        this.exerciseService.getExerciseGrade(this.currentldapUid, this.currentExerciseId).subscribe(res => {
+          this.graded = true;
+          this.gradedFeedback = res.data.feedback;
+          this.gradedGrade = res.data.grade;
+        });
       })
     }
     if (node.projectid > 0) {

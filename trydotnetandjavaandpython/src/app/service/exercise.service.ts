@@ -6,6 +6,12 @@ import { ExerciseNode } from '../exercise-module/exercise-node';
 import { HandInNode } from '../exercise-module/handin-node';
 import { FileNode, FileNodeType } from '../file-module/file-node';
 import { convertFileTypeToNumber } from './help.function.service';
+export interface GradeBody {
+    data: {
+        grade: number;
+        feedback: string;
+    }
+}
 export interface ResponseBody {
     data: ExerciseNode[];
 };
@@ -40,5 +46,8 @@ export class ExerciseService {
     }
     public gradeExercise(exercise: ExerciseNode, handIn: HandInNode, feedback: string, grade: number) {
         return this.http.put(globalVar.apiURL + "/api/grade/gradeExercise", { exerciseId: exercise.id, studentId: handIn.userToGrade.ldapUid, status: 2, grading: grade, feedback: feedback }).pipe(shareReplay(1));
+    }
+    public getExerciseGrade(studentId: string, exerciseId: number) {
+        return this.http.get<GradeBody>(globalVar.apiURL + "/api/grade/student/" + studentId + "/Exercise/" + exerciseId);
     }
 }

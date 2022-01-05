@@ -64,6 +64,14 @@
       <h1>Exercise: {{currentExerciseName}} <button mat-raised-button color="warn" style="float: right;"
           (click)="handIn()">Abgeben</button></h1>
       <h4>Author: {{currentExerciseAuthor}}</h4>
+      <div *ngIf="graded">
+        <h2>Bewertung:</h2>
+        Punkte: {{gradedGrade}}
+        <br>
+        Feedback: {{gradedFeedback}}
+      </div>
+      <br>
+      <h2>Beschreibung:</h2>
       <div [innerHTML]="currentTaskDefinition"></div>
     </div>
   </mat-grid-tile>

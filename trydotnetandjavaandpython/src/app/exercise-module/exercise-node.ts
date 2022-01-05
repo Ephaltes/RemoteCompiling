@@ -13,7 +13,7 @@ export class ExerciseNode {
     template?: UserProject;
     files?: FileNode[];
     handIns?: HandInNode[];
-
+    ldapUid?: string;
     constructor(id: number, name: string, author: string, description: string, files?: FileNode[]) {
         this.id = id;
         this.name = name;
