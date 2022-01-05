@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading;
@@ -28,16 +27,11 @@ namespace RestWebservice_RemoteCompiling.Handlers
         {
             Exercise exercise = await _exerciseRepository.Get(request.ExerciseId);
             User? user = await _userRepository.GetUserByLdapUid(request.Token.Claims.First(x => x.Type == ClaimTypes.Sid).Value);
-            List<ExerciseGrade> userAlreadyInHandIns = exercise.HandIns.Where(x => x.UserToGrade.LdapUid == user.LdapUid).ToList();
+            ExerciseGrade userAlreadyInHandIns = exercise.HandIns.FirstOrDefault(x => x.UserToGrade.LdapUid == user.LdapUid);
 
-            if (userAlreadyInHandIns.Count() == 1 && userAlreadyInHandIns[0].Status != GradingStatus.NotGraded)
+            if (userAlreadyInHandIns is not null && userAlreadyInHandIns.Status != GradingStatus.NotGraded)
             {
                 throw new Exception("currently in grading or already graded");
-            }
-
-            if (userAlreadyInHandIns.Count() == 1)
-            {
-                exercise.HandIns.Remove(userAlreadyInHandIns[0]);
             }
 
             ExerciseGrade? x = new ExerciseGrade
@@ -49,37 +43,38 @@ namespace RestWebservice_RemoteCompiling.Handlers
                                    UserToGrade = user
                                };
 
-            foreach (Project item in user.Projects)
+            Project project = user.Projects.FirstOrDefault(x => x.Id == request.ProjectId);
+
+            ExerciseProject? y = new ExerciseProject
+                                 {
+                                     StdIn = project.StdIn,
+                                     ProjectName = project.ProjectName,
+                                     ProjectType = project.ProjectType
+                                 };
+
+            foreach (File z in project.Files)
             {
-                if (item.Id != request.ProjectId)
-                {
-                    continue;
-                }
-
-                ExerciseProject? y = new ExerciseProject
-                                     {
-                                         StdIn = item.StdIn,
-                                         ProjectName = item.ProjectName,
-                                         ProjectType = item.ProjectType
-                                     };
-
-                foreach (File z in item.Files)
-                {
-                    y.Files.Add(new ExerciseFile
-                                {
-                                    User = user,
-                                    ExerciseGrade = x,
-                                    Checkpoint = z.Checkpoints.Last(),
-                                    FileName = z.FileName,
-                                    LastModified = z.LastModified
-                                });
-                }
-
-                x.Project = y;
+                y.Files.Add(new ExerciseFile
+                            {
+                                User = user,
+                                ExerciseGrade = x,
+                                Checkpoint = z.Checkpoints.Last(),
+                                FileName = z.FileName,
+                                LastModified = z.LastModified
+                            });
             }
 
-            //_exerciseGradeRepository.Add(x);
-            exercise.HandIns.Add(x);
+            x.Project = y;
+
+            if (userAlreadyInHandIns is not null)
+            {
+                userAlreadyInHandIns = x;
+            }
+            else
+            {
+                exercise.HandIns.Add(x);
+            }
+
             await _exerciseRepository.Update(exercise);
 
             return CustomResponse.Success(true);

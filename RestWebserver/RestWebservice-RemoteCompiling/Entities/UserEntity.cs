@@ -1,10 +1,6 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using RestWebservice_RemoteCompiling.Database;
 
-using RestWebservice_RemoteCompiling.Entities;
-
-namespace RestWebservice_RemoteCompiling.Database
+namespace RestWebservice_RemoteCompiling.Entities
 {
     public class UserEntity
     {
@@ -31,11 +27,5 @@ namespace RestWebservice_RemoteCompiling.Database
             get;
             set;
         }
-
-        public ICollection<ProjectEntity> Projects
-        {
-            get;
-            set;
-        } = new List<ProjectEntity>();
     }
 }

@@ -47,6 +47,7 @@ namespace RestWebservice_RemoteCompiling
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddHttpClient();
+            services.AddOptions();
             services.AddSingleton<IPistonHelper, PistonHelper>();
             services.AddSingleton<IAliasHelper, AliasHelper>();
             services.AddSingleton<IHttpHelper>(x => new HttpHelper

@@ -26,52 +26,52 @@ namespace RestWebservice_RemoteCompiling.Handlers
             if (dbExercise is null)
                 return CustomResponse.Error<ExerciseEntity>(404, "Exercise not found");
 
-            List<ExerciseGradeEntity> y = dbExercise.HandIns.ConvertAll(x =>
-                                                                        {
-                                                                            UserEntity user = new()
-                                                                                              {
-                                                                                                  Email = x.UserToGrade.Email,
-                                                                                                  Name = x.UserToGrade.Name,
-                                                                                                  LdapUid = x.UserToGrade.LdapUid,
-                                                                                                  UserRole = x.UserToGrade.UserRole
-                                                                                              };
-                                                                            ProjectEntity project = new()
-                                                                                                    {
-                                                                                                        ExerciseID = x.Exercise.Id,
-                                                                                                        Id = x.Project.Id,
-                                                                                                        ProjectName = x.Project.ProjectName,
-                                                                                                        ProjectType = x.Project.ProjectType,
-                                                                                                        StdIn = x.Project.StdIn
-                                                                                                    };
-                                                                            project.Files = x.Project.Files.ConvertAll(x =>
-                                                                                                                       {
-                                                                                                                           return new FileEntity
-                                                                                                                                  {
-                                                                                                                                      FileName = x.FileName,
-                                                                                                                                      Id = x.Id,
-                                                                                                                                      LastModified = x.LastModified,
-                                                                                                                                      Checkpoints = new List<CheckPointEntity>
-                                                                                                                                                    {
-                                                                                                                                                        new()
-                                                                                                                                                        {
-                                                                                                                                                            Code = x.Checkpoint.Code,
-                                                                                                                                                            Created = x.Checkpoint.Created,
-                                                                                                                                                            Id = x.Checkpoint.Id
-                                                                                                                                                        }
-                                                                                                                                                    }
-                                                                                                                                  };
-                                                                                                                       });
+            List<ExerciseGradeEntity> exerciseGradeList = dbExercise.HandIns.ConvertAll(exerciseGrade =>
+                                                                                        {
+                                                                                            UserEntity user = new()
+                                                                                                              {
+                                                                                                                  Email = exerciseGrade.UserToGrade.Email,
+                                                                                                                  Name = exerciseGrade.UserToGrade.Name,
+                                                                                                                  LdapUid = exerciseGrade.UserToGrade.LdapUid,
+                                                                                                                  UserRole = exerciseGrade.UserToGrade.UserRole
+                                                                                                              };
+                                                                                            ProjectEntity project = new()
+                                                                                                                    {
+                                                                                                                        ExerciseID = exerciseGrade.Exercise.Id,
+                                                                                                                        Id = exerciseGrade.Project.Id,
+                                                                                                                        ProjectName = exerciseGrade.Project.ProjectName,
+                                                                                                                        ProjectType = exerciseGrade.Project.ProjectType,
+                                                                                                                        StdIn = exerciseGrade.Project.StdIn
+                                                                                                                    };
+                                                                                            project.Files = exerciseGrade.Project.Files.ConvertAll(x =>
+                                                                                                                                                   {
+                                                                                                                                                       return new FileEntity
+                                                                                                                                                              {
+                                                                                                                                                                  FileName = x.FileName,
+                                                                                                                                                                  Id = x.Id,
+                                                                                                                                                                  LastModified = x.LastModified,
+                                                                                                                                                                  Checkpoints = new List<CheckPointEntity>
+                                                                                                                                                                                {
+                                                                                                                                                                                    new()
+                                                                                                                                                                                    {
+                                                                                                                                                                                        Code = x.Checkpoint.Code,
+                                                                                                                                                                                        Created = x.Checkpoint.Created,
+                                                                                                                                                                                        Id = x.Checkpoint.Id
+                                                                                                                                                                                    }
+                                                                                                                                                                                }
+                                                                                                                                                              };
+                                                                                                                                                   });
 
-                                                                            return new ExerciseGradeEntity
-                                                                                   {
-                                                                                       Id = x.Id,
-                                                                                       UserToGrade = user,
-                                                                                       Grade = x.Grade,
-                                                                                       Status = x.Status,
-                                                                                       Feedback = x.Feedback,
-                                                                                       Project = project
-                                                                                   };
-                                                                        });
+                                                                                            return new ExerciseGradeEntity
+                                                                                                   {
+                                                                                                       Id = exerciseGrade.Id,
+                                                                                                       UserToGrade = user,
+                                                                                                       Grade = exerciseGrade.Grade,
+                                                                                                       Status = exerciseGrade.Status,
+                                                                                                       Feedback = exerciseGrade.Feedback,
+                                                                                                       Project = project
+                                                                                                   };
+                                                                                        });
             ExerciseEntity x = new()
                                {
                                    Author = dbExercise.Author.LdapUid,
@@ -79,7 +79,7 @@ namespace RestWebservice_RemoteCompiling.Handlers
                                    Id = dbExercise.Id,
                                    Name = dbExercise.Name,
                                    Template = dbExercise.Template,
-                                   HandIns = y,
+                                   HandIns = exerciseGradeList,
                                    DueDate = dbExercise.DueDate,
                                    TaskDefinition = dbExercise.TaskDefinition
                                };
