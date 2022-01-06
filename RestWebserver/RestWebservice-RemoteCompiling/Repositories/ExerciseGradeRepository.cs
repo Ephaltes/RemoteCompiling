@@ -38,9 +38,9 @@ namespace RestWebservice_RemoteCompiling.Repositories
             return await _context.ExerciseGrades.FirstOrDefaultAsync(x => x.Exercise.Id == exerciseId && x.UserToGrade.LdapUid == studentId);
         }
 
-        public async Task<ExerciseGrade?> Get(int exerciseGradeId)
+        public async Task<ExerciseGrade?> Get(int id)
         {
-            return await _context.ExerciseGrades.FirstOrDefaultAsync(x => x.Exercise.Id == exerciseGradeId);
+            return await _context.ExerciseGrades.FirstOrDefaultAsync(x => x.Id == id);
         }
     }
 }
