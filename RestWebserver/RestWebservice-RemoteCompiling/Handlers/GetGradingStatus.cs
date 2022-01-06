@@ -36,7 +36,7 @@ namespace RestWebservice_RemoteCompiling.Handlers
 
             if (exerciseGrade is null)
             {
-                return CustomResponse.Success<GradingStatus>(204);
+                return CustomResponse.Error<GradingStatus>(404, "No grade found");
             }
 
             return CustomResponse.Success(exerciseGrade.Status);

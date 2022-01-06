@@ -35,12 +35,9 @@ namespace RestWebservice_RemoteCompiling.Handlers
 
             ExerciseGrade? exerciseGrade = await _exerciseGradeRepository.Get(request.StudentId, request.ExerciseId);
 
-            if (exerciseGrade is null)
-                return CustomResponse.Success<ExerciseGradeEntity>(204);
-
-            if (exerciseGrade.Status is GradingStatus.NotGraded or GradingStatus.InProcess)
+            if (exerciseGrade is null || exerciseGrade.Status is GradingStatus.NotGraded or GradingStatus.InProcess)
             {
-                return CustomResponse.Success<ExerciseGradeEntity>(204);
+                return CustomResponse.Error<ExerciseGradeEntity>(404, "Grade not ready or not found");
             }
 
             UserEntity userEntity = new()
