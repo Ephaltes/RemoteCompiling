@@ -38,14 +38,9 @@ namespace RestWebservice_RemoteCompiling.Handlers
             if (exerciseGrade is null)
                 return CustomResponse.Success<ExerciseGradeEntity>(204);
 
-            if (exerciseGrade.Status == GradingStatus.NotGraded)
+            if (exerciseGrade.Status is GradingStatus.NotGraded or GradingStatus.InProcess)
             {
-                return CustomResponse.Error<ExerciseGradeEntity>(425, "too early");
-            }
-
-            if (exerciseGrade.Status == GradingStatus.InProcess)
-            {
-                return CustomResponse.Error<ExerciseGradeEntity>(425, "too early, in processing");
+                return CustomResponse.Success<ExerciseGradeEntity>(204);
             }
 
             UserEntity userEntity = new()
