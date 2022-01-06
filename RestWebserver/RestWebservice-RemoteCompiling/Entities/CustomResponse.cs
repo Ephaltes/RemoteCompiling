@@ -14,8 +14,8 @@
             set;
         }
 
-        public bool IsSuccess => StatusCode == 200;
-        public virtual bool HasData => false;
+        public bool IsSuccess => StatusCode >= 200 && StatusCode < 300;
+        public virtual bool HasData { get; init; } = false;
 
         public virtual object GetData()
         {
@@ -25,6 +25,12 @@
         {
             return new CustomResponse<T>
                    { StatusCode = 200, Data = data };
+        }
+
+        public static CustomResponse<T> Success<T>(int status)
+        {
+            return new CustomResponse<T>
+                   { StatusCode = status, HasData = false };
         }
 
         public static CustomResponse<T> Error<T>(int statusCode, string errorMessage = "")
@@ -47,7 +53,7 @@
             init;
         }
 
-        public override bool HasData => true;
+        public override bool HasData { get; init; } = true;
         public override object GetData()
         {
             return Data;
