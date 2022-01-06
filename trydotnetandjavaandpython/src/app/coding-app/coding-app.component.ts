@@ -22,13 +22,14 @@ import { ExerciseService } from '../service/exercise.service';
 import { StdinInputComponent } from '../stdin-input/stdin-input.component';
 import { convertBEtoFEEntity, convertFileTypeToNumber } from '../service/help.function.service';
 import { error } from 'protractor';
+import { StaticCodeService } from '../service/staticcode.service';
 
 @Component({
   selector: 'app-coding-app',
   templateUrl: './coding-app.component.html',
   styleUrls: ['./coding-app.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  providers: [CompileService, UserProjectService, ExerciseService]
+  providers: [CompileService, UserProjectService, ExerciseService, StaticCodeService]
 })
 export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit {
   handinButtonDisabled: boolean = false;
@@ -99,7 +100,7 @@ export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit {
     },
   };
 
-  constructor(private userProjectService: UserProjectService, private exerciseService: ExerciseService, private editorService: CodeEditorService, private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer, private compileService: CompileService, private Dialog: MatDialog, private ToasterService: ToasterService) {
+  constructor(private staticCodeService: StaticCodeService, private userProjectService: UserProjectService, private exerciseService: ExerciseService, private editorService: CodeEditorService, private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer, private compileService: CompileService, private Dialog: MatDialog, private ToasterService: ToasterService) {
     this.nestedTreeControl = new NestedTreeControl<FileNode>(this._getChildren);
     this.nestedDataSource = new MatTreeNestedDataSource();
 
@@ -282,7 +283,7 @@ export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit {
       else
         this.handinButtonDisabled = false;
     }, err => {
-      if (err.status == 500)
+      if (err.status == 500 || err.status == 204)
         this.handinButtonDisabled = false;
     })
   }
@@ -389,7 +390,12 @@ export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit {
       this.output = "Loading...";
       this.compileService.compile(this.selectedModel, this.runFiles, args, stdin).subscribe((item => { this.isLoading = false; item.data.run.stderr.length > 0 ? this.output = item.data.run.stderr : this.output = item.data.run.stdout }))
     }
-
+  }
+  runStaticCode() {
+    this.isLoading = true;
+    this.staticCodeService.postScan(this.selectedModel.value, this.selectedModel.language).subscribe(res => {
+      this.staticCodeService.getScanResult(res.id).subscribe(res => { console.log(res) });
+    })
   }
   openNewFolderDialog() {
     const dialogRef = this.Dialog.open(AddNewFolderComponent);
@@ -416,7 +422,7 @@ export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit {
       title: 'Auto save complete',
       showCloseButton: false
     };
-    this.saveSource.subscribe(() => { this.saveButton() , this.toasterSerivce.pop(toast) });
+    this.saveSource.subscribe(() => { this.saveButton(), this.toasterSerivce.pop(toast) });
   }
   ngOnDestroy() {
     this.saveButton();

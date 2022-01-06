@@ -77,7 +77,7 @@
       <h2>Beschreibung:</h2>
       <div [innerHTML]="currentTaskDefinition"></div>
     </div>
-   
+
   </mat-grid-tile>
   <!-- File Upload Drag n Drop-->
   <file-upload [control]="fileUploadControl" style="visibility:hidden; opacity:0" class="dropzone">
@@ -150,6 +150,8 @@
           </mat-checkbox>
         </div>
         <button mat-raised-button color="primary" (click)="saveButton()" style="left: 10px;">Force Save</button>
+        <button mat-raised-button color="primary" [disabled]="isLoading" (click)="runStaticCode()" style="left: 25px;">Statische Code
+          Analyse</button>
       </div>
       <!--<mat-grid-tile [colspan]="15" [rowspan]="3"></mat-grid-tile>-->
       <div>
