@@ -38,6 +38,16 @@ namespace RestWebservice_RemoteCompiling.Controllers
             
             return response.ToResponse();
         }
+        
+        [HttpGet("student/{studentId}/Exercise/{exerciseId}/status")]
+        public async Task<IActionResult> GetGradeGradingStatus(string studentId, int exerciseId)
+        {
+            GetGradingStatusQuery query = new GetGradingStatusQuery
+                                          { ExerciseId = exerciseId, StudentId = studentId, Token = GetTokenFromAuthorization() };
+            CustomResponse<GradingStatus> response = await _mediator.Send(query);
+            
+            return response.ToResponse();
+        }
 
         [HttpPut("gradeExercise")]
         public async Task<IActionResult> GradeExercise(GradeExerciseCommand command)
