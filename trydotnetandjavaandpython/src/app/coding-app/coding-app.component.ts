@@ -4,7 +4,7 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { CodeEditorService, CodeModel } from '@ngstack/code-editor';
 import { interval, Observable, Subscription } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { catchError, debounceTime } from 'rxjs/operators';
 import { FileNode, FileNodeType } from '../file-module/file-node';
 import { DomSanitizer } from "@angular/platform-browser";
 import { CompileService } from '../service/compile.service';
@@ -21,6 +21,7 @@ import { CheckPoint, UserProjectService } from '../service/userproject.service';
 import { ExerciseService } from '../service/exercise.service';
 import { StdinInputComponent } from '../stdin-input/stdin-input.component';
 import { convertBEtoFEEntity, convertFileTypeToNumber } from '../service/help.function.service';
+import { error } from 'protractor';
 
 @Component({
   selector: 'app-coding-app',
@@ -30,6 +31,7 @@ import { convertBEtoFEEntity, convertFileTypeToNumber } from '../service/help.fu
   providers: [CompileService, UserProjectService, ExerciseService]
 })
 export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit {
+  handinButtonDisabled: boolean = false;
   currentCheckpoints: CheckPoint[] = []
   private _selectedCheckpoint: CheckPoint;
   get selectedCheckpoint(): CheckPoint {
@@ -254,7 +256,36 @@ export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit {
       this.exerciseService.putExerciseHandIn(this.currentProjectId, this.currentExerciseId).subscribe();
     }
   }
-
+  getGrade() {
+    this.exerciseService.getExerciseGrade(this.currentldapUid, this.currentExerciseId).subscribe(res => {
+      this.graded = true;
+      this.gradedFeedback = res.data.feedback;
+      this.gradedGrade = res.data.grade;
+    }, err => {
+      if (err.status == 404 || err.status == 204)
+        this.graded = false;
+    })
+  }
+  getExercisByCurrentId() {
+    this.exerciseService.getExercisesById(this.currentExerciseId).subscribe(res => {
+      this.currentExerciseAuthor = res.data.author;
+      this.currentTaskDefinition = res.data.taskDefinition;
+      this.currentExerciseName = res.data.name;
+      this.getGrade();
+      this.checkIfGraded();
+    })
+  }
+  checkIfGraded() {
+    this.exerciseService.getExerciseGradeStatus(this.currentldapUid, this.currentExerciseId).subscribe(res => {
+      if (res.data > 0)
+        this.handinButtonDisabled = true;
+      else
+        this.handinButtonDisabled = false;
+    }, err => {
+      if (err.status == 500)
+        this.handinButtonDisabled = false;
+    })
+  }
   selectNode(node: FileNode) {
     if (node.checkpoints != undefined)
       this.currentCheckpoints = node.checkpoints;
@@ -264,16 +295,7 @@ export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit {
     this.selectedModel = node.code;
     if (node.exerciseId > 0) {
       this.currentExerciseId = node.exerciseId;
-      this.exerciseService.getExercisesById(this.currentExerciseId).subscribe(res => {
-        this.currentExerciseAuthor = res.data.author;
-        this.currentTaskDefinition = res.data.taskDefinition;
-        this.currentExerciseName = res.data.name;
-        this.exerciseService.getExerciseGrade(this.currentldapUid, this.currentExerciseId).subscribe(res => {
-          this.graded = true;
-          this.gradedFeedback = res.data.feedback;
-          this.gradedGrade = res.data.grade;
-        });
-      })
+      this.getExercisByCurrentId();
     }
     if (node.projectid > 0) {
       this.currentProjectId = node.projectid;
@@ -378,13 +400,15 @@ export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit {
     dialogRef.afterClosed().subscribe(() => { dialogRef.componentInstance.validData ? this.refreshDataNavivagte(dialogRef.componentInstance.emittingData.projectId, dialogRef.componentInstance.emittingData.projectFileId) : false })
   }
   saveButton() {
+    this.userProjectService.save(this.nestedDataSource.data);
     this.nestedDataSource.data.forEach(project => {
       project.children.forEach(file => {
-        if (file.modified)
+        if (file.modified) {
           file.checkpoints.push({ created: new Date(), code: file.code.value })
+          file.modified = false;
+        }
       })
     });
-    this.userProjectService.save(this.nestedDataSource.data);
   }
   ngOnInit() {
     var toast: Toast = {
@@ -392,7 +416,7 @@ export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit {
       title: 'Auto save complete',
       showCloseButton: false
     };
-    // this.saveSource.subscribe(() => { this.saveButton() , this.toasterSerivce.pop(toast) });
+    this.saveSource.subscribe(() => { this.saveButton() , this.toasterSerivce.pop(toast) });
   }
   ngOnDestroy() {
     this.saveButton();
