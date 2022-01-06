@@ -36,7 +36,7 @@ namespace RestWebservice_RemoteCompiling.Handlers
             ExerciseGrade? exerciseGrade = await _exerciseGradeRepository.Get(request.StudentId, request.ExerciseId);
 
             if (exerciseGrade is null)
-                return CustomResponse.Error<ExerciseGradeEntity>(404, "No grade found for this student in this exercise");
+                return CustomResponse.Success<ExerciseGradeEntity>(204);
 
             if (exerciseGrade.Status == GradingStatus.NotGraded)
             {

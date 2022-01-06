@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
@@ -34,6 +33,11 @@ namespace RestWebservice_RemoteCompiling.Handlers
             }
 
             ExerciseGrade? exerciseGrade = await _exerciseGradeRepository.Get(request.StudentId, request.ExerciseId);
+
+            if (exerciseGrade is null)
+            {
+                return CustomResponse.Success<GradingStatus>(204);
+            }
 
             return CustomResponse.Success(exerciseGrade.Status);
         }
