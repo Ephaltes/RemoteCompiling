@@ -48,7 +48,9 @@ export class AuthService {
     getUserName(): string {
         const token = localStorage.getItem("id_token");
         const decoded = this.getDecodedAccessToken(token);
-        return decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
+        if (decoded != undefined)
+            return decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
+        return "";
     }
     getDecodedAccessToken(token: string): any {
         try {

@@ -17,7 +17,7 @@ import { Toast, ToasterService } from 'angular2-toaster';
 import * as JSZip from 'jszip';
 import { FolderOptionDialogComponent } from '../folder-option-dialog/folder-option-dialog.component';
 import { AddNewFolderComponent } from '../add-new-folder/add-new-folder.component';
-import { UserProjectService } from '../service/userproject.service';
+import { CheckPoint, UserProjectService } from '../service/userproject.service';
 import { ExerciseService } from '../service/exercise.service';
 import { StdinInputComponent } from '../stdin-input/stdin-input.component';
 import { convertBEtoFEEntity, convertFileTypeToNumber } from '../service/help.function.service';
@@ -30,6 +30,18 @@ import { convertBEtoFEEntity, convertFileTypeToNumber } from '../service/help.fu
   providers: [CompileService, UserProjectService, ExerciseService]
 })
 export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit {
+  currentCheckpoints: CheckPoint[] = []
+  private _selectedCheckpoint: CheckPoint;
+  get selectedCheckpoint(): CheckPoint {
+    return this._selectedCheckpoint;
+  }
+  set selectedCheckpoint(value: CheckPoint) {
+    if (confirm("Selecting a checkpoint will discard your current changes, do you want to proceed?")) {
+      this.nestedDataSource.data.find(c => c.projectid == this.currentProjectId).children
+        .find(c => c.fileId = this.currentFileId).code.value = value.code;
+      this.selectedModel = { language: this.selectedModel.language, value: value.code, uri: this.selectedModel.uri }
+    }
+  }
   stdinString: string = ""
   currentldapUid: string = "";
   stdin: boolean = false;
@@ -237,13 +249,15 @@ export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit {
     );
   }
   handIn() {
-    this.userProjectService.save(this.nestedDataSource.data);
+    this.saveButton();
     if (this.currentProjectId > 0 && this.currentExerciseId > 0) {
       this.exerciseService.putExerciseHandIn(this.currentProjectId, this.currentExerciseId).subscribe();
     }
   }
 
   selectNode(node: FileNode) {
+    if (node.checkpoints != undefined)
+      this.currentCheckpoints = node.checkpoints;
     this.stdinString = node.stdin;
     this.isLoading = false;
     this.graded = false;
@@ -325,7 +339,7 @@ export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit {
   }
   runCode() {
     var stdin = this.nestedDataSource.data.find(c => c.projectid == this.currentProjectId).children
-    .find(c => c.fileId = this.currentFileId).stdin;
+      .find(c => c.fileId = this.currentFileId).stdin;
     var args: string[] = []
     this.runFiles = [];
     if (this.stdin) {
@@ -364,6 +378,12 @@ export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit {
     dialogRef.afterClosed().subscribe(() => { dialogRef.componentInstance.validData ? this.refreshDataNavivagte(dialogRef.componentInstance.emittingData.projectId, dialogRef.componentInstance.emittingData.projectFileId) : false })
   }
   saveButton() {
+    this.nestedDataSource.data.forEach(project => {
+      project.children.forEach(file => {
+        if (file.modified)
+          file.checkpoints.push({ created: new Date(), code: file.code.value })
+      })
+    });
     this.userProjectService.save(this.nestedDataSource.data);
   }
   ngOnInit() {
@@ -372,10 +392,10 @@ export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit {
       title: 'Auto save complete',
       showCloseButton: false
     };
-    //this.saveSource.subscribe(() => { this.userProjectService.save(this.nestedDataSource.data), this.toasterSerivce.pop(toast) });
+    // this.saveSource.subscribe(() => { this.saveButton() , this.toasterSerivce.pop(toast) });
   }
   ngOnDestroy() {
-    this.userProjectService.save(this.nestedDataSource.data);
+    this.saveButton();
   }
 
 }

@@ -157,6 +157,14 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
+        <mat-form-field appearance="fill" [style.height.px]="45" class="selectThemeActionBar">
+          <mat-label>checkpoint</mat-label>
+          <mat-select [(value)]="selectedCheckpoint">
+            <mat-option *ngFor="let checkpoint of currentCheckpoints" [value]="checkpoint">
+              {{checkpoint.code}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
     </div>
   </mat-grid-tile>

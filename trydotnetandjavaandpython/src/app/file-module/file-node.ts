@@ -1,4 +1,5 @@
 import { CodeModel } from '@ngstack/code-editor/public_api';
+import { CheckPoint } from '../service/userproject.service';
 
 export enum FileNodeType {
     csharp = 'csharp',
@@ -19,7 +20,7 @@ export class FileNode {
     exerciseId?: number;
     modified?:boolean;
     stdin?:string;
-
+    checkpoints?:CheckPoint[]
     code?: CodeModel;
 
     constructor(name: string, type: FileNodeType, code: string,) {
