@@ -41,9 +41,9 @@ export interface TextLocation {
 export class StaticCodeService {
     constructor(private http: HttpClient) { }
     public postScan(code: string, language: string) {
-        return this.http.post<ScanBody>(globalVar.apiURL + "/scans", { code: code, codeLanguage: language })
+        return this.http.post<ScanBody>(globalVar.staticCodeURL + "/scans", { code: code, codeLanguage: language })
     }
     public getScanResult(scanId: number) {
-        return this.http.get<Scan>(globalVar.apiURL + "/scans/" + scanId + "/results")
+        return this.http.get<Scan>(globalVar.staticCodeURL + "/scans/" + scanId + "/results")
     }
 }
