@@ -3,27 +3,38 @@ import { Injectable } from "@angular/core";
 import * as globalVar from '../../../globals'
 export interface ScanBody {
     id: number;
-    status: number;
+    status: ScanStatus;
 }
 export interface Scan {
     total: number;
     issues: ScanIssues[];
 }
 export interface ScanIssues {
-    type: number;
+    type: IssueType;
     severity: Severity;
     component: string;
     message: string;
     textLocation: TextLocation;
 }
-enum Severity{
-    
+enum ScanStatus {
+    Pending = 0,
+    Available = 1,
+    Failed = 2
+}
+enum Severity {
+    Major = 0,
+    Minor = 1
+}
+enum IssueType {
+    CodeSmell = 0,
+    Bug = 1,
+    Vulnerability = 2
 }
 export interface TextLocation {
     startLine: number;
     endLine: number;
     startOffset: number;
-    endOffset:number;
+    endOffset: number;
 }
 
 @Injectable()
