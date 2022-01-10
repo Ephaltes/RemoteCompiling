@@ -22,7 +22,7 @@ import { ExerciseService } from '../service/exercise.service';
 import { StdinInputComponent } from '../stdin-input/stdin-input.component';
 import { convertBEtoFEEntity, convertFileTypeToNumber } from '../service/help.function.service';
 import { error } from 'protractor';
-import { StaticCodeService } from '../service/staticcode.service';
+import { Scan, ScanBody, StaticCodeService } from '../service/staticcode.service';
 
 @Component({
   selector: 'app-coding-app',
@@ -392,9 +392,30 @@ export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
   runStaticCode() {
+    var scanbody: Scan = {
+      total: 1, issues: [{
+        type: 1,
+        severity: 1,
+        component: "test",
+        message: "test",
+        textLocation: {
+          startLine: 1,
+          endLine: 1,
+          startOffset: 1,
+          endOffset: 1
+        }
+      }]
+    }
+    var issueText = "";
     this.isLoading = true;
     this.staticCodeService.postScan(this.selectedModel.value, this.selectedModel.language).subscribe(res => {
       this.staticCodeService.getScanResult(res.id).subscribe(res => { console.log(res) });
+    }, err => {
+      scanbody.issues.forEach(issues => {
+        issueText = issueText + " Errortext: " + issues.message + "\r\n";
+      });
+      this.output = "Issues: " + scanbody.total + "\r\n" + issueText;
+      this.isLoading = false;
     })
   }
   openNewFolderDialog() {
