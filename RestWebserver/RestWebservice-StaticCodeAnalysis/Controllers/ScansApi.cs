@@ -78,9 +78,18 @@ namespace RestWebservice_StaticCodeAnalysis.Controllers
         [SwaggerResponse(statusCode: 401, description: "Token is missing or has expired")]
         public virtual async Task<IActionResult> CreateScanJob([FromBody] CodeDto body)
         {
-            if (body.CodeLanguage != "dotnet")
+            var supportedLanguages = new List<string>
             {
-                return BadRequest("Language not supported. Only 'dotnet' is supported at the moment.");
+                "dotnet",
+                "csharp",
+                "mono",
+                "gcc",
+                "c"
+            };
+
+            if (!supportedLanguages.Contains(body.CodeLanguage.ToLower()))
+            {
+                return BadRequest($"Language not supported. Only {string.Join(", ", supportedLanguages)} are supported.");
             }
 
             var scanJob = await _scanService.CreateScanAsync(); ;
@@ -148,7 +157,7 @@ namespace RestWebservice_StaticCodeAnalysis.Controllers
         [Route("/scans/{scanId:int}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [SwaggerOperation("GetScanJob")]
-        [SwaggerResponse(statusCode: 200, type: typeof(CodeDto), description: "Results of the scan")]
+        [SwaggerResponse(statusCode: 200, type: typeof(ScanJobDto), description: "Scan job")]
         [SwaggerResponse(statusCode: 401, description: "Token is missing or has expired or user is not permitted to see this scan job")]
         [SwaggerResponse(statusCode: 404, description: "Scan with this scanId was not found")]
         public virtual async Task<IActionResult> GetScanJob([FromRoute][Required] int scanId)

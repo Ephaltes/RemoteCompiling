@@ -1,5 +1,9 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using Serilog;
+using Serilog.Events;
+
+using System;
 
 namespace RestWebservice_StaticCodeAnalysis
 {
@@ -14,7 +18,21 @@ namespace RestWebservice_StaticCodeAnalysis
         /// <param name="args"></param>
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                .Enrich.FromLogContext()
+                .WriteTo.Console()
+                .CreateLogger();
+
+            try
+            {
+                Log.Information("Starting web host");
+                CreateHostBuilder(args).Build().Run();
+            }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
 
         /// <summary>
@@ -24,6 +42,7 @@ namespace RestWebservice_StaticCodeAnalysis
         /// <returns></returns>
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .UseSerilog()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();

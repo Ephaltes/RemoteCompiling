@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\RestWebservice-StaticCodeAnalysis.DTOs\RestWebservice-StaticCodeAnalysis.DTOs.csproj" />
     <ProjectReference Include="..\RestWebService-StaticCodeAnalysis.Entities\RestWebService-StaticCodeAnalysis.Services.Entities.csproj" />
     <ProjectReference Include="..\RestWebService-StaticCodeAnalysis.ServiceAgents.DTOs\RestWebService-StaticCodeAnalysis.ServiceAgents.DTOs.csproj" />
   </ItemGroup>

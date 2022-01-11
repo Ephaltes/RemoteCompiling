@@ -15,12 +15,17 @@ RUN dotnet build --no-restore "./RestWebservice-StaticCodeAnalysis/RestWebservic
 FROM build AS publish
 RUN dotnet publish "./RestWebservice-StaticCodeAnalysis/RestWebservice-StaticCodeAnalysis.csproj" -c Release -o /app
 
-# Configure Run Environment
+# Configure runtime environment
 FROM base as final
 
+RUN apt update
+
+# Install gcc and g++
+RUN apt install -y gcc
+RUN apt install -y g++
+
 # Install .NET 6 SDK
-RUN apt update; \
-    apt install -y wget && \
+RUN apt install -y wget && \
 	wget https://packages.microsoft.com/config/ubuntu/21.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && \
 	dpkg -i packages-microsoft-prod.deb && \
 	rm packages-microsoft-prod.deb && \
@@ -29,8 +34,7 @@ RUN apt update; \
 	apt install -y dotnet-sdk-6.0;
 
 # Install OpenJDK-11
-RUN apt update && \
-    apt install -y openjdk-11-jdk && \
+RUN apt install -y openjdk-11-jdk && \
     apt install -y ant;
 
 # Setup JAVA_HOME
@@ -38,9 +42,11 @@ ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64/
 RUN export JAVA_HOME
 
 # Install .NET sonarscanner	tool
-RUN dotnet --info
 RUN dotnet tool install -g dotnet-sonarscanner
 ENV PATH="${PATH}:/root/.dotnet/tools"
+
+# Install valgrind
+RUN apt install -y valgrind
 
 COPY --from=publish /app . 
 WORKDIR /app

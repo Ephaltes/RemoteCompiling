@@ -7,7 +7,7 @@ services:
       context: RestWebservice-RemoteCompiling
       dockerfile: Dockerfile
     ports:
-      - "5001:80" # port 80 from container to port 5000 on host
+      - "5001:80"
     environment:
       - DOTNET_RUNNING_IN_CONTAINER=true
       - ASPNETCORE_ENVIRONMENT=Development
@@ -25,6 +25,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
       - Sonarqube__ServerUrl=http://sonarqube:9000
+      - Valgrind__Flags=--leak-check=full --show-leak-kinds=all --track-origins=yes
   sonarqube:
     container_name: sonarqube
     image: sonarqube
