@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -9,22 +11,32 @@ using RestWebservice_RemoteCompiling.Repositories;
 
 namespace RestWebservice_RemoteCompiling.Handlers
 {
-    public class GetExerciseHandler : BaseHandler<GetExerciseQuery, CustomResponse<ExerciseEntity>>
+    public class GetExerciseHandInHandler : BaseHandler<GetExerciseHandInQuery, CustomResponse<ExerciseEntity>>
     {
         private readonly IExerciseRepository _exerciseRepository;
+        private readonly IUserRepository _userRepository;
 
-        public GetExerciseHandler(IExerciseRepository exerciseRepository, IUserRepository userRepository)
+        public GetExerciseHandInHandler(IExerciseRepository exerciseRepository, IUserRepository userRepository)
             : base(userRepository)
         {
             _exerciseRepository = exerciseRepository;
+            _userRepository = userRepository;
         }
 
-        public override async Task<CustomResponse<ExerciseEntity>> Handle(GetExerciseQuery request, CancellationToken cancellationToken)
+        public override async Task<CustomResponse<ExerciseEntity>> Handle(GetExerciseHandInQuery request, CancellationToken cancellationToken)
         {
             Exercise? dbExercise = await _exerciseRepository.Get(request.Id);
 
             if (dbExercise is null)
                 return CustomResponse.Error<ExerciseEntity>(404, "Exercise not found");
+
+            string ldapIdent = request.Token.Claims.First(x => x.Type == ClaimTypes.Sid).Value;
+            User? ldapUser = await _userRepository.GetUserByLdapUid(ldapIdent);
+
+            if (ldapUser is null /*|| ldapUser.UserRole != UserRole.Teacher */)
+            {
+                return CustomResponse.Error<ExerciseEntity>(403);
+            }
 
             List<ExerciseGradeEntity> exerciseGradeList = dbExercise.HandIns.ConvertAll(exerciseGrade =>
                                                                                         {
@@ -79,7 +91,7 @@ namespace RestWebservice_RemoteCompiling.Handlers
                                    Id = dbExercise.Id,
                                    Name = dbExercise.Name,
                                    Template = dbExercise.Template,
-                                   HandIns = null,
+                                   HandIns = exerciseGradeList,
                                    DueDate = dbExercise.DueDate,
                                    TaskDefinition = dbExercise.TaskDefinition
                                };
