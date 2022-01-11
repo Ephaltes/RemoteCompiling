@@ -13,17 +13,31 @@ namespace RestWebservice_RemoteCompiling.Handlers
 {
     public class AddFileForProjectHandler : BaseHandler<AddFileForProjectCommand, CustomResponse<int>>
     {
+        private readonly IProjectRepository _projectRepository;
         private readonly IUserRepository _userRepository;
-        public AddFileForProjectHandler(IUserRepository userRepository)
+        public AddFileForProjectHandler(IUserRepository userRepository, IProjectRepository projectRepository)
             : base(userRepository)
         {
             _userRepository = userRepository;
+            _projectRepository = projectRepository;
         }
 
         public override async Task<CustomResponse<int>> Handle(AddFileForProjectCommand request, CancellationToken cancellationToken)
         {
             string ldapIdent = request.Token.Claims.First(x => x.Type == ClaimTypes.Sid).Value;
-            User? ldapUser = _userRepository.GetUserByLdapUid(ldapIdent);
+            User? ldapUser = await _userRepository.GetUserByLdapUid(ldapIdent);
+
+            if (ldapUser == null)
+            {
+                return CustomResponse.Error<int>(403);
+            }
+
+            Project? project = await _projectRepository.GetProjectIfUserHasAccess(request.ProjectId, ldapUser.LdapUid);
+
+            if (project is null)
+            {
+                return CustomResponse.Error<int>(403);
+            }
 
             File file = new File
                         {
@@ -37,18 +51,8 @@ namespace RestWebservice_RemoteCompiling.Handlers
                             FileName = request.File.FileName
                         };
 
-            User? user = _userRepository.GetUserByLdapUid(ldapUser.LdapUid);
-            foreach (Project x in user.Projects)
-            {
-                if (x.Id == request.ProjectId)
-                {
-                    x.Files.Add(file);
-
-                    break;
-                }
-            }
-
-            _userRepository.UpdateUser(user);
+            project.Files.Add(file);
+            await _projectRepository.Update(project);
 
             return CustomResponse.Success(file.Id);
         }

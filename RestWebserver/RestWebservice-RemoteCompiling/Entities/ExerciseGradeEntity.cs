@@ -1,10 +1,10 @@
 ﻿using System.Text.Json.Serialization;
 
-using RestWebservice_RemoteCompiling.Entities;
+using RestWebservice_RemoteCompiling.Database;
 
-namespace RestWebservice_RemoteCompiling.Database
+namespace RestWebservice_RemoteCompiling.Entities
 {
-    public class ExerciseGrade
+    public class ExerciseGradeEntity
     {
         public int Id
         {
@@ -12,14 +12,7 @@ namespace RestWebservice_RemoteCompiling.Database
             set;
         }
 
-        [JsonIgnore]
-        public virtual Exercise Exercise
-        {
-            get;
-            set;
-        }
-
-        public virtual User UserToGrade
+        public UserEntity UserToGrade
         {
             get;
             set;
@@ -43,7 +36,7 @@ namespace RestWebservice_RemoteCompiling.Database
             set;
         }
 
-        public virtual ExerciseProject Project
+        public ProjectEntity Project
         {
             get;
             set;

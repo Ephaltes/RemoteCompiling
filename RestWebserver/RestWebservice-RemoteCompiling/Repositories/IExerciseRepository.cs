@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using RestWebservice_RemoteCompiling.Database;
 
@@ -6,13 +7,13 @@ namespace RestWebservice_RemoteCompiling.Repositories
 {
     public interface IExerciseRepository
     {
-        public int Add(Exercise exercise);
-        public void Update(Exercise exercise);
+        public Task<int> Add(Exercise exercise);
+        public Task Update(Exercise exercise);
 
-        public void Delete(int id);
+        public Task Delete(int id);
 
-        public Exercise Get(int id);
+        public Task<Exercise?> Get(int? id);
 
-        public List<Exercise> GetAll();
+        public Task<List<Exercise>> GetAll();
     }
 }

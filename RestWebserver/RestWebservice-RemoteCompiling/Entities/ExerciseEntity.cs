@@ -49,10 +49,10 @@ namespace RestWebservice_RemoteCompiling.Entities
             set;
         }
 
-        public virtual List<ExerciseGrade> HandIns
+        public virtual List<ExerciseGradeEntity> HandIns
         {
             get;
             set;
-        } = new List<ExerciseGrade>();
+        } = new List<ExerciseGradeEntity>();
     }
 }

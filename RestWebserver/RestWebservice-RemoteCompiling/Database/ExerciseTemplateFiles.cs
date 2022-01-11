@@ -28,11 +28,5 @@ namespace RestWebservice_RemoteCompiling.Database
             get;
             set;
         } = new List<Checkpoint>();
-
-        public ProjectType ProjectType
-        {
-            get;
-            set;
-        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net;
+using System.Threading.Tasks;
 
 using MediatR;
 
@@ -33,8 +34,18 @@ namespace RestWebservice_RemoteCompiling.Controllers
         {
             GetGradeForStudentInExerciseQuery query = new GetGradeForStudentInExerciseQuery
                                                       { ExerciseId = exerciseId, StudentId = studentId, Token = GetTokenFromAuthorization() };
-            CustomResponse<ExerciseGrade> response = await _mediator.Send(query);
-
+            CustomResponse<ExerciseGradeEntity> response = await _mediator.Send(query);
+            
+            return response.ToResponse();
+        }
+        
+        [HttpGet("student/{studentId}/Exercise/{exerciseId}/status")]
+        public async Task<IActionResult> GetGradeGradingStatus(string studentId, int exerciseId)
+        {
+            GetGradingStatusQuery query = new GetGradingStatusQuery
+                                          { ExerciseId = exerciseId, StudentId = studentId, Token = GetTokenFromAuthorization() };
+            CustomResponse<GradingStatus> response = await _mediator.Send(query);
+            
             return response.ToResponse();
         }
 

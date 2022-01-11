@@ -22,7 +22,7 @@ namespace RestWebservice_RemoteCompiling.Entities
         {
             get;
             set;
-        }
+        } = "";
 
         public List<FileEntity> Files
         {
@@ -31,6 +31,12 @@ namespace RestWebservice_RemoteCompiling.Entities
         } = new List<FileEntity>();
 
         public ProjectType ProjectType
+        {
+            get;
+            set;
+        }
+
+        public int? ExerciseID
         {
             get;
             set;

@@ -1,7 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+
 using Microsoft.AspNetCore.Mvc;
+
 using RestWebservice_RemoteCompiling.Command;
 using RestWebservice_RemoteCompiling.Entities;
 using RestWebservice_RemoteCompiling.Helpers;
@@ -21,36 +23,45 @@ namespace RestWebservice_RemoteCompiling.Extensions
 
             return new StatusCodeResult(response.StatusCode);
         }
-        
-        public static SendCompileRequest ToJsonSendCompileRequest (this ExecuteCodeCommand command,IPistonHelper pistonHelper)
+
+        public static SendCompileRequest ToJsonSendCompileRequest(this ExecuteCodeCommand command, IPistonHelper pistonHelper)
         {
+            string version = command.Version;
+            if (string.IsNullOrEmpty(version))
+                version = pistonHelper.DefaultVersion(command.Language);
+
+            if (string.IsNullOrEmpty(version))
+                throw new VersionNotFoundException();
+
+
             SendCompileRequest item = new SendCompileRequest
-            {
-                language = command.Language,
-                version = command.Version,
-                stdin = command.Code.stdin ,
-                compile_timeout = Int32.Parse(pistonHelper.GetCompileTimeout()),
-                run_timeout = Int32.Parse(pistonHelper.GetRunTimeout())
-            };
-            
+                                      {
+                                          language = command.Language,
+                                          version = version,
+                                          stdin = command.Code.stdin,
+                                          compile_timeout = int.Parse(pistonHelper.GetCompileTimeout()),
+                                          run_timeout = int.Parse(pistonHelper.GetRunTimeout())
+                                      };
+
             command.Code.files.ForEach(x => item.files.Add(x));
-            
-            if(!string.IsNullOrWhiteSpace(command.Code.mainFile))
+
+            if (!string.IsNullOrWhiteSpace(command.Code.mainFile))
                 MoveMainFileToFirstElement(item.files, command.Code.mainFile);
-            
+
             command.Code.args.ForEach(x => item.args.Add(x));
+
             return item;
         }
 
         private static void MoveMainFileToFirstElement(List<FileArray> array, string mainFileName)
         {
-            var mainFile = array.FirstOrDefault(x => x.name == mainFileName);
+            FileArray? mainFile = array.FirstOrDefault(x => x.name == mainFileName);
 
             if (mainFile == null)
                 return;
 
             array.Remove(mainFile);
-            array.Insert(0,mainFile);
+            array.Insert(0, mainFile);
         }
     }
 }

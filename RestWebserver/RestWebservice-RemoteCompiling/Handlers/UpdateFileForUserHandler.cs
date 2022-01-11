@@ -12,30 +12,37 @@ namespace RestWebservice_RemoteCompiling.Handlers
 {
     public class UpdateFileForUserHandler : BaseHandler<UpdateFileForProjectCommand, CustomResponse<bool>>
     {
+        private readonly IFileRepository _fileRepository;
         private readonly IUserRepository _userRepository;
-        public UpdateFileForUserHandler(IUserRepository userRepository)
+        public UpdateFileForUserHandler(IUserRepository userRepository, IFileRepository fileRepository)
             : base(userRepository)
         {
             _userRepository = userRepository;
+            _fileRepository = fileRepository;
         }
 
         public override async Task<CustomResponse<bool>> Handle(UpdateFileForProjectCommand request, CancellationToken cancellationToken)
         {
             string ldapIdent = request.Token.Claims.First(x => x.Type == ClaimTypes.Sid).Value;
-            User? ldapUser = _userRepository.GetUserByLdapUid(ldapIdent);
+            User? ldapUser = await _userRepository.GetUserByLdapUid(ldapIdent);
 
-
-            foreach (Project item in ldapUser.Projects.Where(x => x.Id == request.ProjectId))
+            if (ldapUser is null)
             {
-                foreach (File file in item.Files.Where(file => file.Id == request.FileId))
-                {
-                    file.FileName = request.FileName;
-
-                    break;
-                }
+                return CustomResponse.Error<bool>(403);
             }
 
-            _userRepository.UpdateUser(ldapUser);
+            bool isOwner = await _fileRepository.UserIsOwnerOfFile(ldapUser.LdapUid, request.FileId);
+
+            if (!isOwner)
+            {
+                return CustomResponse.Error<bool>(403, "File not found or no access");
+            }
+
+            File? file = await _fileRepository.GetFile(request.FileId);
+
+            file.FileName = request.FileName;
+
+            await _fileRepository.Update(file);
 
             return CustomResponse.Success(true);
         }

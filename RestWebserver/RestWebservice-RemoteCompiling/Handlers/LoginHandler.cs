@@ -34,7 +34,7 @@ namespace RestWebservice_RemoteCompiling.Handlers
                 if (user is null)
                     return CustomResponse.Error<string>(401, "Invalid Credentials");
 
-                User? dbUser = _userRepository.GetUserByLdapUid(user.Uid);
+                User? dbUser = await _userRepository.GetUserByLdapUid(user.Uid);
 
                 if (dbUser is not null)
                     return CustomResponse.Success(_tokenService.BuildToken(dbUser));
@@ -47,7 +47,7 @@ namespace RestWebservice_RemoteCompiling.Handlers
                              UserRole = user.Ou.Contains("Teacher") ? UserRole.Teacher : UserRole.DefaultUser
                          };
 
-                dbUser = _userRepository.AddUser(dbUser);
+                dbUser = await _userRepository.AddUser(dbUser);
 
                 return CustomResponse.Success(_tokenService.BuildToken(dbUser));
             }

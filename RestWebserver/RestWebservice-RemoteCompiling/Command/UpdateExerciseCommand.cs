@@ -22,7 +22,13 @@ namespace RestWebservice_RemoteCompiling.Command
             set;
         }
 
-        public ProjectEntity TemplateProject
+        public ProjectEntity Template
+        {
+            get;
+            set;
+        }
+
+        public string? Taskdefinition
         {
             get;
             set;

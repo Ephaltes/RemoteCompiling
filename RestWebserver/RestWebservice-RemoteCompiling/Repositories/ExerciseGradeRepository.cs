@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+
+using Microsoft.EntityFrameworkCore;
 
 using RestWebservice_RemoteCompiling.Database;
 
@@ -13,31 +16,31 @@ namespace RestWebservice_RemoteCompiling.Repositories
             _context = context;
         }
 
-        public int Add(ExerciseGrade exerciseGrade)
+        public async Task<int> Add(ExerciseGrade exerciseGrade)
         {
-            _context.ExerciseGrades.Add(exerciseGrade);
+            await _context.ExerciseGrades.AddAsync(exerciseGrade);
 
-            return _context.SaveChanges();
+            return await _context.SaveChangesAsync();
         }
-        public int Update(ExerciseGrade exerciseGrade)
+        public async Task<int> Update(ExerciseGrade exerciseGrade)
         {
             _context.ExerciseGrades.Update(exerciseGrade);
 
-            return _context.SaveChanges();
+            return await _context.SaveChangesAsync();
         }
-        public List<ExerciseGrade> Get(string studentId)
+        public async Task<List<ExerciseGrade>> Get(string studentId)
         {
-            return _context.ExerciseGrades.Where(x => x.UserToGrade.LdapUid == studentId).ToList();
-        }
-
-        public ExerciseGrade? Get(string studentId, int exerciseId)
-        {
-            return _context.ExerciseGrades.FirstOrDefault(x => x.Exercise.Id == exerciseId && x.UserToGrade.LdapUid == studentId);
+            return await _context.ExerciseGrades.Where(x => x.UserToGrade.LdapUid == studentId).ToListAsync();
         }
 
-        public ExerciseGrade Get(int exerciseGradeId)
+        public async Task<ExerciseGrade?> Get(string studentId, int exerciseId)
         {
-            return _context.ExerciseGrades.First(x => x.Exercise.Id == exerciseGradeId);
+            return await _context.ExerciseGrades.FirstOrDefaultAsync(x => x.Exercise.Id == exerciseId && x.UserToGrade.LdapUid == studentId);
+        }
+
+        public async Task<ExerciseGrade?> Get(int id)
+        {
+            return await _context.ExerciseGrades.FirstOrDefaultAsync(x => x.Id == id);
         }
     }
 }

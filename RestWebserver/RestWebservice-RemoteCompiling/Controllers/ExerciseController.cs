@@ -22,17 +22,15 @@ namespace RestWebservice_RemoteCompiling.Controllers
     public class ExerciceController : BaseController
     {
         private readonly IMediator _mediator;
-        private readonly ITokenService _tokenService;
 
         public ExerciceController(IMediator mediator, ITokenService tokenService)
             : base(tokenService)
         {
             _mediator = mediator;
-            _tokenService = tokenService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetExercices()
+        public async Task<IActionResult> GetExercises()
         {
             CustomResponse<List<ExerciseEntity>> response = await _mediator.Send(new GetExercisesQuery());
 
@@ -40,7 +38,7 @@ namespace RestWebservice_RemoteCompiling.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetExercices(int id)
+        public async Task<IActionResult> GetExercise(int id)
         {
             GetExerciseQuery query = new GetExerciseQuery
                                      { Id = id };
@@ -79,7 +77,7 @@ namespace RestWebservice_RemoteCompiling.Controllers
             return result.ToResponse();
         }
 
-        [HttpPost("handin")]
+        [HttpPut("handin")]
         public async Task<IActionResult> HandInExercise(HandInCommand command)
         {
             command.Token = GetTokenFromAuthorization();
