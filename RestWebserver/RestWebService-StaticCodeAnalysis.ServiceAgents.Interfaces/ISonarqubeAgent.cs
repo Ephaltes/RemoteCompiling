@@ -7,7 +7,7 @@ using ProjectResponse = RestWebService_StaticCodeAnalysis.ServiceAgents.DTOs.Pro
 
 namespace RestWebService_StaticCodeAnalysis.ServiceAgents.Interfaces
 {
-    public interface IScanAgent
+    public interface ISonarqubeAgent
     {
         public Task<ProjectResponse> CreateProjectAsync(string key, string name);
 

@@ -1,24 +1,23 @@
 ﻿using Newtonsoft.Json;
 
-using RestWebservice_StaticCodeAnalysis.Configuration;
-
 using RestWebService_StaticCodeAnalysis.ServiceAgents.DTOs;
 using RestWebService_StaticCodeAnalysis.ServiceAgents.Interfaces;
 
-using System.Diagnostics;
 using System.Net.Http;
-using System.Net.Http.Json;
-using System.Text;
 using System.Threading.Tasks;
+
+using RestWebservice_StaticCodeAnalysis.Interfaces;
+using System;
 
 namespace RestWebService_StaticCodeAnalysis.ServiceAgents
 {
-    public class SonarqubeAgent : IScanAgent
+    public class SonarqubeAgent : ISonarqubeAgent
     {
         private readonly ISonarqubeConfiguration _configuration;
 
         public SonarqubeAgent(ISonarqubeConfiguration configuration)
         {
+            Console.WriteLine(JsonConvert.SerializeObject(configuration));
             _configuration = configuration;
         }
 

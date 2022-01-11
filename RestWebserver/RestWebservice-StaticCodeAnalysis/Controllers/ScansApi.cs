@@ -5,17 +5,19 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Authorization;
 using Swashbuckle.AspNetCore.Annotations;
 using RestWebservice_StaticCodeAnalysis.DTOs;
-using Newtonsoft.Json;
+
 using RestWebService_StaticCodeAnalysis.Services.Interfaces;
 using AutoMapper;
-using RestWebservice_StaticCodeAnalysis.Configuration;
+
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Threading.Tasks;
+
+using RestWebservice_StaticCodeAnalysis.Interfaces;
+
 using RestWebService_StaticCodeAnalysis.Services.Entities.Enums;
-using RestWebService_StaticCodeAnalysis.Services.Entities;
 using RestWebService_StaticCodeAnalysis.Services.Entities.Exceptions;
 
 namespace RestWebservice_StaticCodeAnalysis.Controllers

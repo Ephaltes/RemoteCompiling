@@ -1,5 +1,4 @@
-﻿using RestWebservice_StaticCodeAnalysis.Configuration;
-using RestWebservice_StaticCodeAnalysis.DTOs;
+﻿using RestWebservice_StaticCodeAnalysis.DTOs;
 
 using RestWebService_StaticCodeAnalysis.DataAccess.Interfaces;
 using RestWebService_StaticCodeAnalysis.ServiceAgents.Interfaces;
@@ -12,7 +11,12 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+
+using RestWebservice_StaticCodeAnalysis.Interfaces;
+
 
 namespace RestWebService_StaticCodeAnalysis.Services
 {
@@ -20,13 +24,13 @@ namespace RestWebService_StaticCodeAnalysis.Services
     {
         private readonly IScanJobRepository _scanJobRepository;
 
-        private readonly IScanAgent _scanAgent;
+        private readonly ISonarqubeAgent _scanAgent;
 
         private readonly ISonarqubeConfiguration _sonarqubeConfiguration;
 
         public ScanService(
             IScanJobRepository scanJobRepository, 
-            IScanAgent scanAgent,
+            ISonarqubeAgent scanAgent,
             ISonarqubeConfiguration configuration)
         {
             _scanJobRepository = scanJobRepository;
@@ -86,8 +90,13 @@ namespace RestWebService_StaticCodeAnalysis.Services
             string projectPath = SetupProjectDirectoryForScan(project.Details.Key, codeDto.Code);
             Directory.SetCurrentDirectory(projectPath);
 
+            RunEcho($"dotnet sonarscanner begin /k:\"{project.Details.Key}\" /d:sonar.host.url=\"{_sonarqubeConfiguration.ServerUrl}\"");
             var cmd1 = RunDotnet($"sonarscanner begin /k:\"{project.Details.Key}\" /d:sonar.host.url=\"{_sonarqubeConfiguration.ServerUrl}\"");
+
+            RunEcho("dotnet build");
             var cmd2 = RunDotnet($"build");
+
+            RunEcho("dotnet sonarscanner end");
             var cmd3 = RunDotnet($"sonarscanner end");
 
             // Clean up
@@ -101,8 +110,31 @@ namespace RestWebService_StaticCodeAnalysis.Services
             // If all command succeded, create scan
             if (cmd1 && cmd2 && cmd3)
             {
+                // Wait a bit for sonarqube to publish it's results
+                Thread.Sleep(5000);
+
                 var response = await _scanAgent.GetProjectIssuesAsync(project);
                 job.Scan = new Scan();
+
+                var issues = response.Issues.Select(i =>
+                {
+                    return new Issue
+                    {
+                        Component = i.Component.Replace($"{project.Details.Key}:", ""),
+                        Message = i.Message,
+                        Severity = Enum.Parse<IssueSeverity>(i.Severity),
+                        Type = Enum.Parse<IssueType>(i.Type),
+                        TextLocation = new TextLocation
+                        {
+                            EndLine = i.TextRange.EndLine,
+                            EndOffset = i.TextRange.EndOffset,
+                            StartLine = i.TextRange.StartLine,
+                            StartOffset = i.TextRange.StartOffset
+                        }
+                    };
+                }).ToList();
+
+                issues.ForEach(i => job.Scan.Issues.Add(i));
                 job.Status = ScanStatus.Available;
             }
             // If a command failed, mark job as failed
@@ -117,8 +149,8 @@ namespace RestWebService_StaticCodeAnalysis.Services
         private static string SetupProjectDirectoryForScan(string projectKey, string code)
         {
             var currentDirectory = Directory.GetCurrentDirectory();
-            var projectListingDirectory = $"{currentDirectory}\\sonar-projects";
-            var projectDirectory = $"{projectListingDirectory}\\{projectKey}";
+            var projectListingDirectory = $"{currentDirectory}/sonar-projects";
+            var projectDirectory = $"{projectListingDirectory}/{projectKey}";
 
             if (!Directory.Exists(projectListingDirectory))
             {
@@ -132,18 +164,29 @@ namespace RestWebService_StaticCodeAnalysis.Services
 
             Directory.SetCurrentDirectory(projectDirectory);
 
+            RunEcho("dotnet new console --force");
             RunDotnet("new console --force");
 
             Directory.SetCurrentDirectory(currentDirectory);
 
-            File.WriteAllText($"{projectDirectory}\\Program.cs", code);
+            File.WriteAllText($"{projectDirectory}/Program.cs", code);
             return projectDirectory;
         }
 
         private static bool RunDotnet(string arguments)
         {
+            return RunProgram("dotnet", arguments);
+        }
+
+        private static bool RunEcho(string arguments)
+        {
+            return RunProgram("echo", arguments);
+        }
+
+        private static bool RunProgram(string fileName, string arguments)
+        {
             var process = new Process();
-            process.StartInfo.FileName = "dotnet";
+            process.StartInfo.FileName = fileName;
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.CreateNoWindow = true;
             process.StartInfo.Arguments = arguments;

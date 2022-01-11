@@ -12,6 +12,8 @@ namespace RestWebservice_StaticCodeAnalysis.MappingProfiles
         {
             CreateMap<Scan, ScanDto>().ReverseMap();
             CreateMap<ScanJob, ScanJobDto>().ReverseMap();
+            CreateMap<Issue, IssueDto>().ReverseMap();
+            CreateMap<TextLocation, TextLocationDto>().ReverseMap();
         }
     }
 }

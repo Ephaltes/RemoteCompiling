@@ -20,7 +20,7 @@
     <ProjectReference Include="..\RestWebservice-StaticCodeAnalysis.DTOs\RestWebservice-StaticCodeAnalysis.DTOs.csproj" />
     <ProjectReference Include="..\RestWebService-StaticCodeAnalysis.ServiceAgents\RestWebService-StaticCodeAnalysis.ServiceAgents.csproj" />
     <ProjectReference Include="..\RestWebService-StaticCodeAnalysis.Services\RestWebService-StaticCodeAnalysis.Services.csproj" />
-    <ProjectReference Include="..\RestWebService-StaticCodeAnalysis.Interfaces\RestWebService-StaticCodeAnalysis.Interfaces.csproj" />
+    <ProjectReference Include="..\RestWebservice_StaticCodeAnalysis.Interfaces\RestWebservice_StaticCodeAnalysis.Interfaces.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -24,6 +24,8 @@ using RestWebService_StaticCodeAnalysis.Services.Interfaces;
 using System;
 using System.Text;
 
+using RestWebservice_StaticCodeAnalysis.Interfaces;
+
 namespace RestWebservice_StaticCodeAnalysis
 {
     /// <summary>
@@ -113,7 +115,7 @@ namespace RestWebservice_StaticCodeAnalysis
             services.AddSingleton<IJwtConfiguration>(jwtConfig);
             services.AddSingleton<ISonarqubeConfiguration>(sonarqubeConfig);
 
-            services.AddTransient<IScanAgent, SonarqubeAgent>();
+            services.AddTransient<ISonarqubeAgent, SonarqubeAgent>();
             services.AddTransient<IScanJobRepository, ScanJobRepository>();
             services.AddTransient<IScanRepository, ScanRepository>();
 

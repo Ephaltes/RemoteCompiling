@@ -21,13 +21,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestWebService-StaticCodeAn
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestWebService-StaticCodeAnalysis.DataAccess", "RestWebService-StaticCodeAnalysis.DataAccess\RestWebService-StaticCodeAnalysis.DataAccess.csproj", "{9B42E5DD-C6A2-4086-84FC-864C5CCFC282}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestWebService-StaticCodeAnalysis.ServiceAgents", "RestWebService-StaticCodeAnalysis.ServiceAgents\RestWebService-StaticCodeAnalysis.ServiceAgents.csproj", "{2C9D0FBC-1416-4F27-BBB7-8142BE8462EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestWebService-StaticCodeAnalysis.ServiceAgents", "RestWebService-StaticCodeAnalysis.ServiceAgents\RestWebService-StaticCodeAnalysis.ServiceAgents.csproj", "{2C9D0FBC-1416-4F27-BBB7-8142BE8462EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestWebService-StaticCodeAnalysis.ServiceAgents.Interfaces", "RestWebService-StaticCodeAnalysis.ServiceAgents.Interfaces\RestWebService-StaticCodeAnalysis.ServiceAgents.Interfaces.csproj", "{D2925B49-1AA6-42AA-A9CA-21E328D0C476}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestWebService-StaticCodeAnalysis.ServiceAgents.Interfaces", "RestWebService-StaticCodeAnalysis.ServiceAgents.Interfaces\RestWebService-StaticCodeAnalysis.ServiceAgents.Interfaces.csproj", "{D2925B49-1AA6-42AA-A9CA-21E328D0C476}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestWebService-StaticCodeAnalysis.ServiceAgents.DTOs", "RestWebService-StaticCodeAnalysis.ServiceAgents.DTOs\RestWebService-StaticCodeAnalysis.ServiceAgents.DTOs.csproj", "{9A621F30-4FE3-4F8F-9173-9CC05D24F0CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestWebService-StaticCodeAnalysis.ServiceAgents.DTOs", "RestWebService-StaticCodeAnalysis.ServiceAgents.DTOs\RestWebService-StaticCodeAnalysis.ServiceAgents.DTOs.csproj", "{9A621F30-4FE3-4F8F-9173-9CC05D24F0CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestWebservice-StaticCodeAnalysis.Interfaces", "RestWebservice-StaticCodeAnalysis.Interfaces\RestWebservice-StaticCodeAnalysis.Interfaces.csproj", "{92EEC1FC-7EA5-4690-8F82-97C1D9F8351A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestWebservice_StaticCodeAnalysis.Interfaces", "RestWebservice_StaticCodeAnalysis.Interfaces\RestWebservice_StaticCodeAnalysis.Interfaces.csproj", "{2E58A736-30AC-4D54-AE95-EEED47280344}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -83,10 +83,10 @@ Global
 		{9A621F30-4FE3-4F8F-9173-9CC05D24F0CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9A621F30-4FE3-4F8F-9173-9CC05D24F0CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9A621F30-4FE3-4F8F-9173-9CC05D24F0CA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{92EEC1FC-7EA5-4690-8F82-97C1D9F8351A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{92EEC1FC-7EA5-4690-8F82-97C1D9F8351A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{92EEC1FC-7EA5-4690-8F82-97C1D9F8351A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{92EEC1FC-7EA5-4690-8F82-97C1D9F8351A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E58A736-30AC-4D54-AE95-EEED47280344}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E58A736-30AC-4D54-AE95-EEED47280344}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E58A736-30AC-4D54-AE95-EEED47280344}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E58A736-30AC-4D54-AE95-EEED47280344}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
