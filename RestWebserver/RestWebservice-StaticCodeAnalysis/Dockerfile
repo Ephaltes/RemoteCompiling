@@ -41,9 +41,15 @@ RUN apt install -y openjdk-11-jdk && \
 ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64/
 RUN export JAVA_HOME
 
-# Install .NET sonarscanner	tool
+# Install .NET-only sonarscanner
 RUN dotnet tool install -g dotnet-sonarscanner
 ENV PATH="${PATH}:/root/.dotnet/tools"
+
+# Install generic sonarscanner
+RUN apt install -y unzip
+RUN wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip
+RUN unzip sonar-scanner-cli-4.6.2.2472-linux.zip
+ENV PATH=${PATH}:/app/sonar-scanner-4.6.2.2472-linux/bin
 
 # Install valgrind
 RUN apt install -y valgrind

@@ -33,7 +33,18 @@ namespace RestWebService_StaticCodeAnalysis.ServiceAgents
             _logger = logger;
         }
 
-        public async Task<List<Services.Entities.Issue>> ScanAsync(CodeDto codeDto)
+        public async Task<List<Services.Entities.Issue>> ScanPythonAsync(CodeDto codeDto)
+        {
+            return await ScanAsync(codeDto, (x, y) => PerformPythonScan(x, y));
+        }
+
+        public async Task<List<Services.Entities.Issue>> ScanDotnetAsync(CodeDto codeDto)
+        {
+
+            return await ScanAsync(codeDto, (x, y) => PerformDotnetScan(x, y));
+        }
+
+        private async Task<List<Services.Entities.Issue>> ScanAsync(CodeDto codeDto, Action<ProjectResponse, CodeDto> scanAction)
         {
             // Setup
             var projectKey = Guid.NewGuid().ToString() + "_" + codeDto.CodeLanguage;
@@ -41,7 +52,7 @@ namespace RestWebService_StaticCodeAnalysis.ServiceAgents
             _logger.Information($"Creating project with key {projectKey}");
             var project = await CreateProjectAsync(projectKey, projectKey);
 
-            PerformScan(project, codeDto);
+            scanAction.Invoke(project, codeDto);
 
             // Wait a bit for sonarqube to publish it's results
             Thread.Sleep(5000);
@@ -71,6 +82,7 @@ namespace RestWebService_StaticCodeAnalysis.ServiceAgents
             _logger.Information($"Found {issues.Count} issues for project");
             return issues;
         }
+        
 
         private async Task<ProjectResponse> CreateProjectAsync(string key, string name)
         {
@@ -92,7 +104,7 @@ namespace RestWebService_StaticCodeAnalysis.ServiceAgents
             return issuesDto;
         }
 
-        private void PerformScan(ProjectResponse project, CodeDto codeDto)
+        private void PerformDotnetScan(ProjectResponse project, CodeDto codeDto)
         {
             // Perform scan
             var rootDirectory = Directory.GetCurrentDirectory();
@@ -105,19 +117,62 @@ namespace RestWebService_StaticCodeAnalysis.ServiceAgents
 
             // Clean up
             Directory.SetCurrentDirectory(rootDirectory);
-            CleanupDotnetProject(projectDirectory);
+            CleanupProject(projectDirectory);
 
             // Check for errors
             if (!beginScanCmd || !buildCmd || !endScanCmd)
             {
-                throw new ScanFailedException("Failed to perform sonarqube scan commands");
+                throw new ScanFailedException("Failed to perform sonarqube dotnet scan commands");
             }
+        }
+
+        private void PerformPythonScan(ProjectResponse project, CodeDto codeDto)
+        {
+            // Perform scan
+            var rootDirectory = Directory.GetCurrentDirectory();
+            string projectDirectory = CreatePythonProject(project.Details.Key, codeDto.Code);
+
+            _logger.Information($"Set directory to {projectDirectory}");
+            Directory.SetCurrentDirectory(projectDirectory);
+
+            var scanCmd = RunProgram("sonar-scanner", $"-Dsonar.projectKey={project.Details.Key} -Dsonar.host.url={_configuration.ServerUrl}");
+
+            // Clean up
+            _logger.Information($"Set directory to {rootDirectory}");
+            Directory.SetCurrentDirectory(rootDirectory);
+            CleanupProject(projectDirectory);
+
+            // Check for errors
+            if (!scanCmd)
+            {
+                throw new ScanFailedException("Failed to perform sonarqube python scan commands");
+            }
+        }
+
+        private string CreatePythonProject(string projectName, string code)
+        {
+            var currentDirectory = Directory.GetCurrentDirectory();
+            var projectListingDirectory = $"{currentDirectory}/python-projects";
+            var projectDirectory = $"{projectListingDirectory}/{projectName}";
+
+            if (!Directory.Exists(projectListingDirectory))
+            {
+                Directory.CreateDirectory(projectListingDirectory);
+            }
+
+            if (!Directory.Exists(projectDirectory))
+            {
+                Directory.CreateDirectory(projectDirectory);
+            }
+
+            File.WriteAllText($"{projectDirectory}/Program.py", code);
+            return projectDirectory;
         }
 
         private string CreateDotnetProject(string projectName, string code)
         {
             var currentDirectory = Directory.GetCurrentDirectory();
-            var projectListingDirectory = $"{currentDirectory}/sonarqube-projects";
+            var projectListingDirectory = $"{currentDirectory}/dotnet-projects";
             var projectDirectory = $"{projectListingDirectory}/{projectName}";
 
             if (!Directory.Exists(projectListingDirectory))
@@ -140,7 +195,7 @@ namespace RestWebService_StaticCodeAnalysis.ServiceAgents
             return projectDirectory;
         }
 
-        private void CleanupDotnetProject(string projectDirectory)
+        private void CleanupProject(string projectDirectory)
         {
             if (Directory.Exists(projectDirectory))
             {
@@ -155,13 +210,14 @@ namespace RestWebService_StaticCodeAnalysis.ServiceAgents
 
         private bool RunProgram(string fileName, params string[] arguments)
         {
-            _logger.Information($"{fileName} {string.Join(' ', arguments)}");
+            string argumentString = string.Join(' ', arguments);
+            _logger.Information($"{fileName} {argumentString}");
 
             var process = new Process();
             process.StartInfo.FileName = fileName;
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.CreateNoWindow = true;
-            process.StartInfo.Arguments = string.Join(' ', arguments);
+            process.StartInfo.Arguments = argumentString;
             process.Start();
             process.WaitForExit();
             var result = process.ExitCode;

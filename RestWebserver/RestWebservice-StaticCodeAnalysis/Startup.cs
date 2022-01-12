@@ -126,6 +126,7 @@ namespace RestWebservice_StaticCodeAnalysis
             services.AddTransient<ISonarqubeAgent, SonarqubeAgent>();
             services.AddTransient<IValgrindAgent, ValgrindAgent>();
             services.AddTransient<IValgrindReportParser, ValgrindXmlReportParser>();
+
             services.AddTransient<IScanJobRepository, ScanJobRepository>();
             services.AddTransient<IScanRepository, ScanRepository>();
 

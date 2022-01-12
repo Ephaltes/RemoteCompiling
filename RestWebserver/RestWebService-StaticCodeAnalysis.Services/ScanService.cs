@@ -87,15 +87,20 @@ namespace RestWebService_StaticCodeAnalysis.Services
                     case "dotnet": 
                     case "csharp":
                     case "mono":
-                        issues = await _sonarqubeAgent.ScanAsync(codeDto);
+                        issues = await _sonarqubeAgent.ScanDotnetAsync(codeDto);
                         break;
                     case "gcc":
                     case "c":
-                        issues = await _valgrindAgent.ScanAsync(codeDto, ValgrindCompiler.GCC);
+                        issues = await _valgrindAgent.ScanCAsync(codeDto);
                         break;
                     case "g++":
                     case "c++":
-                        issues = await _valgrindAgent.ScanAsync(codeDto, ValgrindCompiler.GPP);
+                    case "cpp":
+                        issues = await _valgrindAgent.ScanCppAsync(codeDto);
+                        break;
+                    case "python":
+                    case "py":
+                        issues = await _sonarqubeAgent.ScanPythonAsync(codeDto);
                         break;
                     default:
                         throw new LanguageNotSupportedException($"Language {codeDto.CodeLanguage} is not supported");

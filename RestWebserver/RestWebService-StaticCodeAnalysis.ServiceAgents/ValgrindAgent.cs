@@ -25,24 +25,14 @@ namespace RestWebService_StaticCodeAnalysis.ServiceAgents
 
         private readonly ILogger _logger;
 
-        public ValgrindAgent(IValgrindConfiguration config, IValgrindReportParser reportParser ILogger logger)
+        public ValgrindAgent(IValgrindConfiguration config, IValgrindReportParser reportParser, ILogger logger)
         {
             _config = config;
             _reportParser = reportParser;
             _logger = logger;
         }
 
-        public async Task<List<Services.Entities.Issue>> ScanAsync(CodeDto codeDto, ValgrindCompiler compiler)
-        {
-            return compiler switch
-            {
-                ValgrindCompiler.GCC => await ScanCAsync(codeDto),
-                ValgrindCompiler.GPP => await ScanCppAsync(codeDto),
-                _ => throw new ScanFailedException("Other language than c and c++ found for valgrind scan")
-            };
-        }
-
-        private async Task<List<Services.Entities.Issue>> ScanCAsync(CodeDto codeDto)
+        public async Task<List<Services.Entities.Issue>> ScanCAsync(CodeDto codeDto)
         {
             var projectDirectory = CreateCProject(codeDto);
             string cFile = $"{projectDirectory}/main.c";
@@ -75,7 +65,7 @@ namespace RestWebService_StaticCodeAnalysis.ServiceAgents
             return issues;
         }
 
-        private async Task<List<Services.Entities.Issue>> ScanCppAsync(CodeDto codeDto)
+        public async Task<List<Services.Entities.Issue>> ScanCppAsync(CodeDto codeDto)
         {
             var projectDirectory = CreateCppProject(codeDto);
             string cFile = $"{projectDirectory}/main.cpp";

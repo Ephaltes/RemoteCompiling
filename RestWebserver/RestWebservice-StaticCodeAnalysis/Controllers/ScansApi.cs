@@ -84,7 +84,12 @@ namespace RestWebservice_StaticCodeAnalysis.Controllers
                 "csharp",
                 "mono",
                 "gcc",
-                "c"
+                "c",
+                "g++",
+                "c++",
+                "cpp",
+                "python",
+                "py"
             };
 
             if (!supportedLanguages.Contains(body.CodeLanguage.ToLower()))
