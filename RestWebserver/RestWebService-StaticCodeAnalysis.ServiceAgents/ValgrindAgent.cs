@@ -58,7 +58,7 @@ namespace RestWebService_StaticCodeAnalysis.ServiceAgents
             var xmlDocument = new XmlDocument();
             xmlDocument.Load(valgrindReportFile);
 
-            var issues = _reportParser.ReadIssues(xmlDocument);
+            var issues = _reportParser.ReadIssues(xmlDocument, "main.c");
 
             CleanupProject(projectDirectory);
 
@@ -91,7 +91,7 @@ namespace RestWebService_StaticCodeAnalysis.ServiceAgents
             var xmlDocument = new XmlDocument();
             xmlDocument.Load(valgrindReportFile);
 
-            var issues = _reportParser.ReadIssues(xmlDocument);
+            var issues = _reportParser.ReadIssues(xmlDocument, "main.cpp");
 
             CleanupProject(projectDirectory);
 

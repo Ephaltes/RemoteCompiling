@@ -9,6 +9,8 @@ namespace RestWebService_StaticCodeAnalysis.ServiceAgents
 {
     public class ValgrindXmlReportParser : IValgrindReportParser
     {
+        private string MainFile;
+
         private readonly ILogger _logger;
 
         public ValgrindXmlReportParser(ILogger logger)
@@ -16,8 +18,10 @@ namespace RestWebService_StaticCodeAnalysis.ServiceAgents
             _logger = logger;
         }
 
-        public List<Services.Entities.Issue> ReadIssues(XmlDocument document)
+        public List<Services.Entities.Issue> ReadIssues(XmlDocument document, string mainFile)
         {
+            MainFile = mainFile;
+
             var issues = new List<Services.Entities.Issue>();
             var valgrindOutput = document.LastChild;
 
@@ -64,7 +68,7 @@ namespace RestWebService_StaticCodeAnalysis.ServiceAgents
 
             return new Services.Entities.Issue
             {
-                Component = "main.c",
+                Component = MainFile,
                 Message = message,
                 Severity = severity,
                 TextLocation = new Services.Entities.TextLocation
@@ -122,7 +126,7 @@ namespace RestWebService_StaticCodeAnalysis.ServiceAgents
 
             return new Services.Entities.Issue
             {
-                Component = "main.c",
+                Component = MainFile,
                 Message = message,
                 Severity = severity,
                 TextLocation = new Services.Entities.TextLocation
@@ -156,9 +160,9 @@ namespace RestWebService_StaticCodeAnalysis.ServiceAgents
                 {
                     _logger.Information($"Reading sub-frame node {frameNode.Name}");
 
-                    if (frameNode.Name == "file" && frameNode.InnerText == "main.c")
+                    if (frameNode.Name == "file" && frameNode.InnerText == MainFile)
                     {
-                        _logger.Information("Found frame node for main.c");
+                        _logger.Information($"Found frame node for {MainFile}");
                         isFromInternalFile = true;
                     }
 
