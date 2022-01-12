@@ -2,7 +2,6 @@ version: "3.9"
 services:
   rest-api:
     image: rest-api
-    container_name: rest-api
     build:
       context: RestWebservice-RemoteCompiling
       dockerfile: Dockerfile
@@ -14,7 +13,6 @@ services:
       - ASPNETCORE_URLS=http://+:80
   code-analysis-api:
     image: code-analysis-api
-    container_name: code-analysis-api
     build:
       context: .
       dockerfile: RestWebservice-StaticCodeAnalysis/Dockerfile
@@ -26,9 +24,17 @@ services:
       - ASPNETCORE_URLS=http://+:80
       - Sonarqube__ServerUrl=http://sonarqube:9000
       - Valgrind__Flags=--leak-check=full --show-leak-kinds=all --track-origins=yes
+  db:
+    image: postgres
+    container_name: remotecompiler_postgres
+    restart: unless-stopped
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_PASSWORD=remote_password
+      - POSTGRES_USER=remote_user
+      - POSTGRES_DB=remote
   sonarqube:
-    container_name: sonarqube
     image: sonarqube
-    build: .
     ports:
       - "9001:9000"
