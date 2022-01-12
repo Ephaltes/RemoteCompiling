@@ -120,7 +120,7 @@ namespace RestWebservice_StaticCodeAnalysis.Controllers
         /// <param name="scanId">Id of the scan to retrieve</param>
         [HttpDelete]
         [Route("/scans/{scanId:int}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [SwaggerOperation("DeleteScanJob")]
         [SwaggerResponse(statusCode: 204, description: "Scan job was deleted")]
         [SwaggerResponse(statusCode: 401, description: "Token is missing or has expired or user is not permitted to see this scan job")]
@@ -143,7 +143,7 @@ namespace RestWebservice_StaticCodeAnalysis.Controllers
         /// </summary>
         [HttpGet]
         [Route("/scans")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [SwaggerOperation("GetAllScanJobs")]
         [SwaggerResponse(statusCode: 200, type: typeof(List<ScanJobDto>), description: "List of all scan jobs")]
         [SwaggerResponse(statusCode: 401, description: "Token is missing or has expired")]
@@ -160,7 +160,7 @@ namespace RestWebservice_StaticCodeAnalysis.Controllers
         /// <param name="scanId">Id of the scan to retrieve</param>
         [HttpGet]
         [Route("/scans/{scanId:int}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [SwaggerOperation("GetScanJob")]
         [SwaggerResponse(statusCode: 200, type: typeof(ScanJobDto), description: "Scan job")]
         [SwaggerResponse(statusCode: 401, description: "Token is missing or has expired or user is not permitted to see this scan job")]
@@ -186,7 +186,7 @@ namespace RestWebservice_StaticCodeAnalysis.Controllers
         /// <param name="scanId">Id of the scan to retrieve</param>
         [HttpGet]
         [Route("/scans/{scanId:int}/results")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [SwaggerOperation("GetScanResults")]
         [SwaggerResponse(statusCode: 200, type: typeof(ScanDto), description: "Results of the scan")]
         [SwaggerResponse(statusCode: 401, description: "Token is missing or has expired or user is not permitted to see this scan job")]
