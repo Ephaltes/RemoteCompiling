@@ -38,7 +38,7 @@ namespace RestWebservice_RemoteCompiling.Database
             set;
         }
 
-        public DbSet<ExerciseFile> ExerciseFiles
+        public DbSet<ExerciseFile?> ExerciseFiles
         {
             get;
             set;
