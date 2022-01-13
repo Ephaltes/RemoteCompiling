@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Serilog" Version="2.10.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\RestWebService-StaticCodeAnalysis.DataAccess.Interfaces\RestWebService-StaticCodeAnalysis.DataAccess.Interfaces.csproj" />
     <ProjectReference Include="..\RestWebService-StaticCodeAnalysis.Entities\RestWebService-StaticCodeAnalysis.Services.Entities.csproj" />
     <ProjectReference Include="..\RestWebService-StaticCodeAnalysis.ServiceAgents.Interfaces\RestWebService-StaticCodeAnalysis.ServiceAgents.Interfaces.csproj" />

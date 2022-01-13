@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace RestWebService_StaticCodeAnalysis.ServiceAgents.Interfaces
 {
-    public interface ISonarqubeAgent
+    public interface IValgrindAgent
     {
-        public Task<List<Services.Entities.Issue>> ScanDotnetAsync(CodeDto codeDto);
+        public Task<List<Services.Entities.Issue>> ScanCAsync(CodeDto codeDto);
 
-        public Task<List<Services.Entities.Issue>> ScanPythonAsync(CodeDto codeDto);
+        public Task<List<Services.Entities.Issue>> ScanCppAsync(CodeDto codeDto);
     }
 }

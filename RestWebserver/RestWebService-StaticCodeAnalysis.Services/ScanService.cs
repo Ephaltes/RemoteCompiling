@@ -6,17 +6,10 @@ using RestWebService_StaticCodeAnalysis.Services.Entities;
 using RestWebService_StaticCodeAnalysis.Services.Entities.Enums;
 using RestWebService_StaticCodeAnalysis.Services.Entities.Exceptions;
 using RestWebService_StaticCodeAnalysis.Services.Interfaces;
-
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-
-using RestWebservice_StaticCodeAnalysis.Interfaces;
-
+using Serilog;
+using System;
 
 namespace RestWebService_StaticCodeAnalysis.Services
 {
@@ -24,18 +17,22 @@ namespace RestWebService_StaticCodeAnalysis.Services
     {
         private readonly IScanJobRepository _scanJobRepository;
 
-        private readonly ISonarqubeAgent _scanAgent;
+        private readonly ISonarqubeAgent _sonarqubeAgent;
 
-        private readonly ISonarqubeConfiguration _sonarqubeConfiguration;
+        private readonly IValgrindAgent _valgrindAgent;
+
+        private readonly ILogger _logger;
 
         public ScanService(
             IScanJobRepository scanJobRepository, 
-            ISonarqubeAgent scanAgent,
-            ISonarqubeConfiguration configuration)
+            ISonarqubeAgent sonarqubeAgent,
+            IValgrindAgent valgrindAgent,
+            ILogger logger)
         {
             _scanJobRepository = scanJobRepository;
-            _scanAgent = scanAgent;
-            _sonarqubeConfiguration = configuration;
+            _sonarqubeAgent = sonarqubeAgent;
+            _valgrindAgent = valgrindAgent;
+            _logger = logger;
         }
 
         public async Task<List<ScanJob>> GetAllScanJobsAsync()
@@ -81,120 +78,47 @@ namespace RestWebService_StaticCodeAnalysis.Services
 
         public async Task StartScanAsync(CodeDto codeDto, ScanJob job)
         {
-            // Setup
-            var intialDirectory = Directory.GetCurrentDirectory();
-            var projectKey = Guid.NewGuid().ToString() + "_" + codeDto.CodeLanguage;
-            var project = await _scanAgent.CreateProjectAsync(projectKey, projectKey);
-
-            // Perform scan
-            string projectPath = SetupProjectDirectoryForScan(project.Details.Key, codeDto.Code);
-            Directory.SetCurrentDirectory(projectPath);
-
-            RunEcho($"dotnet sonarscanner begin /k:\"{project.Details.Key}\" /d:sonar.host.url=\"{_sonarqubeConfiguration.ServerUrl}\"");
-            var cmd1 = RunDotnet($"sonarscanner begin /k:\"{project.Details.Key}\" /d:sonar.host.url=\"{_sonarqubeConfiguration.ServerUrl}\"");
-
-            RunEcho("dotnet build");
-            var cmd2 = RunDotnet($"build");
-
-            RunEcho("dotnet sonarscanner end");
-            var cmd3 = RunDotnet($"sonarscanner end");
-
-            // Clean up
-            Directory.SetCurrentDirectory(intialDirectory);
-
-            if (Directory.Exists(projectPath))
+            try
             {
-                Directory.Delete(projectPath, true);
-            }
+                var issues = new List<Issue>();
 
-            // If all command succeded, create scan
-            if (cmd1 && cmd2 && cmd3)
-            {
-                // Wait a bit for sonarqube to publish it's results
-                Thread.Sleep(5000);
-
-                var response = await _scanAgent.GetProjectIssuesAsync(project);
-                job.Scan = new Scan();
-
-                var issues = response.Issues.Select(i =>
+                switch (codeDto.CodeLanguage.ToLower())
                 {
-                    return new Issue
-                    {
-                        Component = i.Component.Replace($"{project.Details.Key}:", ""),
-                        Message = i.Message,
-                        Severity = Enum.Parse<IssueSeverity>(i.Severity),
-                        Type = Enum.Parse<IssueType>(i.Type),
-                        TextLocation = new TextLocation
-                        {
-                            EndLine = i.TextRange.EndLine,
-                            EndOffset = i.TextRange.EndOffset,
-                            StartLine = i.TextRange.StartLine,
-                            StartOffset = i.TextRange.StartOffset
-                        }
-                    };
-                }).ToList();
+                    case "dotnet": 
+                    case "csharp":
+                    case "mono":
+                        issues = await _sonarqubeAgent.ScanDotnetAsync(codeDto);
+                        break;
+                    case "gcc":
+                    case "c":
+                        issues = await _valgrindAgent.ScanCAsync(codeDto);
+                        break;
+                    case "g++":
+                    case "c++":
+                    case "cpp":
+                        issues = await _valgrindAgent.ScanCppAsync(codeDto);
+                        break;
+                    case "python":
+                    case "py":
+                        issues = await _sonarqubeAgent.ScanPythonAsync(codeDto);
+                        break;
+                    default:
+                        throw new LanguageNotSupportedException($"Language {codeDto.CodeLanguage} is not supported");
+                }
 
+                job.Scan = new Scan();
                 issues.ForEach(i => job.Scan.Issues.Add(i));
                 job.Status = ScanStatus.Available;
             }
-            // If a command failed, mark job as failed
-            else
+            catch (Exception ex)
             {
+                _logger.Error(ex, ex.Message);
                 job.Status = ScanStatus.Failed;
             }
 
             await _scanJobRepository.UpdateAsync(job);
         }
 
-        private static string SetupProjectDirectoryForScan(string projectKey, string code)
-        {
-            var currentDirectory = Directory.GetCurrentDirectory();
-            var projectListingDirectory = $"{currentDirectory}/sonar-projects";
-            var projectDirectory = $"{projectListingDirectory}/{projectKey}";
-
-            if (!Directory.Exists(projectListingDirectory))
-            {
-                Directory.CreateDirectory(projectListingDirectory);
-            }
-
-            if (!Directory.Exists(projectDirectory))
-            {
-                Directory.CreateDirectory(projectDirectory);
-            }
-
-            Directory.SetCurrentDirectory(projectDirectory);
-
-            RunEcho("dotnet new console --force");
-            RunDotnet("new console --force");
-
-            Directory.SetCurrentDirectory(currentDirectory);
-
-            File.WriteAllText($"{projectDirectory}/Program.cs", code);
-            return projectDirectory;
-        }
-
-        private static bool RunDotnet(string arguments)
-        {
-            return RunProgram("dotnet", arguments);
-        }
-
-        private static bool RunEcho(string arguments)
-        {
-            return RunProgram("echo", arguments);
-        }
-
-        private static bool RunProgram(string fileName, string arguments)
-        {
-            var process = new Process();
-            process.StartInfo.FileName = fileName;
-            process.StartInfo.UseShellExecute = false;
-            process.StartInfo.CreateNoWindow = true;
-            process.StartInfo.Arguments = arguments;
-            process.Start();
-            process.WaitForExit();
-            var result = process.ExitCode;
-            process.Close();
-            return result == 0;
-        }
+        
     }
 }
