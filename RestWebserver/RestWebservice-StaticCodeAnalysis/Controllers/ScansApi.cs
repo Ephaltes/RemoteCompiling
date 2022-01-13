@@ -19,6 +19,7 @@ using RestWebservice_StaticCodeAnalysis.Interfaces;
 
 using RestWebService_StaticCodeAnalysis.Services.Entities.Enums;
 using RestWebService_StaticCodeAnalysis.Services.Entities.Exceptions;
+using Microsoft.AspNetCore.Cors;
 
 namespace RestWebservice_StaticCodeAnalysis.Controllers
 {
@@ -47,6 +48,7 @@ namespace RestWebservice_StaticCodeAnalysis.Controllers
         /// <param name="body">Code to perform the analysis on</param>
         [HttpGet]
         [Route("/token")]
+        [EnableCors("cors-allow-any")]
         [SwaggerOperation("GetAccessToken")]
         [SwaggerResponse(statusCode: 200, type: typeof(string), description: "A access token to use")]
         public virtual IActionResult GetAccessToken()
@@ -71,6 +73,7 @@ namespace RestWebservice_StaticCodeAnalysis.Controllers
         /// <param name="body">Code to perform the analysis on</param>
         [HttpPost]
         [Route("/scans")]
+        [EnableCors("cors-allow-any")]
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [SwaggerOperation("CreateScanJob")]
         [SwaggerResponse(statusCode: 200, type: typeof(ScanJobDto), description: "A job that corresponds to the code analysis")]
@@ -120,6 +123,7 @@ namespace RestWebservice_StaticCodeAnalysis.Controllers
         /// <param name="scanId">Id of the scan to retrieve</param>
         [HttpDelete]
         [Route("/scans/{scanId:int}")]
+        [EnableCors("cors-allow-any")]
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [SwaggerOperation("DeleteScanJob")]
         [SwaggerResponse(statusCode: 204, description: "Scan job was deleted")]
@@ -143,6 +147,7 @@ namespace RestWebservice_StaticCodeAnalysis.Controllers
         /// </summary>
         [HttpGet]
         [Route("/scans")]
+        [EnableCors("cors-allow-any")]
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [SwaggerOperation("GetAllScanJobs")]
         [SwaggerResponse(statusCode: 200, type: typeof(List<ScanJobDto>), description: "List of all scan jobs")]
@@ -160,6 +165,7 @@ namespace RestWebservice_StaticCodeAnalysis.Controllers
         /// <param name="scanId">Id of the scan to retrieve</param>
         [HttpGet]
         [Route("/scans/{scanId:int}")]
+        [EnableCors("cors-allow-any")]
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [SwaggerOperation("GetScanJob")]
         [SwaggerResponse(statusCode: 200, type: typeof(ScanJobDto), description: "Scan job")]
@@ -186,6 +192,7 @@ namespace RestWebservice_StaticCodeAnalysis.Controllers
         /// <param name="scanId">Id of the scan to retrieve</param>
         [HttpGet]
         [Route("/scans/{scanId:int}/results")]
+        [EnableCors("cors-allow-any")]
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [SwaggerOperation("GetScanResults")]
         [SwaggerResponse(statusCode: 200, type: typeof(ScanDto), description: "Results of the scan")]
