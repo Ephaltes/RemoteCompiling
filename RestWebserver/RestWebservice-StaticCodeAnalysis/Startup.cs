@@ -138,9 +138,10 @@ namespace RestWebservice_StaticCodeAnalysis
             {
                 options.AddPolicy(CorsAllowAny, x =>
                 {
-                    x.AllowAnyOrigin();
-                    x.AllowAnyMethod();
-                    x.AllowAnyHeader();
+                    x
+                    .AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
                 });
             });
 
@@ -202,6 +203,8 @@ namespace RestWebservice_StaticCodeAnalysis
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(CorsAllowAny);
 
             app.UseAuthorization();
 
