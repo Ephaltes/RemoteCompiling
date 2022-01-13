@@ -40,6 +40,8 @@ namespace RestWebservice_StaticCodeAnalysis
         /// </summary>
         public IConfiguration Configuration { get; }
 
+        private const string CorsAllowAny = "cors-allow-any";
+
         /// <summary>
         /// Startup constructor
         /// </summary>
@@ -132,6 +134,16 @@ namespace RestWebservice_StaticCodeAnalysis
 
             services.AddTransient<IScanService, ScanService>();
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy(CorsAllowAny, x =>
+                {
+                    x.AllowAnyOrigin();
+                    x.AllowAnyMethod();
+                    x.AllowAnyHeader();
+                });
+            });
+
             // Add jwt to swagger as authentiation scheme
             var securityScheme = new OpenApiSecurityScheme
             {
@@ -190,6 +202,8 @@ namespace RestWebservice_StaticCodeAnalysis
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(CorsAllowAny);
 
             app.UseAuthorization();
 
