@@ -29,7 +29,7 @@ namespace RestWebservice_RemoteCompiling.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("Excercises")]
+        [HttpGet("Exercises")]
         public async Task<IActionResult> GetExercises()
         {
             CustomResponse<List<ExerciseEntity>> response = await _mediator.Send(new GetExercisesQuery());
@@ -47,7 +47,7 @@ namespace RestWebservice_RemoteCompiling.Controllers
             return response.ToResponse();
         }
 
-        [HttpGet("ExcercisesWithHandIn")]
+        [HttpGet("ExercisesWithHandIn")]
         public async Task<IActionResult> GetExercisesHandIn()
         {
             CustomResponse<List<ExerciseEntity>> response = await _mediator.Send(new GetExercisesHandInQuery()
@@ -58,7 +58,7 @@ namespace RestWebservice_RemoteCompiling.Controllers
             return response.ToResponse();
         }
 
-        [HttpGet("ExcercisesWithHandIn/{id}")]
+        [HttpGet("ExercisesWithHandIn/{id}")]
         public async Task<IActionResult> GetExerciseHandIn(int id)
         {
             GetExerciseHandInQuery query = new GetExerciseHandInQuery
