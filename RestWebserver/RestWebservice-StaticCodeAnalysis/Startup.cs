@@ -203,6 +203,8 @@ namespace RestWebservice_StaticCodeAnalysis
 
             app.UseRouting();
 
+            app.UseCors(CorsAllowAny);
+
             app.UseAuthorization();
 
             app.UseSwagger();
