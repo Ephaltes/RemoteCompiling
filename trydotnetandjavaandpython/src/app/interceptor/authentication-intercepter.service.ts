@@ -22,8 +22,8 @@ export class AuthInterceptor implements HttpInterceptor {
         next: HttpHandler): Observable<HttpEvent<any>> {
 
         const idToken = localStorage.getItem("id_token");
-
-        if (idToken) {
+        //console.log(req.url.includes('5001'))
+        if (idToken && req.url.includes('https://localhost:5001')) {
             const cloned = req.clone({
                 headers: req.headers.set("Authorization",
                     "Bearer " + idToken)

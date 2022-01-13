@@ -27,7 +27,7 @@ export class ExercisePlatformCorrectComponent implements OnInit {
     this.selectedItem = row;
   }
   refreshData(handIn: HandInNode) {
-    this.exerciseService.getExercisesById(this.selectedItem.id).subscribe(res => { this.selectedItem = res.data; this.selectedStudent = res.data.handIns.find(c => c.id == handIn.id); });
+    this.exerciseService.getExercisesWithHandInById(this.selectedItem.id).subscribe(res => { this.selectedItem = res.data; this.selectedStudent = res.data.handIns.find(c => c.id == handIn.id); });
   }
   openCodingApp(row: HandInNode) {
     this.studentSelected = true;

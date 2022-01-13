@@ -392,29 +392,19 @@ export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
   runStaticCode() {
-    var scanbody: Scan = {
-      total: 1, issues: [{
-        type: 1,
-        severity: 1,
-        component: "test",
-        message: "test",
-        textLocation: {
-          startLine: 1,
-          endLine: 1,
-          startOffset: 1,
-          endOffset: 1
-        }
-      }]
-    }
     var issueText = "";
     this.isLoading = true;
     this.staticCodeService.postScan(this.selectedModel.value, this.selectedModel.language).subscribe(res => {
-      this.staticCodeService.getScanResult(res.id).subscribe(res => { console.log(res) });
-    }, err => {
-      scanbody.issues.forEach(issues => {
-        issueText = issueText + " Errortext: " + issues.message + "\r\n";
+      this.output = "Loading . . .";
+      this.staticCodeService.getScanResult(res.id).subscribe(res => {
+        res.issues.forEach(issues => {
+          issueText = issueText + " [Type] " + issues.type + "\r\n Message: " + issues.message + "\r\n [Component] " + issues.component + "\r\n [Zeile] "+issues.textLocation.startLine+"-"+issues.textLocation.endLine+ "\r\n\r\n";
+        });
+        this.output = "Issues: " + res.total + "\r\n" + issueText;
+        this.isLoading = false;
       });
-      this.output = "Issues: " + scanbody.total + "\r\n" + issueText;
+    }, err => {
+      this.output = err;
       this.isLoading = false;
     })
   }

@@ -32,7 +32,7 @@ export class ExercisePlatformExerciseOverviewTableComponent implements OnInit {
     this.refreshData();
   }
   refreshData(): void {
-    this.ExerciseService.getExercises().subscribe(res => this.dataSource.data = res.data.sort((r, o) => r.id - o.id));
+    this.ExerciseService.getExercisesWithHandIn().subscribe(res => this.dataSource.data = res.data.sort((r, o) => r.id - o.id));
   }
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;

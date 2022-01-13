@@ -121,7 +121,7 @@ export class ExerciseCodeEditorComponent implements OnInit {
     dialogRef.afterClosed().subscribe(() => { dialogRef.componentInstance.validData ? this.refreshData() : false })
   }
   refreshData() {
-    this.exerciseService.getExercisesById(this.currentExercise.id).subscribe(res => {
+    this.exerciseService.getExercisesWithHandInById(this.currentExercise.id).subscribe(res => {
       this.currentExercise = res.data;
     });
 

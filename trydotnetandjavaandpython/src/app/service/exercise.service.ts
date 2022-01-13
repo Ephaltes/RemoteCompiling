@@ -24,10 +24,16 @@ export class ExerciseService {
 
     constructor(private http: HttpClient) { }
     public getExercises() {
-        return this.http.get<ResponseBody>(globalVar.apiURL + "/api/exercises");
+        return this.http.get<ResponseBody>(globalVar.apiURL + "/api/exercises/Exercises");
     }
     public getExercisesById(projectId: number) {
-        return this.http.get<ResponseBodySingle>(globalVar.apiURL + "/api/exercises/" + projectId);
+        return this.http.get<ResponseBodySingle>(globalVar.apiURL + "/api/exercises/Exercises/" + projectId);
+    }
+    public getExercisesWithHandIn() {
+        return this.http.get<ResponseBody>(globalVar.apiURL + "/api/exercises/ExercisesWithHandIn");
+    }
+    public getExercisesWithHandInById(projectId: number) {
+        return this.http.get<ResponseBodySingle>(globalVar.apiURL + "/api/exercises/ExercisesWithHandIn/" + projectId);
     }
     public postExercises(name: string, description: string, projectType: FileNodeType) {
         return this.http.post(globalVar.apiURL + "/api/exercises", { name: name, description: description, taskDefinition: "", templateProjectType: convertFileTypeToNumber(projectType) })
