@@ -5,17 +5,19 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Authorization;
 using Swashbuckle.AspNetCore.Annotations;
 using RestWebservice_StaticCodeAnalysis.DTOs;
-using Newtonsoft.Json;
+
 using RestWebService_StaticCodeAnalysis.Services.Interfaces;
 using AutoMapper;
-using RestWebservice_StaticCodeAnalysis.Configuration;
+
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Threading.Tasks;
+
+using RestWebservice_StaticCodeAnalysis.Interfaces;
+
 using RestWebService_StaticCodeAnalysis.Services.Entities.Enums;
-using RestWebService_StaticCodeAnalysis.Services.Entities;
 using RestWebService_StaticCodeAnalysis.Services.Entities.Exceptions;
 
 namespace RestWebservice_StaticCodeAnalysis.Controllers
@@ -76,9 +78,23 @@ namespace RestWebservice_StaticCodeAnalysis.Controllers
         [SwaggerResponse(statusCode: 401, description: "Token is missing or has expired")]
         public virtual async Task<IActionResult> CreateScanJob([FromBody] CodeDto body)
         {
-            if (body.CodeLanguage != "dotnet")
+            var supportedLanguages = new List<string>
             {
-                return BadRequest("Language not supported. Only 'dotnet' is supported at the moment.");
+                "dotnet",
+                "csharp",
+                "mono",
+                "gcc",
+                "c",
+                "g++",
+                "c++",
+                "cpp",
+                "python",
+                "py"
+            };
+
+            if (!supportedLanguages.Contains(body.CodeLanguage.ToLower()))
+            {
+                return BadRequest($"Language not supported. Only {string.Join(", ", supportedLanguages)} are supported.");
             }
 
             var scanJob = await _scanService.CreateScanAsync(); ;
@@ -104,7 +120,7 @@ namespace RestWebservice_StaticCodeAnalysis.Controllers
         /// <param name="scanId">Id of the scan to retrieve</param>
         [HttpDelete]
         [Route("/scans/{scanId:int}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [SwaggerOperation("DeleteScanJob")]
         [SwaggerResponse(statusCode: 204, description: "Scan job was deleted")]
         [SwaggerResponse(statusCode: 401, description: "Token is missing or has expired or user is not permitted to see this scan job")]
@@ -127,7 +143,7 @@ namespace RestWebservice_StaticCodeAnalysis.Controllers
         /// </summary>
         [HttpGet]
         [Route("/scans")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [SwaggerOperation("GetAllScanJobs")]
         [SwaggerResponse(statusCode: 200, type: typeof(List<ScanJobDto>), description: "List of all scan jobs")]
         [SwaggerResponse(statusCode: 401, description: "Token is missing or has expired")]
@@ -144,9 +160,9 @@ namespace RestWebservice_StaticCodeAnalysis.Controllers
         /// <param name="scanId">Id of the scan to retrieve</param>
         [HttpGet]
         [Route("/scans/{scanId:int}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [SwaggerOperation("GetScanJob")]
-        [SwaggerResponse(statusCode: 200, type: typeof(CodeDto), description: "Results of the scan")]
+        [SwaggerResponse(statusCode: 200, type: typeof(ScanJobDto), description: "Scan job")]
         [SwaggerResponse(statusCode: 401, description: "Token is missing or has expired or user is not permitted to see this scan job")]
         [SwaggerResponse(statusCode: 404, description: "Scan with this scanId was not found")]
         public virtual async Task<IActionResult> GetScanJob([FromRoute][Required] int scanId)
@@ -170,7 +186,7 @@ namespace RestWebservice_StaticCodeAnalysis.Controllers
         /// <param name="scanId">Id of the scan to retrieve</param>
         [HttpGet]
         [Route("/scans/{scanId:int}/results")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [SwaggerOperation("GetScanResults")]
         [SwaggerResponse(statusCode: 200, type: typeof(ScanDto), description: "Results of the scan")]
         [SwaggerResponse(statusCode: 401, description: "Token is missing or has expired or user is not permitted to see this scan job")]

@@ -6,10 +6,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Serilog" Version="2.10.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\RestWebService-StaticCodeAnalysis.Entities\RestWebService-StaticCodeAnalysis.Services.Entities.csproj" />
-    <ProjectReference Include="..\RestWebservice-StaticCodeAnalysis.Interfaces\RestWebservice-StaticCodeAnalysis.Interfaces.csproj" />
     <ProjectReference Include="..\RestWebService-StaticCodeAnalysis.ServiceAgents.DTOs\RestWebService-StaticCodeAnalysis.ServiceAgents.DTOs.csproj" />
     <ProjectReference Include="..\RestWebService-StaticCodeAnalysis.ServiceAgents.Interfaces\RestWebService-StaticCodeAnalysis.ServiceAgents.Interfaces.csproj" />
+    <ProjectReference Include="..\RestWebservice_StaticCodeAnalysis.Interfaces\RestWebservice_StaticCodeAnalysis.Interfaces.csproj" />
   </ItemGroup>
 
 </Project>

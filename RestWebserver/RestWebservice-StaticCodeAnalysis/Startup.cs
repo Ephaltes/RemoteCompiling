@@ -24,6 +24,10 @@ using RestWebService_StaticCodeAnalysis.Services.Interfaces;
 using System;
 using System.Text;
 
+using RestWebservice_StaticCodeAnalysis.Interfaces;
+using Serilog;
+using Microsoft.Extensions.Logging;
+
 namespace RestWebservice_StaticCodeAnalysis
 {
     /// <summary>
@@ -55,8 +59,11 @@ namespace RestWebservice_StaticCodeAnalysis
             // Bind configuration sections to config objects
             var jwtConfig = new JwtConfiguration();
             var sonarqubeConfig = new SonarqubeConfiguration();
+            var valgrindConfig = new ValgrindConfiguration();
+
             Configuration.GetSection("Jwt").Bind(jwtConfig);
             Configuration.GetSection("Sonarqube").Bind(sonarqubeConfig);
+            Configuration.GetSection("Valgrind").Bind(valgrindConfig);
             
             // Add jwt for authentication
             services
@@ -110,10 +117,16 @@ namespace RestWebservice_StaticCodeAnalysis
             });
 
             // Configure DI
+            services.AddSingleton(Log.Logger);
+
             services.AddSingleton<IJwtConfiguration>(jwtConfig);
             services.AddSingleton<ISonarqubeConfiguration>(sonarqubeConfig);
+            services.AddSingleton<IValgrindConfiguration>(valgrindConfig);
 
-            services.AddTransient<IScanAgent, SonarqubeAgent>();
+            services.AddTransient<ISonarqubeAgent, SonarqubeAgent>();
+            services.AddTransient<IValgrindAgent, ValgrindAgent>();
+            services.AddTransient<IValgrindReportParser, ValgrindXmlReportParser>();
+
             services.AddTransient<IScanJobRepository, ScanJobRepository>();
             services.AddTransient<IScanRepository, ScanRepository>();
 
@@ -171,6 +184,8 @@ namespace RestWebservice_StaticCodeAnalysis
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseSerilogRequestLogging();
 
             app.UseHttpsRedirection();
 

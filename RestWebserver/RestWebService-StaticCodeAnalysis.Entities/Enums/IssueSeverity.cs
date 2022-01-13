@@ -2,7 +2,7 @@
 {
     public enum IssueSeverity
     {
-        Major,
-        Minor
+        MAJOR,
+        MINOR
     }
 }

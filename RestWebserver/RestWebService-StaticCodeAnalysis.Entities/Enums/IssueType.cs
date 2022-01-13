@@ -2,8 +2,8 @@
 {
     public enum IssueType
     {
-        CodeSmell,
-        Bug,
-        Vulnerability
+        CODE_SMELL,
+        BUG,
+        VULNERABILIY
     }
 }

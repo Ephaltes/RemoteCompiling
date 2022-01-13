@@ -1,4 +1,8 @@
-﻿namespace RestWebservice_StaticCodeAnalysis.Configuration
+﻿
+
+using RestWebservice_StaticCodeAnalysis.Interfaces;
+
+namespace RestWebservice_StaticCodeAnalysis.Configuration
 {
     public class JwtConfiguration : IJwtConfiguration
     {
