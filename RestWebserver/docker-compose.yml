@@ -11,6 +11,7 @@ services:
       - DOTNET_RUNNING_IN_CONTAINER=true
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings:Database=Server=db;Port=5432;Database=remote;User Id=remote_user;Password=remote_password;
   code-analysis-api:
     image: code-analysis-api
     build:
@@ -22,8 +23,8 @@ services:
       - DOTNET_RUNNING_IN_CONTAINER=true
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
-      - Sonarqube__ServerUrl=http://sonarqube:9000
-      - Valgrind__Flags=--leak-check=full --show-leak-kinds=all --track-origins=yes
+      - Sonarqube:ServerUrl=http://sonarqube:9000
+      - Valgrind:Flags=--leak-check=full --show-leak-kinds=all --track-origins=yes
   db:
     image: postgres
     container_name: remotecompiler_postgres
