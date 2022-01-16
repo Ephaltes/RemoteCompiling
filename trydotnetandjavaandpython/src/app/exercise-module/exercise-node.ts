@@ -1,7 +1,6 @@
 import { FileNode } from "../file-module/file-node";
 import { UserProject } from "../service/userproject.service";
 import { HandInNode } from "./handin-node";
-import { StudentNode } from "./student-node";
 
 export class ExerciseNode {
     id: number;

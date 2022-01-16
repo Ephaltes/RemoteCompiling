@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ExerciseNode } from '../exercise-module/exercise-node';
 import { HandInNode } from '../exercise-module/handin-node';
-import { StudentNode } from '../exercise-module/student-node';
 import { ExerciseService } from '../service/exercise.service';
 
 @Component({

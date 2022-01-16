@@ -8,7 +8,6 @@ import { CodeModel } from '@ngstack/code-editor';
 import { debounceTime } from 'rxjs/operators';
 import { ExerciseNode } from '../exercise-module/exercise-node';
 import { HandInNode } from '../exercise-module/handin-node';
-import { StudentNode } from '../exercise-module/student-node';
 import { ExercisePlatformCreateFileComponent } from '../exercise-platform-create-file/exercise-platform-create-file.component';
 import { FileNode, FileNodeType } from '../file-module/file-node';
 import { ExerciseService } from '../service/exercise.service';

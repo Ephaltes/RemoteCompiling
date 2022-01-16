@@ -79,7 +79,7 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
       { path: 'coding', component: CodingAppComponent },
       {
         path: 'platform', component: ExercisePlatformAppComponent, children: [
-          { path: '', redirectTo: 'overview', pathMatch: 'full' },
+          { path: '', redirectTo: 'create', pathMatch: 'full' },
           { path: 'overview', component: ExercisePlatformOverviewComponent },
           { path: 'create', component: ExercisePlatformCreateComponent },
           { path: 'correct', component: ExercisePlatformCorrectComponent },

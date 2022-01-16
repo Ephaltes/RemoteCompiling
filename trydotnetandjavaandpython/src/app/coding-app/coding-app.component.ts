@@ -418,14 +418,6 @@ export class CodingAppComponent implements OnInit, OnDestroy, AfterViewInit {
   }
   saveButton() {
     this.userProjectService.save(this.nestedDataSource.data);
-    this.nestedDataSource.data.forEach(project => {
-      project.children.forEach(file => {
-        if (file.modified) {
-          file.checkpoints.push({ created: new Date(), code: file.code.value })
-          file.modified = false;
-        }
-      })
-    });
   }
   ngOnInit() {
     var toast: Toast = {

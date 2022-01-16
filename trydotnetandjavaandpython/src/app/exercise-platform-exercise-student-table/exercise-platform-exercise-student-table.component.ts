@@ -4,7 +4,6 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { HandInNode } from '../exercise-module/handin-node';
-import { StudentNode } from '../exercise-module/student-node';
 import { FileNode, FileNodeType } from '../file-module/file-node';
 
 
