@@ -14,12 +14,3 @@ export function forbiddenEndingValidator(): ValidatorFn {
         return forbidden ? { fileNameEnding: true } : null;
     };
 }
-export function forbiddenNameValidator(fileNameList: string[]): AsyncValidatorFn {
-    return (control: AbstractControl): Observable<ValidationErrors | null> => {
-        return checkIfFileNameExists(control.value.toLowerCase(), fileNameList).pipe(
-            map(res => {
-                return res ? { fileNameExists: true } : null;
-            })
-        );
-    };
-}
