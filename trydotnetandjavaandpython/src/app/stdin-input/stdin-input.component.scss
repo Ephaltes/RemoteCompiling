@@ -1,0 +1,51 @@
+#contentWrapper{
+    margin: 1vh 0 0 2vh;
+    width: 30vw;
+}
+#stdinCard{
+    color: white;
+    background-color: rgba(26, 32, 53, 1);
+}
+::ng-deep .stdinForm {
+    .mat-input-element {
+        color: white;
+    }
+    .mat-form-field-label {
+        color: white;
+    }
+    .mat-form-field-underline {
+        background-color: white;
+    }
+    .mat-form-field-ripple {
+        background-color: white;
+    }
+    .mat-form-field-required-marker {
+        color: white;
+    }
+    .mat-form-field .mat-select{
+        color: white;
+    }
+     .mat-hint {
+        color: red;
+    }
+    .mat-select-value{
+        color: white;
+    }
+}
+::ng-deep .stdinForm.mat-focused {
+    .mat-form-field-label {
+        color: white;
+    }
+    .mat-form-field-ripple {
+        background-color: white;
+    }
+    .mat-form-field-required-marker {
+        color: white;
+    }
+    .mat-input-element {
+        color: white;
+    }
+    .mat-input-element::placeholder{
+        color: rgba(255, 255, 255, 0.4);
+    }
+}

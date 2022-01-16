@@ -1,0 +1,36 @@
+<div class="container-fluid" id="contentWrapper">
+    <mat-card id="editExerciseCard">
+        <mat-card-header>
+            <mat-card-title>Aufgabe bearbeiten</mat-card-title>
+        </mat-card-header>
+        <form [formGroup]="editExerciseForm" (ngSubmit)="submit()">
+            <mat-card-content>
+                <div class="col-md-12 mb-3">
+                    <mat-form-field appearance="outline" [style.width.%]="49" style="padding-right: 2%;"
+                        class="editExerciseForm">
+                        <mat-label>Aufgaben Name</mat-label>
+                        <input matInput formControlName="name" value="" autocomplete="off" placeholder="HelloWorld">
+                        <mat-hint *ngIf="name.invalid && (name.dirty || name.touched)"
+                            class="text-danger margin-bottom-thin my-mat-hint">
+                            <div *ngIf="name.errors!['required']">
+                                Name is required
+                            </div>
+                            <div *ngIf="name.errors!['minlength']">
+                                Name must be at least 3 characters long.
+                            </div>
+                        </mat-hint>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" [style.width.%]="49" class="editExerciseForm">
+                        <mat-label>Aufgaben Beschreibung</mat-label>
+                        <input matInput formControlName="description" value="" autocomplete="off"
+                            placeholder="For BIF students.">
+                    </mat-form-field>
+                </div>
+            </mat-card-content>
+            <mat-card-actions style="padding: 20px;">
+                <button style="float: left;" mat-raised-button color="primary" type="submit"
+                    [disabled]="editExerciseForm.invalid" mat-dialog-close>Submit</button>
+            </mat-card-actions>
+        </form>
+    </mat-card>
+</div>

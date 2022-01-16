@@ -1,0 +1,16 @@
+<!--outer-shell-begin-->
+<mat-grid-list cols="14" rows="20" min-rowHeight="400px" rowHeight="4.90%">
+    <mat-grid-tile [colspan]="2" [rowspan]="4" class="leftBar">
+        <img src="./assets/fh_technikum_wien_logo_4c_rgb_800x504px_72dpi_2020.png" id="fhImgLogo">
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="12" [rowspan]="20" style="padding: 15px;">
+        <router-outlet></router-outlet>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="2" [rowspan]="13" class="leftBar">
+        <app-exercise-platform-navigation></app-exercise-platform-navigation>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="2" [rowspan]="3" class="leftBar">
+        <app-logged-in-user style="width: 100%;height: 100%;"></app-logged-in-user>
+    </mat-grid-tile>
+</mat-grid-list>
+<!--outer-shell-end-->

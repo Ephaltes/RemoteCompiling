@@ -1,0 +1,27 @@
+<div class="container-fluid" id="contentWrapper">
+    <mat-card id="createFileCard">
+        <mat-card-header>
+            <mat-card-title>Choose project for file ...</mat-card-title>
+        </mat-card-header>
+        <form [formGroup]="newFileForm" (ngSubmit)="submit()">
+            <mat-card-content>
+                <div class="col-md-12 mb-3">
+                    <mat-form-field appearance="outline" [style.width.%]="100" class="newFileForm">
+                        <mat-label>Project</mat-label>
+                        <mat-select matInput formControlName="project" name="project">
+                            <mat-option *ngFor="let project of projectList" [value]="project">
+                                {{project.projectName}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="newFileForm.hasError('required')">Please choose a project</mat-error>
+                    </mat-form-field>
+                </div>
+
+            </mat-card-content>
+            <mat-card-actions style="padding: 20px;">
+                <button style="float: left;" mat-raised-button color="primary" type="submit"
+                    [disabled]="newFileForm.invalid" mat-dialog-close>Submit</button>
+            </mat-card-actions>
+        </form>
+    </mat-card>
+</div>

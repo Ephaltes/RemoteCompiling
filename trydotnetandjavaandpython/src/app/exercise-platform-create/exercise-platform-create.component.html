@@ -1,0 +1,7 @@
+<ng-container *ngIf="!exerciseSelected">
+<app-exercise-platform-exercise-overview-table (itemSelectedEvent)="openCodingApp($event)"></app-exercise-platform-exercise-overview-table>
+</ng-container>
+<ng-container *ngIf="exerciseSelected">
+    <app-exercise-code-editor (finishedWorkingEvent)="backFromCodingApp($event)" [currentExercise]="selectedItem">
+    </app-exercise-code-editor>
+</ng-container>
