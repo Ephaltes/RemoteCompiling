@@ -1,12 +1,9 @@
-import { AfterViewInit, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {  Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSelect } from '@angular/material/select';
 import { ReplaySubject, Subject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { ExerciseNode } from '../exercise-module/exercise-node';
-import { FileNodeType } from '../file-module/file-node';
-import { forbiddenEndingValidator, forbiddenNameValidator } from '../forbidden-name.directive';
 import { ExerciseService } from '../service/exercise.service';
 import { UserProjectService } from '../service/userproject.service';
 
