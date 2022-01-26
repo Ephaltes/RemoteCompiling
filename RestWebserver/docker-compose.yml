@@ -2,6 +2,7 @@ version: "3.9"
 services:
   rest-api:
     image: rest-api
+    container_name: remotecompiler_rest-api
     build:
       context: RestWebservice-RemoteCompiling
       dockerfile: Dockerfile
@@ -14,6 +15,7 @@ services:
       - ConnectionStrings:Database=Server=db;Port=5432;Database=remote;User Id=remote_user;Password=remote_password;
   code-analysis-api:
     image: code-analysis-api
+    container_name: remotecompiler_staticode
     build:
       context: .
       dockerfile: RestWebservice-StaticCodeAnalysis/Dockerfile
